@@ -2,10 +2,30 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const progress = document.querySelector('.scroll-progress span');
   const heroWords = [...document.querySelectorAll('.hero-word')];
+  const motionTargets = [...document.querySelectorAll('main h2, .robot-visual, .photo-card')];
+  const heroLimits = new Map();
+  let scrollFrame = 0;
+  motionTargets.forEach(el => {
+    if (el.matches('h2')) el.classList.add('scroll-heading');
+  });
+
+  function measureHero() {
+    heroWords.forEach(word => {
+      word.style.transform = 'none';
+      const range = document.createRange();
+      range.selectNodeContents(word);
+      const rect = range.getBoundingClientRect();
+      const direction = Number(word.dataset.shift || 0);
+      const room = direction < 0 ? rect.left - 6 : innerWidth - rect.right - 6;
+      heroLimits.set(word, Math.max(0, Math.min(innerWidth * .055, room)));
+    });
+    scheduleScroll();
+  }
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 
   function onScroll() {
+    scrollFrame = 0;
     const max = document.documentElement.scrollHeight - innerHeight;
     const ratio = max > 0 ? scrollY / max : 0;
     if (progress) progress.style.width = `${Math.min(100, Math.max(0, ratio * 100))}%`;
@@ -13,17 +33,37 @@
     if (!reducedMotion) {
       const heroRatio = Math.min(1, scrollY / Math.max(innerHeight, 1));
       const mobileLayout = window.matchMedia('(max-width: 980px)').matches;
-      const maxShiftVw = mobileLayout ? 0 : 5.5;
       const maxShiftVh = mobileLayout ? .7 : 1.2;
+      // Read section positions before writing transforms to avoid layout thrashing.
+      const positions = motionTargets.map(el => {
+        const anchor = el.matches('h2') ? el.parentElement : el;
+        const rect = anchor.getBoundingClientRect();
+        return { el, visible: rect.bottom > 0 && rect.top < innerHeight,
+          phase: Math.max(-1, Math.min(1, (innerHeight / 2 - (rect.top + rect.height / 2)) / (innerHeight / 2 + rect.height / 2))) };
+      });
       heroWords.forEach((word) => {
         const dir = Number(word.dataset.shift || 0);
-        word.style.transform = `translate3d(${dir * heroRatio * maxShiftVw}vw, ${heroRatio * -maxShiftVh}vh, 0)`;
+        word.style.transform = `translate3d(${dir * heroRatio * (heroLimits.get(word) || 0)}px, ${heroRatio * -maxShiftVh}vh, 0)`;
+      });
+      positions.forEach(({ el, visible, phase }) => {
+        if (!visible) return;
+        if (el.matches('h2')) {
+          el.style.setProperty('--scroll-offset', `${phase * (mobileLayout ? -10 : -18)}px`);
+        } else if (el.matches('.robot-visual')) {
+          el.style.setProperty('--scroll-rotation', `${phase * 12}deg`);
+        } else {
+          el.style.setProperty('--scroll-offset', `${phase * 18}px`);
+        }
       });
     }
   }
-  addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', onScroll, { passive: true });
-  onScroll();
+  function scheduleScroll() {
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(onScroll);
+  }
+  addEventListener('scroll', scheduleScroll, { passive: true });
+  addEventListener('resize', measureHero, { passive: true });
+  document.fonts.ready.then(measureHero);
+  measureHero();
 
   const header = document.querySelector('.site-header');
   const menuToggle = document.querySelector('.menu-toggle');
