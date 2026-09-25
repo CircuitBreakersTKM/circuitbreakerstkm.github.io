@@ -12,13 +12,14 @@
 }
 
 * { box-sizing: border-box; }
+html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
 html { scroll-behavior: smooth; background: var(--ink); }
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background: var(--ink);
   color: var(--paper);
-  overflow-x: hidden;
 }
 a { color: inherit; }
 img { max-width: 100%; display: block; }
@@ -236,4 +237,14 @@ footer span, footer a { color:#909090; font-size:.72rem; text-decoration:none; }
   html { scroll-behavior:auto; }
   *, *::before, *::after { animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; }
   .reveal { opacity:1; transform:none; }
+}
+
+/* Prevent layout children from expanding the mobile viewport. */
+main, section, header, footer { max-width: 100%; }
+.intro-grid > *, .race-stage > *, .robot-layout > *, .code-grid > *,
+.photos-head > *, .photo-grid > *, .robul-grid > *, .join-grid > * { min-width: 0; }
+.repo-link, .repo-link strong, .repo-link span { min-width: 0; overflow-wrap: anywhere; }
+
+@media (max-width: 620px) {
+  .hero-word { transform: none !important; will-change: auto; }
 }
