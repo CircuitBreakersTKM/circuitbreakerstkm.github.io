@@ -89,7 +89,7 @@
         const dy = a.y - b.y;
         const dist = Math.hypot(dx, dy);
         if (dist < 180) {
-          ctx.strokeStyle = `rgba(82,228,255,${(1 - dist / 180) * .16})`;
+          ctx.strokeStyle = `rgba(190,190,190,${(1 - dist / 180) * .16})`;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           const midX = (a.x + b.x) / 2;
@@ -102,7 +102,7 @@
     }
 
     for (const n of nodes) {
-      ctx.fillStyle = 'rgba(239,51,64,.76)';
+      ctx.fillStyle = 'rgba(184,52,48,.82)';
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
       ctx.fill();
