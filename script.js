@@ -102,7 +102,7 @@
     }
 
     for (const n of nodes) {
-      ctx.fillStyle = 'rgba(255,212,0,.72)';
+      ctx.fillStyle = 'rgba(239,51,64,.76)';
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
       ctx.fill();
