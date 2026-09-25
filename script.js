@@ -12,8 +12,8 @@
 
     if (!reducedMotion) {
       const heroRatio = Math.min(1, scrollY / Math.max(innerHeight, 1));
-      const mobileLayout = window.matchMedia('(max-width: 620px)').matches;
-      const maxShiftVw = mobileLayout ? 2.4 : 5.5;
+      const mobileLayout = window.matchMedia('(max-width: 980px)').matches;
+      const maxShiftVw = mobileLayout ? 0 : 5.5;
       const maxShiftVh = mobileLayout ? .7 : 1.2;
       heroWords.forEach((word) => {
         const dir = Number(word.dataset.shift || 0);

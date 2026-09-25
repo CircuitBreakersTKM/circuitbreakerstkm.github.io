@@ -16,7 +16,7 @@
 * { box-sizing: border-box; }
 html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 @supports (overflow: clip) { html, body { overflow-x: clip; } }
-html { scroll-behavior: smooth; background: var(--ink); }
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; background: var(--ink); }
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -229,6 +229,7 @@ footer span, footer a { color:#909090; font-size:.72rem; text-decoration:none; }
     opacity:0; visibility:hidden; pointer-events:none;
     transform:translateY(-8px);
     transition:opacity .18s ease, transform .18s ease, visibility .18s;
+    max-height:calc(100svh - 5rem); overflow-y:auto;
   }
   .site-header.menu-open nav {
     opacity:1; visibility:visible; pointer-events:auto; transform:none;
@@ -242,7 +243,8 @@ footer span, footer a { color:#909090; font-size:.72rem; text-decoration:none; }
   .site-header.menu-open .menu-lines i:first-child { transform:translateY(2.5px) rotate(45deg); }
   .site-header.menu-open .menu-lines i:last-child { transform:translateY(-2.5px) rotate(-45deg); }
   .hero-meta { flex-direction:column; align-items:flex-start; gap:.35rem; }
-  .hero-title { font-size: clamp(5.2rem, 21vw, 11rem); }
+  .hero-title { font-size: clamp(4rem, 19vw, 11rem); }
+  .hero-word { overflow-wrap:anywhere; }
   .hero-lede { margin-left:0; }
   .intro-grid,.race-stage,.robot-layout,.code-grid,.photos-head,.robul-grid,.join-grid { grid-template-columns:1fr; }
   .facts-row,.team-rail { grid-template-columns:repeat(2,1fr); }
@@ -254,30 +256,54 @@ footer span, footer a { color:#909090; font-size:.72rem; text-decoration:none; }
   footer { grid-template-columns:1fr; }
   .footer-meta { text-align:left; align-items:flex-start; }
   .footer-sources { justify-content:flex-start; }
+  .intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 {
+    overflow-wrap:anywhere;
+  }
 }
 
 @media (max-width: 620px) {
   :root { --pad: 1rem; }
   .site-header { padding:.7rem 1rem; }
   .brand-name { display:none; }
-  .hero { padding-top:7rem; }
-  .hero-meta { top:5rem; }
-  .hero-title { font-size: clamp(4.2rem, 22vw, 8rem); line-height:.82; }
-  .hero-lede { font-size:1.08rem; line-height:1.42; }
+  .menu-toggle { min-height:44px; }
+  .hero { padding-top:6rem; gap:2rem; }
+  .hero-meta { position:relative; top:auto; left:auto; right:auto; }
+  .hero-copy { margin-top:auto; }
+  .hero-title { font-size:clamp(3rem, 19vw, 7rem); line-height:.88; }
+  .hero-word.outline { -webkit-text-stroke:1px var(--paper); }
+  .hero-lede { width:100%; font-size:1.08rem; line-height:1.5; }
+  .hero-foot { margin-top:0; }
+  .intro, .robot, .code, .photos, .robul, .join { padding-block:4rem; }
+  .intro-grid, .robul-grid { margin-block:2rem 3rem; }
+  .race-stage, .robot-layout, .code-grid, .photos-head, .robul-grid, .join-grid { gap:2rem; }
+  .denver { min-height:auto; padding-block:5rem; }
+  .denver-copy { min-width:0; width:100%; }
   .facts-row,.team-rail { grid-template-columns:1fr; }
   .fact { border-right:0; border-bottom:1px solid var(--line); padding-left:0!important; }
   .team-rail > div { border-right:0; border-bottom:1px solid var(--line); }
   .race { min-height:auto; }
-  .race-sticky { position:relative; min-height:auto; padding-top:6rem; padding-bottom:6rem; }
+  .race-sticky { position:relative; min-height:auto; padding-block:4rem; }
+  .score-head, .score-line { grid-template-columns:minmax(0, 1fr) auto; gap:.75rem; }
+  .score-line { font-size:clamp(1.5rem, 7vw, 2.6rem); }
+  .score-line > span { overflow-wrap:anywhere; }
   .score-line.active { transform:none; }
   .robot-visual { min-height:88vw; }
   .bot-shape { width:82vw; }
-  .spec-list div { grid-template-columns:90px 1fr; }
+  .spec-list div { grid-template-columns:70px minmax(0, 1fr); gap:.75rem; }
+  .spec-list dd { overflow-wrap:anywhere; }
+  .terminal { min-height:0; padding:1rem; box-shadow:6px 6px 0 #262626; }
+  .terminal code { white-space:pre-wrap; overflow-wrap:anywhere; font-size:.75rem; }
   .photo-card { min-height:76vw; }
   .photo-caption { flex-direction:column; align-items:flex-start; }
-  .intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 { line-height: 1.02; }
-  .denver h2 { font-size: clamp(2.2rem, 12.5vw, 4.2rem); max-width: 100%; }
-  .denver-title-line { display: block; white-space: nowrap; }
+  .intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 {
+    font-size:clamp(2rem, 9vw, 3.5rem); line-height:1.04;
+  }
+  .denver-title-line { display:block; }
+  .text-link { max-width:100%; line-height:1.5; padding-block:.75rem; }
+  .join-links { gap:.75rem; }
+  .join-links a { min-height:44px; max-width:100%; line-height:1.4; overflow-wrap:anywhere; }
+  .footer-sources { flex-wrap:wrap; gap:.5rem 1.5rem; }
+  .footer-sources a { display:inline-flex; align-items:center; min-height:44px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
