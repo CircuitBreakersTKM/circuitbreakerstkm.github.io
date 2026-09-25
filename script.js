@@ -10,15 +10,19 @@
     const ratio = max > 0 ? scrollY / max : 0;
     if (progress) progress.style.width = `${Math.min(100, Math.max(0, ratio * 100))}%`;
 
-    if (!reducedMotion) {
+    const mobileLayout = window.matchMedia('(max-width: 620px)').matches;
+    if (!reducedMotion && !mobileLayout) {
       const heroRatio = Math.min(1, scrollY / Math.max(innerHeight, 1));
       heroWords.forEach((word) => {
         const dir = Number(word.dataset.shift || 0);
         word.style.transform = `translate3d(${dir * heroRatio * 5.5}vw, ${heroRatio * -1.2}vh, 0)`;
       });
+    } else {
+      heroWords.forEach((word) => { word.style.transform = ''; });
     }
   }
   addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll, { passive: true });
   onScroll();
 
   const revealTargets = document.querySelectorAll('.intro-grid, .facts-row, .race-copy, .scoreboard, .robot-copy, .robot-visual, .code-copy, .terminal, .photos-head, .photo-card, .robul-grid, .team-rail, .denver-copy, .join-grid');
