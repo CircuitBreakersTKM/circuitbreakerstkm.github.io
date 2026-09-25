@@ -73,10 +73,10 @@ img { max-width: 100%; display: block; }
 .intro-grid { max-width: var(--max); margin: 2.6rem auto 5rem; display: grid; grid-template-columns: 1.25fr .75fr; gap: clamp(2rem,7vw,8rem); align-items: start; }
 .intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 {
   margin: 0;
-  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-family: "Barlow Condensed", Impact, sans-serif;
   text-transform: uppercase;
   letter-spacing: -.015em;
-  line-height: 1.08;
+  line-height: 1.16;
   text-wrap: wrap;
   overflow-wrap: normal;
   word-break: normal;
@@ -229,7 +229,7 @@ footer span, footer a { color:#8f8f89; font-size:.72rem; text-decoration:none; }
   .spec-list div { grid-template-columns:90px 1fr; }
   .photo-card { min-height:76vw; }
   .photo-caption { flex-direction:column; align-items:flex-start; }
-  .intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 { line-height: 1.12; }
+  .intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 { line-height: 1.2; }
 }
 
 @media (prefers-reduced-motion: reduce) {
