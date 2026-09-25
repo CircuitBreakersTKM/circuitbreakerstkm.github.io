@@ -10,15 +10,15 @@
     const ratio = max > 0 ? scrollY / max : 0;
     if (progress) progress.style.width = `${Math.min(100, Math.max(0, ratio * 100))}%`;
 
-    const mobileLayout = window.matchMedia('(max-width: 620px)').matches;
-    if (!reducedMotion && !mobileLayout) {
+    if (!reducedMotion) {
       const heroRatio = Math.min(1, scrollY / Math.max(innerHeight, 1));
+      const mobileLayout = window.matchMedia('(max-width: 620px)').matches;
+      const maxShiftVw = mobileLayout ? 2.4 : 5.5;
+      const maxShiftVh = mobileLayout ? .7 : 1.2;
       heroWords.forEach((word) => {
         const dir = Number(word.dataset.shift || 0);
-        word.style.transform = `translate3d(${dir * heroRatio * 5.5}vw, ${heroRatio * -1.2}vh, 0)`;
+        word.style.transform = `translate3d(${dir * heroRatio * maxShiftVw}vw, ${heroRatio * -maxShiftVh}vh, 0)`;
       });
-    } else {
-      heroWords.forEach((word) => { word.style.transform = ''; });
     }
   }
   addEventListener('scroll', onScroll, { passive: true });
