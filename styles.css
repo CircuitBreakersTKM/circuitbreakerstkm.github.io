@@ -245,6 +245,3 @@ main, section, header, footer { max-width: 100%; }
 .photos-head > *, .photo-grid > *, .robul-grid > *, .join-grid > * { min-width: 0; }
 .repo-link, .repo-link strong, .repo-link span { min-width: 0; overflow-wrap: anywhere; }
 
-@media (max-width: 620px) {
-  .hero-word { transform: none !important; will-change: auto; }
-}
