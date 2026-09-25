@@ -25,6 +25,43 @@
   addEventListener('resize', onScroll, { passive: true });
   onScroll();
 
+  const header = document.querySelector('.site-header');
+  const menuToggle = document.querySelector('.menu-toggle');
+  const mainNav = document.getElementById('main-nav');
+
+  function setMenu(open) {
+    if (!header || !menuToggle) return;
+    header.classList.toggle('menu-open', open);
+    menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  if (header && menuToggle && mainNav) {
+    menuToggle.addEventListener('click', () => {
+      setMenu(!header.classList.contains('menu-open'));
+    });
+
+    mainNav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setMenu(false));
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setMenu(false);
+        menuToggle.focus();
+      }
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+      if (header.classList.contains('menu-open') && !header.contains(event.target)) {
+        setMenu(false);
+      }
+    });
+
+    addEventListener('resize', () => {
+      if (innerWidth > 980) setMenu(false);
+    }, { passive: true });
+  }
+
   const revealTargets = document.querySelectorAll('.intro-grid, .facts-row, .race-copy, .scoreboard, .robot-copy, .robot-visual, .code-copy, .terminal, .photos-head, .photo-card, .robul-grid, .team-rail, .denver-copy, .join-grid');
   revealTargets.forEach(el => el.classList.add('reveal'));
 
