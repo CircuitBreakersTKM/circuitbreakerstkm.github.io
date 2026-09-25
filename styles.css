@@ -276,7 +276,7 @@ footer span, footer a { color:#909090; font-size:.72rem; text-decoration:none; }
   .photo-card { min-height:76vw; }
   .photo-caption { flex-direction:column; align-items:flex-start; }
   .intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 { line-height: 1.02; }
-  .denver h2 { font-size: clamp(2.75rem, 13.5vw, 4.8rem); max-width: 100%; }
+  .denver h2 { font-size: clamp(2.2rem, 12.5vw, 4.2rem); max-width: 100%; }
   .denver-title-line { display: block; white-space: nowrap; }
 }
 
