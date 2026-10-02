@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260925-motion4">
+  <link rel="stylesheet" href="./styles.css?v=20261002-scroll4">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -101,13 +101,15 @@
           <span class="hero-word" data-shift="-1">CIRCUIT</span>
           <span class="hero-word outline" data-shift="1">BREAKERS</span>
         </h1>
-        <p class="hero-lede">CircuitBreakers je regionální robotický tým z Litoměřic. <strong>Navrhujeme, stavíme a programujeme soutěžní roboty.</strong> Jsme součástí sítě RobUL. Do výběrového FRC týmu RobUL #9585 se mohou dostat vybraní členové regionálních týmů, včetně našich.</p>
+        <p class="hero-lede">Jsme středoškolský robotický tým z Litoměřic. <strong>Navrhujeme, stavíme a programujeme soutěžní roboty.</strong></p>
       </div>
 
       <div class="hero-foot mono">
-        <span>scroll</span>
-        <span class="scroll-tick" aria-hidden="true"></span>
-        <span>dolů</span>
+        <span class="hero-scroll"><span>scroll</span><span class="scroll-tick" aria-hidden="true"></span><span>dolů</span></span>
+        <div class="hero-actions">
+          <a class="hero-action hero-action-primary" href="#robot">Prohlédnout robota <span aria-hidden="true">↓</span></a>
+          <a class="hero-action" href="#tym">Poznej tým <span aria-hidden="true">↓</span></a>
+        </div>
       </div>
     </section>
 
@@ -121,6 +123,17 @@
           <p class="note mono">CircuitBreakers = regionální tým v Litoměřicích<br>RobUL #9585 = výběrový FRC tým pro mezinárodní soutěž</p>
         </div>
       </div>
+
+      <figure class="team-photo">
+        <div class="scroll-media">
+          <img src="./photos/site/team-regional-2025-1600.webp"
+             srcset="./photos/site/team-regional-2025-768.webp 768w, ./photos/site/team-regional-2025-1600.webp 1600w"
+             sizes="(max-width: 620px) calc(100vw - 2rem), (max-width: 1630px) 92vw, 1500px"
+             alt="Členové CircuitBreakers se svým robotem na regionální robotické soutěži 2025."
+             width="1600" height="901" loading="lazy" decoding="async">
+        </div>
+        <figcaption class="team-caption"><strong>Tým CircuitBreakers</strong><small class="mono">Regionální soutěž / 2025</small></figcaption>
+      </figure>
 
       <div class="facts-row" aria-label="Rychlá fakta">
         <article class="fact">
@@ -166,17 +179,16 @@
     <section id="robot" class="robot section-paper">
       <div class="section-index mono">04 / Robot</div>
       <div class="robot-layout">
-        <div class="robot-visual" aria-hidden="true">
-          <div class="schematic-grid"></div>
-          <div class="bot-shape">
-            <span class="wheel w1"></span><span class="wheel w2"></span><span class="wheel w3"></span><span class="wheel w4"></span>
-            <span class="bot-core"></span>
-            <span class="scan-ring r1"></span><span class="scan-ring r2"></span>
+        <figure class="robot-visual">
+          <div class="scroll-media">
+            <img src="./photos/site/robot-2025-1600.webp"
+               srcset="./photos/site/robot-2025-768.webp 768w, ./photos/site/robot-2025-1600.webp 1600w"
+               sizes="(max-width: 980px) 92vw, (max-width: 1630px) 48vw, 800px"
+               width="1600" height="900" loading="lazy" decoding="async"
+               alt="Robot CircuitBreakers s červeným ochranným rámem, swerve pohonem a elektronikou v dílně.">
           </div>
-          <div class="telemetry mono">
-            <span>X 2.83</span><span>Y 1.47</span><span>θ 092°</span><span>MODE AUTO</span>
-          </div>
-        </div>
+          <figcaption class="robot-caption mono"><span>CircuitBreakers / robot 2025</span><span>Mechanika + elektronika</span></figcaption>
+        </figure>
 
         <div class="robot-copy">
           <p class="eyebrow mono">Robot / řízení / autonomie</p>
@@ -188,6 +200,36 @@
             <div><dt class="mono">AUTO</dt><dd>bludiště, navigace, reakce na obraz</dd></div>
             <div><dt class="mono">STACK</dt><dd>WPILib, PathPlanner, PhotonLib, CTRE, REV</dd></div>
           </dl>
+        </div>
+      </div>
+
+      <div class="robot-details" aria-labelledby="robot-details-title">
+        <h3 id="robot-details-title" class="mono">Detaily robota / 2025</h3>
+        <div class="detail-grid">
+          <figure class="detail-card">
+            <div class="scroll-media">
+              <img src="./photos/site/robot-chassis-2025-1280.webp"
+                 srcset="./photos/site/robot-chassis-2025-768.webp 768w, ./photos/site/robot-chassis-2025-1280.webp 1280w"
+                 sizes="(max-width: 620px) calc(100vw - 2rem), (max-width: 1630px) 30vw, 490px"
+                 width="1280" height="720" loading="lazy" decoding="async"
+                 alt="Otevřený podvozek robota se čtyřmi pohonnými moduly a kabeláží.">
+            </div>
+            <figcaption><span class="mono">01 / Pohyb</span><strong>Podvozek a pohon</strong></figcaption>
+          </figure>
+          <figure class="detail-card">
+            <div class="scroll-media">
+              <img src="./photos/site/robot-electronics-2025-638.webp" width="638" height="484"
+                 loading="lazy" decoding="async" alt="Detail rozvodu napájení a zapojení elektroniky uvnitř robota.">
+            </div>
+            <figcaption><span class="mono">02 / Elektronika</span><strong>Napájení a řízení</strong></figcaption>
+          </figure>
+          <figure class="detail-card">
+            <div class="scroll-media">
+              <img src="./photos/site/robot-camera-2025-614.webp" width="614" height="586"
+                 loading="lazy" decoding="async" alt="Kamera robota v tištěném držáku s plochým propojovacím kabelem.">
+            </div>
+            <figcaption><span class="mono">03 / Vision</span><strong>Kamera a obraz</strong></figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -219,20 +261,30 @@ robot {
     <section class="photos section-dark" aria-labelledby="photos-title">
       <div class="section-index mono">06 / V terénu</div>
       <div class="photos-head">
-        <h2 id="photos-title">Tým v dílně<br>a na soutěžích.</h2>
-        <p>Fotky z regionální soutěže a z účasti týmu RobUL na Denver Regional 2026.</p>
+        <h2 id="photos-title">Práce v dílně.</h2>
+        <p>Montáž podvozku a zapojování elektroniky v naší dílně během sezóny 2025.</p>
       </div>
       <div class="photo-grid">
-        <a class="photo-card photo-wide" href="https://prf.ujep.cz/cs/29923/chomutovsky-tym-chobot-vyhral-regionalni-robotickou-soutez-a-poleti-do-usa" target="_blank" rel="noreferrer">
-          <img src="https://api.microlink.io/?url=https%3A%2F%2Fprf.ujep.cz%2Fcs%2F29923%2Fchomutovsky-tym-chobot-vyhral-regionalni-robotickou-soutez-a-poleti-do-usa&embed=image.url" alt="Regionální robotická soutěž Ústeckého kraje 2025" loading="lazy">
-          <span class="photo-fallback mono">REGIONAL / 2025</span>
-          <span class="photo-caption"><strong>Regionální soutěž 2025</strong><small>SLUNETA / Ústí nad Labem</small></span>
-        </a>
-        <a class="photo-card" href="https://icuk.cz/tym-robul-na-roboticke-soutezi-denver-regional-2026-pribeh-ktery-stoji-za-vypraveni/" target="_blank" rel="noreferrer">
-          <img src="https://api.microlink.io/?url=https%3A%2F%2Ficuk.cz%2Ftym-robul-na-roboticke-soutezi-denver-regional-2026-pribeh-ktery-stoji-za-vypraveni%2F&embed=image.url" alt="RobUL na Denver Regional 2026" loading="lazy">
-          <span class="photo-fallback mono">DENVER / 2026</span>
-          <span class="photo-caption"><strong>RobUL v Denveru</strong><small>FRC #9585 / 2026</small></span>
-        </a>
+        <figure class="photo-card photo-wide">
+          <div class="scroll-media">
+            <img src="./photos/site/workshop-build-2025-1600.webp"
+               srcset="./photos/site/workshop-build-2025-768.webp 768w, ./photos/site/workshop-build-2025-1600.webp 1600w"
+               sizes="(max-width: 620px) calc(100vw - 2rem), (max-width: 1630px) 61vw, 990px"
+               alt="Členové CircuitBreakers společně pracují na zapojení robota v dílně."
+               width="1600" height="900" loading="lazy" decoding="async">
+          </div>
+          <figcaption class="photo-caption"><strong>Zapojování elektroniky</strong><small>Dílna / 2025</small></figcaption>
+        </figure>
+        <figure class="photo-card photo-workshop">
+          <div class="scroll-media">
+            <img src="./photos/site/workshop-assembly-2025-900.webp"
+               srcset="./photos/site/workshop-assembly-2025-480.webp 480w, ./photos/site/workshop-assembly-2025-900.webp 900w"
+               sizes="(max-width: 620px) calc(100vw - 2rem), (max-width: 1630px) 31vw, 510px"
+               alt="Dva členové týmu společně montují součásti robota v dílně."
+               width="900" height="1600" loading="lazy" decoding="async">
+          </div>
+          <figcaption class="photo-caption"><strong>Montáž robota</strong><small>Dílna / Litoměřice</small></figcaption>
+        </figure>
       </div>
     </section>
 
@@ -298,6 +350,6 @@ robot {
     </div>
   </footer>
 
-  <script src="./script.js?v=20260925-motion4" defer></script>
+  <script src="./script.js?v=20261002-scroll4" defer></script>
 </body>
 </html>
