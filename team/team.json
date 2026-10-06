@@ -1,0 +1,62 @@
+{
+  "groups": [
+    {
+      "title": "Vedoucí týmu",
+      "members": [
+        {
+          "name": "Jindra",
+          "role": "Mentor",
+          "quote": "Naše máma",
+          "photo": "photos/team/Jindra.webp"
+        }
+      ]
+    },
+    {
+      "title": "Studenti",
+      "members": [
+        {
+          "name": "Ami",
+          "quote": "Profesionální šuplík",
+          "photo": "photos/team/Ami.webp"
+        },
+        {
+          "name": "Elko",
+          "quote": "Kafinovaný programátor",
+          "photo": "photos/team/Elko.webp"
+        },
+        {
+          "name": "Hadža",
+          "quote": "Ich bin ein Gamer",
+          "photo": "photos/team/Hadža.webp"
+        },
+        {
+          "name": "Inge",
+          "photo": "photos/team/Inge.webp"
+        },
+        {
+          "name": "Květa",
+          "quote": "Massive dih",
+          "photo": "photos/team/Květa.webp"
+        },
+        {
+          "name": "Lilly",
+          "quote": "Lásky moje, jsme v pohodě?",
+          "photo": "photos/team/Lilly.webp"
+        },
+        {
+          "name": "Michal",
+          "photo": "photos/team/Michal.webp"
+        },
+        {
+          "name": "Šimon",
+          "quote": "Programátor na pokraji vyhoření",
+          "photo": "photos/team/Šimon.webp"
+        },
+        {
+          "name": "Venda",
+          "photo": "photos/team/Venda.webp"
+        }
+      ]
+    }
+  ]
+}

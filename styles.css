@@ -351,3 +351,94 @@ main, section, header, footer { max-width: 100%; }
   .mobile-nav-extra { display: none !important; }
 }
 .section-red a:focus-visible { outline-color:#fff; box-shadow:0 0 0 2px var(--ink); }
+
+/* Shared page navigation and the team yearbook. */
+.site-header nav a[aria-current="page"] { color: var(--red-on-dark); }
+.intro-copy > .text-link { margin: .25rem 0 1.5rem; }
+.team-hero { position: relative; padding: 9rem var(--pad) 4rem; overflow: hidden; }
+.team-hero-inner { position: relative; max-width: var(--max); margin: auto; display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+.team-hero-inner > * { min-width: 0; }
+.team-title { margin: 0; font: 900 clamp(4rem, 8.8vw, 9rem)/.9 "Barlow Condensed", Impact, sans-serif; letter-spacing: -.025em; text-transform: uppercase; }
+.team-title > span { color: transparent; -webkit-text-stroke: 1.5px var(--paper); }
+.team-lede { max-width: 31rem; margin: 2rem 0 .5rem; color: #bdbdb7; font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.6; text-wrap: pretty; }
+.team-hero-photo { margin: 0; border: 1px solid var(--line-dark); }
+.team-hero-photo img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; filter: saturate(.88) contrast(1.03); }
+.team-hero-photo figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1rem; padding: 1rem; font-size: .62rem; line-height: 1.5; letter-spacing: .04em; text-transform: uppercase; }
+.team-roster { padding: 5rem var(--pad) 6rem; }
+.roster-heading { max-width: var(--max); margin: 0 auto 3rem; display: flex; justify-content: space-between; gap: 2rem; align-items: end; }
+.roster-heading .section-index { margin: 0 0 1.4rem; }
+.roster-heading h2 { margin: 0; font: 800 clamp(2.4rem, 4.5vw, 4.8rem)/1.02 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; letter-spacing: -.015em; }
+.roster-count { flex: 0 0 auto; font-size: .65rem; letter-spacing: .08em; padding-bottom: .4rem; color: #616161; }
+.member-grid { max-width: var(--max); margin: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; }
+.member-group { max-width: var(--max); margin-inline: auto; }
+.member-group + .member-group { margin-top: 3rem; padding-top: 3rem; border-top: 1px solid var(--line); }
+.member-group-title { margin: 0 0 1.5rem; color: #616161; font-size: .75rem; line-height: 1.6; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+.member-card { min-width: 0; padding: 1.25rem clamp(1rem, 2vw, 2rem) 2rem; border: 1px solid var(--line); background: var(--paper-2); text-align: center; }
+.member-index { display: flex; justify-content: space-between; margin-bottom: 1.6rem; color: #666; font-size: .6rem; letter-spacing: .08em; }
+.member-index > span:first-child { color: var(--red); }
+.member-portrait { width: min(100%, 13rem); aspect-ratio: 1; margin: 0 auto 1.5rem; border: 1px solid var(--line); border-radius: 50%; overflow: hidden; background: #fff; }
+.member-photo { width: 100%; height: 100%; object-fit: cover; }
+.member-name { margin: 0; font: 800 clamp(2rem, 3vw, 2.8rem)/1.05 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; overflow-wrap: anywhere; }
+.member-role { margin: .75rem 0 0; color: var(--red); font-size: .65rem; line-height: 1.6; letter-spacing: .06em; text-transform: uppercase; overflow-wrap: anywhere; }
+.member-quote { margin: 1.25rem 0 0; }
+.member-quote::before { content: "“"; display: block; height: 1.5rem; color: var(--red); font: 3rem/1 Georgia, serif; }
+.member-quote p { margin: .35rem 0 0; font-size: 1rem; line-height: 1.6; font-style: italic; overflow-wrap: anywhere; text-wrap: pretty; }
+.roster-empty { max-width: var(--max); margin: auto; padding: 3rem; border: 1px solid var(--line); background: var(--paper-2); }
+.roster-empty h3 { margin: 1rem 0; font: 800 2.5rem/1.1 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; }
+.roster-empty p { max-width: 36rem; line-height: 1.6; }
+.roster-status { max-width: var(--max); margin: 0 auto 1.5rem; color: #616161; line-height: 1.6; }
+.roster-retry { min-height: 44px; margin-top: 1rem; padding: .8rem 1rem; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; font-size: .75rem; text-transform: uppercase; }
+.roster-retry:hover { background: var(--ink); color: var(--paper); }
+.roster-retry:disabled { opacity: .6; cursor: wait; }
+
+@media (max-width: 1200px) {
+  .member-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 980px) {
+  .team-hero { padding-top: 7rem; }
+  .team-hero-inner { grid-template-columns: 1fr; }
+  .team-title { font-size: clamp(4rem, 13vw, 8rem); }
+  .team-lede { max-width: 38rem; }
+  .member-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .team-hero { padding-block: 6.5rem 3rem; }
+  .team-title { font-size: clamp(3.5rem, 16vw, 6rem); }
+  .team-lede { margin-top: 1.5rem; }
+  .team-hero-photo figcaption { flex-direction: column; }
+  .team-roster { padding-block: 3rem; }
+  .roster-heading { flex-direction: column; align-items: start; gap: 1rem; margin-bottom: 2rem; }
+  .roster-heading h2 { font-size: clamp(1.9rem, 8vw, 3rem); overflow-wrap: anywhere; }
+  .member-grid { gap: .75rem; }
+  .member-card { padding: 1rem .85rem 1.5rem; }
+  .member-index { margin-bottom: 1rem; font-size: .55rem; }
+  .member-name { font-size: 1.9rem; }
+  .member-quote p { font-size: .95rem; }
+}
+@media (max-width: 420px) {
+  .member-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .member-card { padding: 1.25rem 1.5rem 2rem; }
+  .member-name { font-size: 2.5rem; }
+  .member-quote p { font-size: 1rem; }
+}
+.member-grid--single { grid-template-columns: minmax(0, 21rem); justify-content: center; }
+
+.error-page { min-height: 100svh; display: flex; flex-direction: column; }
+.error-page main { flex: 1; display: grid; }
+.error-hero { position: relative; display: grid; align-items: center; padding: 9rem var(--pad) 4rem; overflow: hidden; }
+.error-inner { position: relative; width: 100%; max-width: var(--max); margin: auto; display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: clamp(2rem, 5vw, 5rem); }
+.error-inner > * { min-width: 0; }
+.error-copy h1 { margin: 0; font: 900 clamp(3rem, 5.8vw, 6.5rem)/.95 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; letter-spacing: -.02em; }
+.error-lede { max-width: 31rem; margin: 2rem 0; color: #bdbdb7; font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.6; text-wrap: pretty; }
+.error-code { padding-block: 2rem; border-block: 1px solid var(--line-dark); text-align: center; font: 900 clamp(8rem, 24vw, 28rem)/.8 "Barlow Condensed", Impact, sans-serif; letter-spacing: -.025em; color: transparent; -webkit-text-stroke: 2px var(--paper); }
+.error-code span { color: var(--red-on-dark); -webkit-text-stroke: 0; }
+@media (max-width: 980px) {
+  .error-hero { padding-top: 7rem; }
+  .error-inner { grid-template-columns: 1fr; }
+  .error-code { font-size: clamp(8rem, 38vw, 22rem); }
+}
+@media (max-width: 620px) {
+  .error-hero { padding-block: 6.5rem 3rem; }
+  .error-copy h1 { font-size: clamp(2.8rem, 11vw, 4.5rem); }
+  .error-lede { margin-block: 1.5rem; }
+}

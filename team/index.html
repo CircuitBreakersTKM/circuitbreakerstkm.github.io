@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <title>Náš tým | CircuitBreakers</title>
+  <meta name="description" content="Členové CircuitBreakers, středoškolského robotického týmu z Litoměřic. Profilové fotky, role v týmu a naše vlastní hlášky.">
+  <link rel="canonical" href="https://circuitbreakers.cloud/team/">
+  <meta property="og:title" content="Náš tým | CircuitBreakers">
+  <meta property="og:site_name" content="CircuitBreakers">
+  <meta property="og:locale" content="cs_CZ">
+  <meta property="og:description" content="Fotky a hlášky členů CircuitBreakers, robotického týmu z Litoměřic.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://circuitbreakers.cloud/team/">
+  <meta property="og:image" content="https://circuitbreakers.cloud/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CircuitBreakers — robotický tým z Litoměřic">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Náš tým | CircuitBreakers">
+  <meta name="twitter:description" content="Fotky a hlášky členů CircuitBreakers, robotického týmu z Litoměřic.">
+  <meta name="twitter:image" content="https://circuitbreakers.cloud/social-card.png">
+  <meta name="twitter:image:alt" content="CircuitBreakers — robotický tým z Litoměřic">
+  <link rel="icon" href="../favicon.svg?v=20260925-cap1" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=20261005-team2">
+</head>
+<body class="team-page">
+  <a class="skip-link mono" href="#main-content">Přeskočit na obsah</a>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+
+  <header class="site-header">
+    <a class="brand" href="../" aria-label="CircuitBreakers — portfolio">
+      <span class="brand-mark" aria-hidden="true">CB</span>
+      <span class="brand-name">CircuitBreakers</span>
+    </a>
+    <button class="menu-toggle mono" type="button" aria-controls="main-nav" aria-expanded="false">
+      <span>Menu</span>
+      <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
+    </button>
+    <nav id="main-nav" class="main-nav" aria-label="Hlavní navigace">
+      <a href="../">Portfolio</a>
+      <a href="./" aria-current="page">Náš tým</a>
+      <a href="../#robot">Robot</a>
+      <a href="../#kod">Kód</a>
+      <a href="../#kontakt">Kontakt</a>
+      <a class="mobile-nav-extra" href="https://www.instagram.com/circuitbreakerstkm/" target="_blank" rel="noreferrer">Instagram ↗</a>
+      <a class="mobile-nav-extra" href="https://github.com/CircuitBreakersTKM" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </nav>
+    <a class="header-cta" href="https://github.com/CircuitBreakersTKM" target="_blank" rel="noreferrer">GitHub ↗</a>
+  </header>
+
+  <main id="main-content">
+    <section class="team-hero section-dark" aria-labelledby="team-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="team-hero-inner">
+        <div class="team-hero-copy">
+          <p class="eyebrow mono">CircuitBreakers / Náš tým</p>
+          <h1 id="team-title" class="team-title">Lidi za<br><span>robotem.</span></h1>
+          <p class="team-lede">Jsme CircuitBreakers, středoškolský robotický tým z Litoměřic. V dílně řešíme návrh a výrobu robota, zapojení elektroniky i kód, který ho řídí. Robota testujeme a podle výsledků upravujeme pro soutěž. Tady se můžeš seznámit s lidmi, kteří se na tom podílejí, od studentů po našeho mentora. Fotky doplňují jména, role v týmu a naše vlastní hlášky.</p>
+          <a class="text-link" href="#clenove">Kdo je v týmu <span aria-hidden="true">↓</span></a>
+        </div>
+        <figure class="team-hero-photo">
+          <img src="../photos/site/team-regional-2025-1600.webp"
+            srcset="../photos/site/team-regional-2025-768.webp 768w, ../photos/site/team-regional-2025-1600.webp 1600w"
+            sizes="(max-width: 980px) 92vw, 45vw" width="1600" height="901" fetchpriority="high" decoding="async"
+            alt="CircuitBreakers společně se svým robotem na regionální soutěži 2025.">
+          <figcaption class="mono"><span>Tým CircuitBreakers</span><span>Regionální soutěž / 2025</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="clenove" class="team-roster section-paper" aria-labelledby="roster-title">
+      <div class="roster-heading">
+        <div>
+          <p class="section-index mono">01 / Členové</p>
+          <h2 id="roster-title">Členové<br>CircuitBreakers.</h2>
+        </div>
+        <span id="team-count" class="roster-count mono" hidden></span>
+      </div>
+      <p id="team-status" class="roster-status" role="status" hidden></p>
+      <div id="team-members" aria-busy="false"></div>
+      <noscript><p class="roster-status">Profily se zobrazí, když v prohlížeči zapneš JavaScript.</p></noscript>
+    </section>
+
+    <section class="join section-red" aria-labelledby="join-title">
+      <div class="section-index mono">02 / Přidej se</div>
+      <div class="join-grid">
+        <h2 id="join-title">Přidej se<br>k týmu.</h2>
+        <div>
+          <p>V týmu se věnujeme programování, mechanice, elektronice, návrhu dílů v CADu i soutěžní strategii. Pokud tě některá z těchhle oblastí baví a chtěl bys ji vyzkoušet při stavbě robota, ozvi se nám na Instagramu.</p>
+          <p>Do zprávy klidně napiš, co tě zajímá, s čím už máš zkušenosti nebo co by ses chtěl naučit. Domluvíme se, kdy se můžeš přijít podívat do dílny, prohlédnout si robota a poznat tým osobně.</p>
+          <div class="join-links">
+            <a href="https://www.instagram.com/circuitbreakerstkm/" target="_blank" rel="noreferrer">Napiš nám na Instagram ↗</a>
+            <a href="../#robot">Prohlédnout robota ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>CircuitBreakers</strong><span>Litoměřice / Czechia</span></div>
+    <div class="mono footer-meta">
+      <span>© <span id="year">2026</span> CircuitBreakersTKM</span>
+      <span>Robotický tým z Litoměřic.</span>
+    </div>
+    <div class="footer-sources">
+      <a href="../">Portfolio</a>
+      <a href="./" aria-current="page">Náš tým</a>
+      <a href="../#kontakt">Kontakt</a>
+    </div>
+  </footer>
+  <script src="../script.js?v=20261005-team2" defer></script>
+  <script src="./team.js?v=20261005-team3" defer></script>
+</body>
+</html>
