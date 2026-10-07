@@ -156,7 +156,7 @@ img { max-width: 100%; display: block; }
 
 .robot-details { max-width: var(--max); margin: 4rem auto 0; }
 .robot-details h3 { margin: 0 0 1.25rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-size: .7rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
-.detail-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.detail-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
 .detail-card { margin: 0; min-width: 0; border: 1px solid var(--line); background: var(--paper-2); overflow: hidden; }
 .detail-card img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; filter: saturate(.88) contrast(1.03); }
 .detail-card figcaption { padding: 1.1rem; display: flex; flex-direction: column; gap: .6rem; border-top: 1px solid var(--line); }
@@ -214,6 +214,7 @@ img { max-width: 100%; display: block; }
 .join-links { display:flex; flex-wrap:wrap; gap:1rem; margin-top:2rem; }
 .join-links a { text-decoration:none; color:#fff; border:2px solid #fff; padding:.85rem 1.1rem; font:600 .72rem/1 "IBM Plex Mono",monospace; text-transform:uppercase; }
 .join-links a:hover { background:#fff; color:var(--ink); }
+.join-links a[href^="mailto:"] { text-transform: none; }
 
 footer { background:var(--ink); color:var(--paper); padding:2.5rem var(--pad); display:grid; grid-template-columns:1fr 1fr 1fr; gap:2rem; border-top:1px solid var(--line-dark); }
 footer > div { display:flex; flex-direction:column; gap:.45rem; }
@@ -239,6 +240,10 @@ footer span, footer a { color:#909090; font-size:.72rem; text-decoration:none; }
 .section-index { display:flex; align-items:center; gap:1rem; }
 .section-index::after { content:""; height:1px; width:clamp(2rem,8vw,8rem); background:currentColor; transform:scaleX(0); transform-origin:left; transition:transform .9s cubic-bezier(.2,.7,.2,1); }
 .section-index.in::after { transform:scaleX(1); }
+
+@media (max-width: 1200px) {
+  .detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
 @media (max-width: 980px) {
   .site-header { grid-template-columns:1fr auto; }
@@ -422,6 +427,42 @@ main, section, header, footer { max-width: 100%; }
   .member-quote p { font-size: 1rem; }
 }
 .member-grid--single { grid-template-columns: minmax(0, 21rem); justify-content: center; }
+
+.sponsors-list { padding: 5rem var(--pad) 6rem; }
+.sponsor-list { max-width: var(--max); margin: auto; display: grid; gap: 1.5rem; }
+.sponsor-card { min-width: 0; display: grid; grid-template-columns: 1fr 2fr; border: 1px solid var(--line); }
+.sponsor-logo-pane { min-width: 0; min-height: 15rem; padding: 2rem; border-right: 1px solid var(--line); background: #fff; display: flex; align-items: center; justify-content: center; }
+.sponsor-logo { width: var(--logo-width, 280px); max-width: 100%; max-height: 12rem; height: auto; object-fit: contain; }
+.sponsor-logo-fallback { max-width: 100%; font: 800 2rem/1.1 "Barlow Condensed", Impact, sans-serif; text-align: center; overflow-wrap: anywhere; }
+.sponsor-body { min-width: 0; padding: clamp(1.5rem, 3vw, 3rem); background: var(--paper-2); }
+.sponsor-index { margin: 0 0 1rem; color: #616161; font-size: .65rem; letter-spacing: .08em; }
+.sponsor-name { margin: 0; font: 800 clamp(2rem, 3vw, 3.1rem)/1.05 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; overflow-wrap: anywhere; }
+.sponsor-description { max-width: 58ch; margin: 1.25rem 0; font-size: 1rem; line-height: 1.7; text-wrap: pretty; overflow-wrap: anywhere; }
+.sponsor-links { display: flex; flex-wrap: wrap; gap: .35rem 1.5rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+.sponsor-links li { min-width: 0; }
+.sponsor-links a { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; max-width: 100%; font-size: .7rem; line-height: 1.5; text-decoration: none; text-transform: uppercase; overflow-wrap: anywhere; }
+.sponsor-links a:hover { text-decoration: underline; text-underline-offset: .3em; }
+.sponsor-support { padding: 5rem var(--pad) 6rem; }
+.support-heading, .support-grid { max-width: var(--max); margin-inline: auto; }
+.support-heading h2 { margin: 2rem 0; font: 800 clamp(2.8rem, 5vw, 5.5rem)/1 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; }
+.support-heading > p:last-child { max-width: 48rem; color: #bdbdb7; font-size: 1.1rem; line-height: 1.7; text-wrap: pretty; }
+.support-heading a:hover { color: var(--red-on-dark); }
+.support-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; margin-top: 3rem; }
+.support-grid article { min-width: 0; padding-top: 1.5rem; border-top: 1px solid var(--line-dark); }
+.support-grid h3 { margin: 1.5rem 0 1rem; font: 700 clamp(1.7rem, 2.4vw, 2.3rem)/1.1 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; overflow-wrap: anywhere; }
+.support-grid article > p:last-child { color: #bdbdb7; line-height: 1.7; }
+@media (max-width: 980px) {
+  .sponsor-card { grid-template-columns: 1fr 1.5fr; }
+  .sponsor-logo-pane { padding: 1.5rem; }
+  .support-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+@media (max-width: 620px) {
+  .sponsors-list, .sponsor-support { padding-block: 3rem; }
+  .sponsor-card { grid-template-columns: 1fr; }
+  .sponsor-logo-pane { min-height: 12rem; border-right: 0; border-bottom: 1px solid var(--line); }
+  .sponsor-logo { max-height: 10rem; }
+  .support-heading h2 { font-size: clamp(2.2rem, 9vw, 3rem); overflow-wrap: anywhere; }
+}
 
 .error-page { min-height: 100svh; display: flex; flex-direction: column; }
 .error-page main { flex: 1; display: grid; }

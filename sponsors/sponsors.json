@@ -1,0 +1,36 @@
+{
+  "sponsors": [
+    {
+      "name": "Technický klub mládeže Litoměřice",
+      "logo": "photos/sponsors/tkm.jpg",
+      "logoWidth": 300,
+      "description": "Technický klub mládeže v Litoměřicích nabízí kroužky robotiky, modelářství, elektroniky, 3D tisku i řemesel. Funguje pod Institutem technického vzdělávání a je také zázemím našeho regionálního robotického týmu. Děti a studenti tu pracují na vlastních projektech a učí se používat nástroje i techniku v dílně.",
+      "links": {
+        "Web klubu": "https://www.technickyklub.cz/",
+        "Kroužky a sekce": "https://www.technickyklub.cz/#tkm"
+      }
+    },
+    {
+      "name": "ProtoPrint s.r.o.",
+      "logo": "photos/sponsors/protoprint.png",
+      "logoWidth": 340,
+      "description": "Litoměřická firma zaměřená na 3D tisk, návrh modelů a prototypování. Vyrábí funkční prototypy, náhradní díly i zakázkové výrobky od jednotlivých kusů po menší série. Pomáhá s přípravou modelu a ověřením jeho rozměrů a funkce před výrobou.",
+      "links": {
+        "Web ProtoPrint": "https://www.pp3d.cz/",
+        "Návrh a 3D tisk": "https://www.pp3d.cz/#nase-sluzby",
+        "Kontakt": "https://www.pp3d.cz/#kontakt"
+      }
+    },
+    {
+      "name": "Projekt RUR",
+      "logo": "photos/sponsors/rur.svg",
+      "logoWidth": 340,
+      "description": "RUR znamená Region univerzitě, univerzita regionu. Projekt Univerzity Jana Evangelisty Purkyně v Ústí nad Labem se věnuje rozvoji Ústeckého kraje, vzdělávání a spolupráci univerzity s regionem. V jeho rámci je podporována také robotika a projekt RobUL, do kterého je zapojený náš tým.",
+      "links": {
+        "O projektu RUR": "https://rur.ujep.cz/zakladni-informace/",
+        "RobUL": "https://robul.cz/",
+        "Podpora robotických týmů": "https://robul.cz/?p=1682"
+      }
+    }
+  ]
+}

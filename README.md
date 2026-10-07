@@ -1,7 +1,9 @@
 # CircuitBreakers
 
 Web středoškolského robotického týmu z Litoměřic. Na `/` je portfolio robotů,
-soutěží a práce v dílně, na `/team/` jsou profily členů. Web hostuje GitHub Pages.
+soutěží a práce v dílně, na `/team/` jsou profily členů a na `/sponsors/`
+seznam sponzorů s možnostmi podpory. Web hostuje GitHub Pages.
+Kontakt pro sponzorskou spolupráci: `sponzori@circuitbreakers.cloud`.
 
 ## Lokální spuštění
 
@@ -70,9 +72,40 @@ V Settings → Pages ponechte publikování větve `main` ze složky `/`.
 Změny se na veřejném webu projeví po pushi a dokončení nasazení GitHub Pages.
 Hosting může ještě chvíli vracet předchozí verzi z cache.
 
-JSON je dostupný na `/team/team.json`. V `sitemap.xml` jsou pouze stránky
-portfolia a týmu. Při obnovení stránky prohlížeč ověřuje aktuální verzi JSONu.
+JSONy jsou dostupné na `/team/team.json` a `/sponsors/sponsors.json`.
+V `sitemap.xml` jsou pouze stránky portfolia, týmu a sponzorů.
+Při obnovení stránky prohlížeč ověřuje aktuální verzi JSONu.
 
 Chybová stránka je v `404.html`. GitHub Pages ji použije pro neexistující adresy.
 Odkazy a styly na ní začínají `/`, aby fungovaly i u chyb v podsložkách.
 Stránka má `noindex` a není v sitemap. Přímý náhled je na `/404.html`.
+
+## Úpravy sponzorů
+
+Upravujte `sponsors/sponsors.json` a obnovte `/sponsors/`. HTML ani build
+kvůli změně sponzora nepotřebujete. Pořadí v poli `sponsors` určuje pořadí karet.
+
+```json
+{
+  "sponsors": [
+    {
+      "name": "ProtoPrint s.r.o.",
+      "logo": "photos/sponsors/protoprint.png",
+      "logoWidth": 340,
+      "description": "Firma z Litoměřic zaměřená na 3D tisk a prototypování.",
+      "links": {
+        "Web": "https://www.pp3d.cz/",
+        "Kontakt": "https://www.pp3d.cz/#kontakt"
+      }
+    }
+  ]
+}
+```
+
+- `name` je povinný název. `description` a `links` můžete vynechat.
+- `links` je objekt `"název odkazu": "adresa"`. Pořadí položek určuje pořadí odkazů. Podporované adresy začínají `https:`, `http:`, `mailto:` nebo `tel:`.
+- Loga ukládejte do `photos/sponsors/`. Podporované přípony jsou `.webp`, `.jpg`, `.jpeg`, `.png`, `.avif` a `.svg`. Původní proporce a barvy zůstávají zachované.
+- `logoWidth` je volitelná šířka v pixelech od 80 do 600, výchozí hodnota je 280. Na menší obrazovce se logo zmenší, aby se vešlo do karty; výška se přizpůsobí proporcím a dostupnému místu.
+- Bez loga, při chybné cestě nebo při selhání obrázku se v jeho místě zobrazí název sponzora.
+
+Zdroje použitých log a popisů jsou v `photos/sponsors/SOURCES.md`.
