@@ -56,7 +56,7 @@ img { max-width: 100%; display: block; }
   border-bottom: 1px solid rgba(255,255,255,.1);
 }
 .brand { display: inline-flex; align-items: center; gap: .8rem; text-decoration: none; width: max-content; }
-.brand-mark { width: 2rem; height: 2rem; display: grid; place-items: center; background: var(--red); color: #fff; font: 900 .8rem/1 "IBM Plex Mono", monospace; }
+.brand-mark { width: 4rem; height: auto; flex-shrink: 0; }
 .brand-name { font-family: "Barlow Condensed", sans-serif; text-transform: uppercase; font-weight: 800; letter-spacing: .06em; }
 .site-header nav { display: flex; gap: 1.4rem; }
 .menu-toggle {
@@ -220,6 +220,9 @@ footer { background:var(--ink); color:var(--paper); padding:2.5rem var(--pad); d
 footer > div { display:flex; flex-direction:column; gap:.45rem; }
 footer strong { font-family:"Barlow Condensed",sans-serif; font-size:1.5rem; text-transform:uppercase; }
 footer span, footer a { color:#909090; font-size:.72rem; text-decoration:none; }
+.footer-brand { flex-direction:row; align-items:center; gap:1rem; }
+.footer-logo { width:8rem; height:auto; flex-shrink:0; }
+.footer-brand > div { display:flex; flex-direction:column; gap:.45rem; }
 .footer-meta { text-align:center; align-items:center; }
 .footer-sources { align-items:flex-end; flex-direction:row; justify-content:flex-end; }
 .footer-sources a:hover { color:var(--red-on-dark); }
@@ -290,6 +293,7 @@ footer span, footer a { color:#909090; font-size:.72rem; text-decoration:none; }
   :root { --pad: 1rem; }
   .site-header { padding:.7rem 1rem; }
   .brand-name { display:none; }
+  .footer-logo { width:6rem; }
   .menu-toggle { min-height:44px; }
   .hero { padding-top:6rem; gap:2rem; }
   .hero-meta { position:relative; top:auto; left:auto; right:auto; }
