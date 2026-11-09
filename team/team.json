@@ -6,7 +6,7 @@
         {
           "name": "Jindra",
           "role": "Mentor",
-          "quote": ["Naše máma", "Báj vočko"],
+          "quote": ["Naše máma", "Báj vočko", "Báj vočko plus mínus", "Když to nebude rovně, tak to bude báj vočko"],
           "photo": "photos/team/Jindra.webp"
         }
       ]
@@ -21,7 +21,7 @@
         },
         {
           "name": "Elko",
-          "quote": "Kafinovaný programátor",
+          "quote": ["Kafinovaný programátor", "To není vyvrtané ve středu, to je ve čtvrtek"],
           "photo": "photos/team/Elko.webp"
         },
         {
