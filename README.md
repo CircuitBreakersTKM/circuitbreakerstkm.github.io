@@ -41,7 +41,7 @@ Ukázka se dvěma skupinami:
         {
           "name": "Ami",
           "photo": "photos/team/Ami.webp",
-          "quote": "Profesionální šuplík"
+          "quote": ["Profesionální šuplík", "Druhá hláška"]
         }
       ]
     }
@@ -55,7 +55,7 @@ jeho umístění na stránce. HTML kvůli těmto změnám neupravujte.
 - `name`: povinné jméno.
 - `photo`: cesta k fotce, například `photos/team/Ami.webp`. Bez fotky, při prázdné cestě nebo chybě načítání se použije `photos/team/placeholder.webp`.
 - `role`: volitelná role v týmu.
-- `quote`: volitelná hláška. Prázdná role nebo hláška se nezobrazí.
+- `quote`: volitelná hláška, buď jeden text, nebo pole textů. Z pole se při každém načtení stránky vybere náhodně jedna. Prázdná role nebo hláška se nezobrazí.
 
 Fotky ukládejte do `photos/team/`. Cesta v JSONu začíná `photos/team/`,
 i když samotný JSON leží ve složce `team/`. České názvy souborů fungují.

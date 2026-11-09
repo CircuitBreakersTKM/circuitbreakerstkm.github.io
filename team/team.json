@@ -6,7 +6,7 @@
         {
           "name": "Jindra",
           "role": "Mentor",
-          "quote": "Naše máma",
+          "quote": ["Naše máma", "Báj vočko"],
           "photo": "photos/team/Jindra.webp"
         }
       ]

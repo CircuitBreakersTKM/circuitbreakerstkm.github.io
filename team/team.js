@@ -21,6 +21,13 @@
     return value.trim();
   }
 
+  // A quote may be one string or an array of strings; each page load shows a random one.
+  function pickQuote(value) {
+    if (!Array.isArray(value)) return optionalText(value, 'Quote');
+    const quotes = value.map(quote => optionalText(quote, 'Each quote')).filter(Boolean);
+    return quotes.length ? quotes[Math.floor(Math.random() * quotes.length)] : '';
+  }
+
   function photoUrl(path) {
     if (!path) return placeholderUrl;
     const parts = path.split('/');
@@ -42,7 +49,7 @@
           return {
             name: member.name.trim(),
             role: optionalText(member.role, 'Role'),
-            quote: optionalText(member.quote, 'Quote'),
+            quote: pickQuote(member.quote),
             photo: photoUrl(optionalText(member.photo, 'Photo'))
           };
         })
