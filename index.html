@@ -2,6 +2,24 @@
 <html lang="cs">
 <head>
   <meta charset="utf-8">
+  <script>
+    if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
+      history.scrollRestoration = 'manual';
+      document.documentElement.style.scrollBehavior = 'auto';
+      if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
+      scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      addEventListener('pageshow', () => {
+        scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        requestAnimationFrame(() => document.documentElement.style.removeProperty('scroll-behavior'));
+      }, { once: true });
+    } else {
+      history.scrollRestoration = 'auto';
+    }
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion-boot');
+      setTimeout(() => document.documentElement.classList.remove('motion-boot'), 2200);
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0a0a0a">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -27,7 +45,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20261023-logos">
+  <link rel="stylesheet" href="./styles.css?v=brand-layout-7">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -88,7 +106,16 @@
 
   <main id="main-content">
     <section id="top" class="hero section-dark" aria-labelledby="hero-title">
-      <canvas id="circuit-canvas" aria-hidden="true"></canvas>
+      <svg class="circuit-traces" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g fill="none" stroke="currentColor" stroke-width="1.5">
+          <path pathLength="1" d="M0 300H240V180H680V80H960"/>
+          <path pathLength="1" d="M1440 220H1150V420H920V560H760"/>
+          <path pathLength="1" d="M100 900V660H340V460H460"/>
+          <path pathLength="1" d="M1440 760H1200V640H1040V800H780"/>
+          <path pathLength="1" d="M300 0V100H480V260H820"/>
+        </g>
+        <g fill="currentColor"><circle cx="960" cy="80" r="4"/><circle cx="760" cy="560" r="4"/><circle cx="460" cy="460" r="4"/><circle cx="780" cy="800" r="4"/><circle cx="820" cy="260" r="4"/></g>
+      </svg>
       <div class="hero-grid" aria-hidden="true"></div>
 
       <div class="hero-meta mono">
@@ -100,10 +127,10 @@
       <div class="hero-copy">
         <p class="eyebrow mono">01 / CircuitBreakers</p>
         <h1 id="hero-title" class="hero-title" aria-label="CircuitBreakers">
-          <span class="hero-word" data-shift="-1">CIRCUIT</span>
-          <span class="hero-word outline" data-shift="1">BREAKERS</span>
+          <span class="hero-word" data-shift="-1"><span class="hero-word-inner">CIRCUIT</span></span>
+          <span class="hero-word outline" data-shift="1"><span class="hero-word-inner">BREAKERS</span></span>
         </h1>
-        <p class="hero-lede">Jsme středoškolský robotický tým z Litoměřic. <strong>Navrhujeme, stavíme a programujeme soutěžní roboty.</strong></p>
+        <p class="hero-lede">Jsme středoškolský tým z Litoměřic. Navrhujeme, stavíme a programujeme soutěžní roboty.</p>
       </div>
 
       <div class="hero-foot mono">
@@ -115,10 +142,12 @@
       </div>
     </section>
 
+    <div class="motion-ribbon" aria-hidden="true"><div class="motion-ribbon-track"><span>NAVRHUJEME <i>/</i> STAVÍME <i>/</i> PROGRAMUJEME <i>/</i> TESTUJEME <i>/</i> </span><span>NAVRHUJEME <i>/</i> STAVÍME <i>/</i> PROGRAMUJEME <i>/</i> TESTUJEME <i>/</i> </span></div></div>
+
     <section id="tym" class="intro section-paper">
       <div class="section-index mono">02 / Kdo jsme</div>
       <div class="intro-grid">
-        <h2>Robotika od návrhu<br>až po závod.</h2>
+        <h2>Stavíme soutěžní roboty</h2>
         <div class="intro-copy">
           <p>CircuitBreakers je středoškolský robotický tým z Litoměřic. Fungujeme jako jeden ze čtyř regionálních týmů projektu <a href="https://robul.cz/" target="_blank" rel="noreferrer">RobUL</a>.</p>
           <p>V týmu se věnujeme mechanice, elektronice, programování i strategii. Robota průběžně navrhujeme, vyrábíme, testujeme a podle výsledků dál upravujeme.</p>
@@ -140,7 +169,7 @@
 
       <div class="facts-row" aria-label="Rychlá fakta">
         <article class="fact">
-          <span class="fact-value">02.</span>
+          <span class="fact-value">2.</span>
           <span class="fact-label">místo / regionální soutěž 2025</span>
         </article>
         <article class="fact">
@@ -164,16 +193,16 @@
         <div class="race-stage">
           <div class="race-copy">
             <p class="eyebrow mono">Regionální robotická soutěž / SLUNETA</p>
-            <h2>Druhé místo.<br><span class="accent">Šestnáct bodů.</span><br>Regionální soutěž 2025.</h2>
+            <h2>Druhé místo<br><span class="accent">a 16 bodů</span></h2>
             <p>Soutěž měla pět disciplín: laser, kroužky, bludiště, pohyblivé předměty a slalom. Robot je plnil manuálně i autonomně a rozhodovala hlavně spolehlivost, přesnost a příprava.</p>
             <a class="text-link" href="https://prf.ujep.cz/cs/29923/chomutovsky-tym-chobot-vyhral-regionalni-robotickou-soutez-a-poleti-do-usa" target="_blank" rel="noreferrer">Výsledky a reportáž UJEP ↗</a>
           </div>
           <div class="scoreboard" aria-label="Pořadí regionální soutěže 2025">
-            <div class="score-head mono"><span>TEAM</span><span>PTS</span></div>
+            <div class="score-head mono"><span>Tým</span><span>Body</span></div>
             <div class="score-line"><span>CHOBOT</span><strong>26</strong></div>
             <div class="score-line active"><span>CIRCUITBREAKERS</span><strong>16</strong></div>
-            <div class="score-line"><span>PAPERBOX</span><strong>09</strong></div>
-            <div class="score-line"><span>LEDbot</span><strong>04</strong></div>
+            <div class="score-line"><span>PAPERBOX</span><strong>9</strong></div>
+            <div class="score-line"><span>LEDbot</span><strong>4</strong></div>
           </div>
         </div>
       </div>
@@ -195,16 +224,70 @@
 
         <div class="robot-copy">
           <p class="eyebrow mono">Robot / řízení / autonomie</p>
-          <h2>Mechanika, řízení a autonomie.</h2>
-          <p>Náš robotický projekt z roku 2025 používá WPILib a je napsaný v Javě. Ve veřejném repozitáři najdete swerve drive, autonomní režimy, práci s kamerou, QR detekci, telemetrii, PID/PIDF řízení i bezpečnostní logiku.</p>
+          <h2>Robot pro sezónu 2025</h2>
+          <p>Robota řídíme v Javě s WPILib. Má swerve pohon, kameru pro detekci QR kódů a autonomní režimy. Kód zahrnuje také telemetrii, PID/PIDF regulaci a bezpečnostní logiku.</p>
           <dl class="spec-list">
-            <div><dt class="mono">DRIVE</dt><dd>Swerve / YAGSL</dd></div>
-            <div><dt class="mono">VISION</dt><dd>kamera + QR / coprocessor</dd></div>
-            <div><dt class="mono">AUTO</dt><dd>bludiště, navigace, reakce na obraz</dd></div>
-            <div><dt class="mono">STACK</dt><dd>WPILib, PathPlanner, PhotonLib, CTRE, REV</dd></div>
+            <div><dt class="mono">Pohon</dt><dd>Swerve / YAGSL</dd></div>
+            <div><dt class="mono">Kamera</dt><dd>kamera + QR / coprocessor</dd></div>
+            <div><dt class="mono">Autonomie</dt><dd>bludiště, navigace, reakce na obraz</dd></div>
+            <div><dt class="mono">Knihovny</dt><dd>WPILib, PathPlanner, PhotonLib, CTRE, REV</dd></div>
           </dl>
         </div>
       </div>
+
+
+      <div class="robot-explorer" aria-labelledby="explorer-title">
+        <div class="explorer-heading"><p class="eyebrow mono">Náš robot / 2025</p><h3 id="explorer-title">Jak robot funguje</h3><p>Vyber část robota a podívej se na její zapojení.</p></div>
+        <div class="explorer-tabs" aria-label="Části robota" hidden>
+          <button type="button" id="tab-drive" data-robot-tab="drive" class="mono">Pohon</button>
+          <button type="button" id="tab-vision" data-robot-tab="vision" class="mono">Kamera</button>
+          <button type="button" id="tab-control" data-robot-tab="control" class="mono">Elektronika</button>
+        </div>
+        <div class="explorer-panels">
+          <section id="panel-drive" class="explorer-panel" data-robot-panel="drive" aria-labelledby="panel-title-drive">
+            <figure><img src="./photos/site/robot-chassis-2025-1280.webp" alt="Podvozek se čtyřmi pohonnými moduly a kabeláží." width="1280" height="720" loading="lazy" decoding="async"><figcaption class="mono">01 / Pohon</figcaption></figure>
+            <div class="explorer-text"><span class="mono explorer-number">01 / Pohon</span><h4 id="panel-title-drive">Pohon do všech směrů</h4><p>Swerve pohon umožňuje natáčet jednotlivé moduly. Robot tak může měnit směr jízdy nezávisle na natočení podvozku. Náš projekt používá knihovnu YAGSL.</p></div>
+          </section>
+          <section id="panel-vision" class="explorer-panel" data-robot-panel="vision" aria-labelledby="panel-title-vision">
+            <figure><img src="./photos/site/robot-camera-2025-614.webp" alt="Kamera v tištěném držáku s propojovacím kabelem." width="1280" height="720" loading="lazy" decoding="async"><figcaption class="mono">02 / Kamera</figcaption></figure>
+            <div class="explorer-text"><span class="mono explorer-number">02 / Kamera</span><h4 id="panel-title-vision">Kamera a QR kódy</h4><p>Kamera a koprocesor zpracovávají obraz a detekují QR kódy. Tyto informace používáme při autonomních úlohách a navigaci.</p></div>
+          </section>
+          <section id="panel-control" class="explorer-panel" data-robot-panel="control" aria-labelledby="panel-title-control">
+            <figure><img src="./photos/site/robot-electronics-2025-638.webp" alt="Rozvod napájení a zapojení elektroniky robota." width="1280" height="720" loading="lazy" decoding="async"><figcaption class="mono">03 / Elektronika</figcaption></figure>
+            <div class="explorer-text"><span class="mono explorer-number">03 / Elektronika</span><h4 id="panel-title-control">Napájení a řízení</h4><p>Elektronika propojuje napájení, pohon a senzory. Kód v Javě s WPILib řeší ruční i autonomní režim, telemetrii a bezpečnostní logiku.</p></div>
+          </section>
+        </div>
+      </div>
+      <section class="swerve-demo" aria-labelledby="swerve-title">
+        <div class="swerve-copy"><p class="eyebrow mono">Swerve pohon</p><h3 id="swerve-title">Každé kolo<br>zatáčí zvlášť</h3><p>Šipky určují směr na hřišti, i když je robot otočený. Každý povel naváže na předchozí polohu. Otočení přidá 90° doprava.</p>
+          <p class="swerve-description" role="status">Vyber směr nebo otočení. Další povely počkají ve frontě.</p>
+          <dl class="swerve-pose mono" aria-label="Poloha ve schématu"><div><dt>X</dt><dd id="pose-x">0</dd></div><div><dt>Y</dt><dd id="pose-y">0</dd></div><div><dt>Natočení</dt><dd id="pose-heading">0°</dd></div></dl>
+          <p class="swerve-queue mono" role="status">Ve frontě: <span id="queue-count">0</span></p>
+          <p class="swerve-note mono">Schéma principu swerve pohonu. Nejde o simulaci skutečného výkonu našeho robota.</p>
+        </div>
+        <figure class="swerve-stage"><div class="swerve-controls gamepad" role="group" aria-label="Ovládání robota podle hřiště" hidden>
+            <button type="button" class="mono pad-up" data-swerve="up" aria-label="Nahoru"><span aria-hidden="true">↑</span><small>Nahoru</small></button>
+            <button type="button" class="mono pad-left" data-swerve="left" aria-label="Doleva"><span aria-hidden="true">←</span><small>Doleva</small></button>
+            <button type="button" class="mono pad-down" data-swerve="down" aria-label="Dolů"><span aria-hidden="true">↓</span><small>Dolů</small></button>
+            <button type="button" class="mono pad-right" data-swerve="right" aria-label="Doprava"><span aria-hidden="true">→</span><small>Doprava</small></button>
+            <button type="button" class="mono pad-spin" data-swerve="spin" aria-label="Otočit o 90 stupňů doprava"><span aria-hidden="true">↻</span><small>Otočit 90°</small></button>
+            <button type="button" class="mono pad-reset" data-swerve="reset"><span aria-hidden="true">⌖</span><small>Reset</small></button>
+          </div><svg id="swerve-svg" viewBox="0 0 520 460" role="img" aria-labelledby="swerve-svg-title swerve-svg-desc">
+          <title id="swerve-svg-title">Princip swerve pohonu</title><desc id="swerve-svg-desc">Čtyři kola směřují dopředu.</desc>
+          <defs><pattern id="swerve-grid" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M26 0H0V26" fill="none" stroke="currentColor" stroke-opacity=".08"/></pattern></defs>
+          <rect width="520" height="460" fill="url(#swerve-grid)"/>
+          <path d="M260 20V440M20 230H500" class="swerve-axis"/>
+          <g transform="translate(260 230)"><g id="swerve-chassis">
+            <rect x="-90" y="-90" width="180" height="180" rx="12" class="chassis-frame"/>
+            <path d="M-60-60H60V60H-60Z M-90-90L90 90 M90-90L-90 90" class="chassis-brace"/>
+            <path d="M0-42L-10-25H10Z" class="chassis-front"/><text x="0" y="20" text-anchor="middle" class="chassis-label">CB</text>
+            <g transform="translate(-90 -90)"><g class="swerve-wheel"><rect x="-13" y="-25" width="26" height="50" rx="6"/><path class="wheel-tread" d="M-6-20V20M6-20V20"/><g class="wheel-vector"><path d="M0 15V-43M-7-35L0-43L7-35"/></g></g></g>
+            <g transform="translate(90 -90)"><g class="swerve-wheel"><rect x="-13" y="-25" width="26" height="50" rx="6"/><path class="wheel-tread" d="M-6-20V20M6-20V20"/><g class="wheel-vector"><path d="M0 15V-43M-7-35L0-43L7-35"/></g></g></g>
+            <g transform="translate(-90 90)"><g class="swerve-wheel"><rect x="-13" y="-25" width="26" height="50" rx="6"/><path class="wheel-tread" d="M-6-20V20M6-20V20"/><g class="wheel-vector"><path d="M0 15V-43M-7-35L0-43L7-35"/></g></g></g>
+            <g transform="translate(90 90)"><g class="swerve-wheel"><rect x="-13" y="-25" width="26" height="50" rx="6"/><path class="wheel-tread" d="M-6-20V20M6-20V20"/><g class="wheel-vector"><path d="M0 15V-43M-7-35L0-43L7-35"/></g></g></g>
+          </g></g>
+        </svg><figcaption class="mono">Pohled shora / šipky u kol ukazují směr jízdy</figcaption></figure>
+      </section>
 
       <div class="robot-details" aria-labelledby="robot-details-title">
         <h3 id="robot-details-title" class="mono">Detaily robota / 2025</h3>
@@ -249,8 +332,8 @@
       <div class="section-index mono">05 / Kód</div>
       <div class="code-grid">
         <div class="code-copy">
-          <h2>Programování robota.</h2>
-          <p>Veřejný repozitář zachycuje vývoj našeho robota během sezóny — od kalibrace kamery a autonomního průjezdu bludištěm přes řízení pohybu až po bezpečnostní logiku a úpravy před soutěží.</p>
+          <h2>Kód v Javě</h2>
+          <p>Ve veřejném repozitáři najdeš kalibraci kamery, autonomní průjezd bludištěm, řízení pohybu i bezpečnostní logiku. Je v něm také vidět, co jsme upravovali před soutěží.</p>
           <a class="repo-link" href="https://github.com/CircuitBreakersTKM/RobUL-2025-Local" target="_blank" rel="noreferrer">
             <span class="mono">github.com/CircuitBreakersTKM</span>
             <strong>RobUL-2025-Local ↗</strong>
@@ -272,7 +355,7 @@ robot {
     <section class="photos section-dark" aria-labelledby="photos-title">
       <div class="section-index mono">06 / V terénu</div>
       <div class="photos-head">
-        <h2 id="photos-title">Práce v dílně.</h2>
+        <h2 id="photos-title">Práce v dílně</h2>
         <p>Montáž podvozku a zapojování elektroniky v naší dílně během sezóny 2025.</p>
       </div>
       <div class="photo-grid">
@@ -304,7 +387,7 @@ robot {
       <div class="robul-grid">
         <div>
           <p class="eyebrow mono">Čtyři města / jeden výběrový tým</p>
-          <h2>Lokálně stavíme.<br>Společně reprezentujeme.</h2>
+          <h2>Čtyři regionální týmy<br>v síti RobUL</h2>
         </div>
         <div class="robul-copy">
           <p>Od školního roku 2025/2026 funguje RobUL jako síť čtyř regionálních týmů. CircuitBreakers je regionální tým pro Litoměřice. Vybraní členové regionálních týmů mohou být součástí výběrového FRC týmu RobUL #9585.</p>
@@ -316,15 +399,15 @@ robot {
         <div role="listitem"><span class="mono">01</span><strong>CHOBOT</strong><small>Chomutov</small></div>
         <div role="listitem"><span class="mono">02</span><strong>PaperBox</strong><small>Štětí</small></div>
         <div role="listitem"><span class="mono">03</span><strong>LEDbot</strong><small>Ústí nad Labem</small></div>
-        <div role="listitem" class="ours"><span class="mono">04</span><strong>CircuitBreakers</strong><small>Litoměřice / CircuitBreakers</small></div>
+        <div role="listitem" class="ours"><span class="mono">04</span><strong>CircuitBreakers</strong><small>Litoměřice</small></div>
       </div>
     </section>
 
     <section class="denver section-dark">
       <div class="denver-number" aria-hidden="true">9585</div>
       <div class="denver-copy">
-        <p class="eyebrow mono">CircuitBreakers → RobUL #9585 / Denver Regional 2026</p>
-        <h2><span class="denver-title-line">Dva členové</span> <span class="denver-title-line">CircuitBreakers</span> <span class="denver-title-line">v RobUL #9585.</span></h2>
+        <p class="eyebrow mono">CircuitBreakers / RobUL #9585 / Denver Regional 2026</p>
+        <h2><span class="denver-title-line">Dva členové</span> <span class="denver-title-line">CircuitBreakers</span> <span class="denver-title-line">v RobUL #9585</span></h2>
         <p>CircuitBreakers na Denver Regional nesoutěžil jako samostatný FRC tým. Dva naši členové byli součástí výběrového týmu RobUL #9585, který dokončil kvalifikaci na 34. místě z 55 a poté nastoupil do vyřazovací části jako součást 7. aliance.</p>
         <a class="text-link" href="https://icuk.cz/tym-robul-na-roboticke-soutezi-denver-regional-2026-pribeh-ktery-stoji-za-vypraveni/" target="_blank" rel="noreferrer">Příběh z Denveru ↗</a>
       </div>
@@ -333,7 +416,7 @@ robot {
     <section id="kontakt" class="join section-red">
       <div class="section-index mono">08 / Co dál</div>
       <div class="join-grid">
-        <h2>Napiš nám<br>na Instagram.</h2>
+        <h2>Napiš nám<br>na Instagram</h2>
         <div>
           <p>Zajímá tě programování, mechanika, elektronika, CAD nebo strategie? Pokud se chceš přidat, na něco se zeptat nebo se přijít podívat, napiš nám na Instagram. Tam se ti ozveme nejrychleji.</p>
           <div class="join-links">
@@ -367,6 +450,9 @@ robot {
     </div>
   </footer>
 
-  <script src="./script.js?v=20261005-team2" defer></script>
+  <script src="./vendor/motion-14.11.1.js" defer></script>
+  <script src="./script.js?v=brand-layout-7" defer></script>
+  <script src="./vendor/anime-4.5.0.js" defer></script>
+  <script src="./robot.js?v=brand-layout-7" defer></script>
 </body>
 </html>

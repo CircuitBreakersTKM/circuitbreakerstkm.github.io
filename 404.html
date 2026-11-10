@@ -2,6 +2,24 @@
 <html lang="cs">
 <head>
   <meta charset="utf-8">
+  <script>
+    if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
+      history.scrollRestoration = 'manual';
+      document.documentElement.style.scrollBehavior = 'auto';
+      if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
+      scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      addEventListener('pageshow', () => {
+        scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        requestAnimationFrame(() => document.documentElement.style.removeProperty('scroll-behavior'));
+      }, { once: true });
+    } else {
+      history.scrollRestoration = 'auto';
+    }
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion-boot');
+      setTimeout(() => document.documentElement.classList.remove('motion-boot'), 2200);
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0a0a0a">
   <meta name="robots" content="noindex, follow">
@@ -12,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=20261023-logos">
+  <link rel="stylesheet" href="/styles.css?v=brand-layout-7">
 </head>
 <body class="error-page">
   <a class="skip-link mono" href="#main-content">Přeskočit na obsah</a>
@@ -77,6 +95,7 @@
       <a href="/#kontakt">Kontakt</a>
     </div>
   </footer>
-  <script src="/script.js?v=20261005-team2" defer></script>
+  <script src="/vendor/motion-14.11.1.js" defer></script>
+  <script src="/script.js?v=brand-layout-7" defer></script>
 </body>
 </html>
