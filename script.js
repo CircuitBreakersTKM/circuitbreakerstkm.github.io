@@ -6,6 +6,7 @@
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
   const entries = new Map();
+  const wideRows = new Map([...document.querySelectorAll('.detail-grid, .photo-grid, .facts-row')].map(el => [el, { el, facts: el.matches('.facts-row'), top: 0, width: 0, progress: 1 }]));
   const opening = new Set();
   let frame = 0;
   let measureFrame = 0;
@@ -39,6 +40,17 @@
       entry.top = rect.top + scrollY;
       entry.height = rect.height;
       entry.visible = rect.width > 0 && rect.height > 0;
+      entry.wideRow = wideRows.get(entry.el.parentElement);
+      if (entry.wideRow) {
+        const parent = entry.el.parentElement.getBoundingClientRect();
+        entry.rowLeft = rect.left - parent.left;
+        entry.rowWidth = rect.width;
+      }
+    });
+    wideRows.forEach(row => {
+      const rect = row.el.getBoundingClientRect();
+      row.top = rect.top + scrollY;
+      row.width = rect.width;
     });
     render();
   }
@@ -51,20 +63,27 @@
     const distance = Math.max(120, Math.min(260, innerHeight * .25));
     const max = document.documentElement.scrollHeight - innerHeight;
     if (progress) progress.style.transform = `scaleX(${max > 0 ? clamp(scrollY / max) : 0})`;
+    wideRows.forEach(row => {
+      const p = reduced || compact.matches ? 1 : clamp((scrollY + innerHeight * .94 - row.top) / Math.max(distance, Math.min(420, innerHeight * .42)));
+      row.progress = p * p * (3 - 2 * p);
+      row.el.style.clipPath = !row.facts && !compact.matches && !reduced ? `inset(0 ${(1 - row.progress) * 100}% 0 0)` : 'none';
+    });
     entries.forEach(entry => {
-      const { el, top, photo, row, stagger, visible } = entry;
+      const { el, top, photo, row, stagger, visible, wideRow } = entry;
+      const continuous = wideRow && !compact.matches;
       const focused = el.contains(document.activeElement);
-      const p = reduced || focused || !visible ? 1 : clamp((scrollY + innerHeight * .94 - top - stagger) / distance);
+      const p = reduced || continuous || focused || !visible ? 1 : clamp((scrollY + innerHeight * .94 - top - stagger) / distance);
       // Position, rather than a one-shot timer, owns progress in both directions.
       const eased = p * p * (3 - 2 * p);
-      if (entry.lastProgress === eased) return;
-      entry.lastProgress = eased;
+      const revealProgress = continuous && wideRow.facts ? clamp((wideRow.progress * wideRow.width - entry.rowLeft) / Math.max(1, entry.rowWidth)) : eased;
+      if (entry.lastProgress === revealProgress) return;
+      entry.lastProgress = revealProgress;
       el.classList.add('scroll-reveal');
       el.classList.toggle('reveal-photo', photo);
-      el.style.setProperty('--reveal-progress', String(eased));
+      el.style.setProperty('--reveal-progress', String(revealProgress));
       el.style.opacity = photo ? '1' : String(.12 + .88 * eased);
       el.style.translate = row ? `${(1 - eased) * 16}px 0` : `0 ${(1 - eased) * (photo ? 12 : 24)}px`;
-      el.style.clipPath = photo && !reduced ? `inset(0 ${(1 - eased) * 100}% 0 0)` : 'none';
+      el.style.clipPath = photo && !reduced && !continuous ? `inset(0 ${(1 - eased) * 100}% 0 0)` : 'none';
     });
 
   }
@@ -110,6 +129,7 @@
   }
   let heroScroll = [];
   let ribbonAnimation;
+  let ribbonDuration = 36;
   let ribbonVisible = false;
   function setupHeroScroll() {
     heroScroll.forEach(({ animation, detach }) => { detach(); animation.cancel(); });
@@ -130,11 +150,23 @@
     else ribbonAnimation.pause();
   }
   function setupRibbon() {
+    const phase = ribbonAnimation ? (ribbonAnimation.time / ribbonDuration) % 1 : 0;
     ribbonAnimation?.cancel();
+    ribbonAnimation = undefined;
     if (!ribbon) return;
     ribbon.style.removeProperty('transform');
+    const seed = ribbon.firstElementChild;
+    if (!seed) return;
+    // One cycle must be followed by enough copies to cover the widest viewport.
+    const period = seed.getBoundingClientRect().width;
+    if (period <= 0) return;
+    const copies = Math.max(2, Math.ceil(ribbon.parentElement.clientWidth / period) + 1);
+    while (ribbon.children.length > copies) ribbon.lastElementChild.remove();
+    while (ribbon.children.length < copies) ribbon.append(seed.cloneNode(true));
     if (!motion || preference.matches) return;
-    ribbonAnimation = motion.animate(ribbon, { x: ['0%', '-50%'] }, { duration: 36, ease: 'linear', repeat: Infinity });
+    ribbonDuration = period / 36;
+    ribbonAnimation = motion.animate(ribbon, { x: [0, -period] }, { duration: ribbonDuration, ease: 'linear', repeat: Infinity });
+    ribbonAnimation.time = phase * ribbonDuration;
     updateRibbon();
   }
   if (ribbon) new IntersectionObserver(entries => {
@@ -143,6 +175,7 @@
   }).observe(ribbon.parentElement);
   document.addEventListener('visibilitychange', updateRibbon);
   addEventListener('resize', setupHeroScroll, { passive: true });
+  addEventListener('resize', setupRibbon, { passive: true });
   document.fonts.ready.then(() => { openPage(); setupHeroScroll(); setupRibbon(); });
 
   const header = document.querySelector('.site-header');

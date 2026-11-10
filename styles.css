@@ -676,7 +676,7 @@ footer span, footer a { font-size:.75rem; line-height:1.5; }
 .section-index::after { transform:scaleX(var(--reveal-progress,1)); }
 .motion-ribbon { padding:20px 0; background:var(--red); overflow:hidden; }
 .motion-ribbon-track { display:flex; width:max-content; will-change:transform; }
-.motion-ribbon-track > span { white-space:nowrap; font:600 clamp(24px,3vw,40px)/1.2 "Barlow Condensed",sans-serif; color:#fff; }
+.motion-ribbon-track > span { flex:0 0 auto; white-space:nowrap; font:600 clamp(24px,3vw,40px)/1.2 "Barlow Condensed",sans-serif; color:#fff; }
 .motion-ribbon i { font-style:normal; padding-inline:24px; }
 .hero-action, .join-links a, .explorer-tabs button, .swerve-controls button, .menu-toggle { touch-action:manipulation; }
 .hero-action:active, .join-links a:active, .explorer-tabs button:active, .swerve-controls button:active, .menu-toggle:active { scale:.98; }
