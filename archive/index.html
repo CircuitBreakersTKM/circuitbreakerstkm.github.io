@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <script>
+    if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
+      history.scrollRestoration = 'manual';
+      document.documentElement.style.scrollBehavior = 'auto';
+      if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
+      scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      addEventListener('pageshow', () => {
+        scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        requestAnimationFrame(() => document.documentElement.style.removeProperty('scroll-behavior'));
+      }, { once: true });
+    } else {
+      history.scrollRestoration = 'auto';
+    }
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion-boot');
+      setTimeout(() => document.documentElement.classList.remove('motion-boot'), 2200);
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <title>Archiv | CircuitBreakers</title>
+  <meta name="description" content="Archiv CircuitBreakers: výsledky, robot, kód a fotky z minulých sezón robotického týmu z Litoměřic.">
+  <link rel="canonical" href="https://circuitbreakers.cloud/archive/">
+  <meta property="og:title" content="Archiv | CircuitBreakers">
+  <meta property="og:site_name" content="CircuitBreakers">
+  <meta property="og:locale" content="cs_CZ">
+  <meta property="og:description" content="Výsledky, robot, kód a fotky z minulých sezón CircuitBreakers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://circuitbreakers.cloud/archive/">
+  <meta property="og:image" content="https://circuitbreakers.cloud/social-card.png?v=20261023-logos">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CircuitBreakers — robotický tým z Litoměřic">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Archiv | CircuitBreakers">
+  <meta name="twitter:description" content="Výsledky, robot, kód a fotky z minulých sezón CircuitBreakers.">
+  <meta name="twitter:image" content="https://circuitbreakers.cloud/social-card.png?v=20261023-logos">
+  <meta name="twitter:image:alt" content="CircuitBreakers — robotický tým z Litoměřic">
+  <link rel="icon" href="../photos/logos/favicon.ico?v=20261023-transparent" type="image/x-icon" sizes="16x16 32x32 48x48 64x64 128x128 256x256">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=20261023-logos" sizes="180x180">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=20261120-swerve3">
+</head>
+<body class="archive-page">
+  <a class="skip-link mono" href="#main-content">Přeskočit na obsah</a>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+
+  <header class="site-header">
+    <a class="brand" href="../" aria-label="CircuitBreakers — portfolio">
+      <img class="brand-mark" src="../photos/logos/circuit_breakers_simple_color.svg" alt="" width="1642" height="825">
+      <span class="brand-name">CircuitBreakers</span>
+    </a>
+    <button class="menu-toggle mono" type="button" aria-controls="main-nav" aria-expanded="false">
+      <span>Menu</span>
+      <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
+    </button>
+    <nav id="main-nav" class="main-nav" aria-label="Hlavní navigace">
+      <a href="../">Portfolio</a>
+      <a href="../team/">Náš tým</a>
+      <a href="../sponsors/">Sponzoři</a>
+      <a href="../#zavod">Výsledky</a>
+      <a href="./" aria-current="page">Archiv</a>
+      <a href="../#kontakt">Kontakt</a>
+      <a class="mobile-nav-extra" href="https://www.instagram.com/circuitbreakerstkm/" target="_blank" rel="noreferrer">Instagram ↗</a>
+      <a class="mobile-nav-extra" href="https://github.com/CircuitBreakersTKM" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </nav>
+    <a class="header-cta" href="https://github.com/CircuitBreakersTKM" target="_blank" rel="noreferrer">GitHub ↗</a>
+  </header>
+
+  <main id="main-content">
+    <section class="team-hero archive-hero section-dark" aria-labelledby="archive-title">
+      <div class="team-hero-inner">
+        <div class="team-hero-copy">
+          <p class="eyebrow mono">CircuitBreakers / Archiv</p>
+          <h1 id="archive-title" class="team-title">Minulé<br><span>sezóny</span></h1>
+          <p class="team-lede">Výsledky, roboti, kód a fotky z předchozích let. Aktuální sezóna je na hlavní stránce, starší najdeš tady.</p>
+        </div>
+
+        <nav class="season-list" aria-label="Výsledky podle sezón">
+          <div class="season-head mono" aria-hidden="true"><span>Sezóna</span><span>Soutěž</span><span>Výsledek</span></div>
+          <a class="season-row" href="../#zavod">
+            <span class="season-year">2026</span>
+            <span class="season-event"><strong>Regionální soutěž</strong><small class="mono">Robot Rosi / hlavní stránka</small></span>
+            <span class="season-result"><strong>1. místo</strong><small class="mono">12 bodů</small></span>
+          </a>
+          <a class="season-row" href="../#denver">
+            <span class="season-year">2026</span>
+            <span class="season-event"><strong>Denver Regional</strong><small class="mono">RobUL #9585 / hlavní stránka</small></span>
+            <span class="season-result"><strong>7. aliance</strong><small class="mono">34. z 55 v kvalifikaci</small></span>
+          </a>
+          <a class="season-row" href="#sezona-2025">
+            <span class="season-year">2025</span>
+            <span class="season-event"><strong>Regionální soutěž</strong><small class="mono">Robot Drandi / níže na stránce</small></span>
+            <span class="season-result"><strong>2. místo</strong><small class="mono">16 bodů</small></span>
+          </a>
+        </nav>
+      </div>
+    </section>
+
+    <section id="sezona-2025" class="intro section-paper" aria-labelledby="season-2025-title">
+      <div class="section-index mono">01 / Sezóna 2025</div>
+      <div class="intro-grid">
+        <h2 id="season-2025-title">Sezóna 2025</h2>
+        <div class="intro-copy">
+          <p>První ročník Regionální robotické soutěže Ústeckého kraje se konal 27. listopadu 2025 ve Sportcentru SLUNETA v Ústí nad Labem. Skončili jsme druzí se 16 body.</p>
+          <p>Soutěžili jsme s robotem jménem Drandijela, kterému jsme říkali Drandi. Níže je všechno, co k té sezóně patří: pořadí, robot, veřejný kód a fotky z dílny.</p>
+        </div>
+      </div>
+
+      <figure class="team-photo">
+        <div class="scroll-media">
+          <img src="../photos/archive/2025/team-regional-2025-1600.webp"
+             srcset="../photos/archive/2025/team-regional-2025-768.webp 768w, ../photos/archive/2025/team-regional-2025-1600.webp 1600w"
+             sizes="(max-width: 620px) calc(100vw - 2rem), (max-width: 1630px) 92vw, 1500px"
+             alt="Členové CircuitBreakers se svým robotem na regionální robotické soutěži 2025."
+             width="1600" height="901" loading="lazy" decoding="async">
+        </div>
+        <figcaption class="team-caption"><strong>Tým CircuitBreakers</strong><small class="mono">Regionální soutěž / 2025</small></figcaption>
+      </figure>
+
+
+      <div class="facts-row" aria-label="Sezóna 2025 v číslech">
+        <article class="fact">
+          <span class="fact-value">2.</span>
+          <span class="fact-label">místo / regionální soutěž 2025</span>
+        </article>
+        <article class="fact">
+          <span class="fact-value">16</span>
+          <span class="fact-label">bodů / výsledek soutěže</span>
+        </article>
+        <article class="fact">
+          <span class="fact-value">5</span>
+          <span class="fact-label">disciplín / ručně i autonomně</span>
+        </article>
+        <article class="fact">
+          <span class="fact-value">4</span>
+          <span class="fact-label">týmy / celý Ústecký kraj</span>
+        </article>
+      </div>
+    </section>
+
+    <section id="vysledky-2025" class="race section-dark" aria-labelledby="race-2025-title">
+      <div class="race-sticky">
+        <div class="section-index mono">02 / 27. 11. 2025</div>
+        <div class="race-stage">
+          <div class="race-copy">
+            <p class="eyebrow mono">Regionální robotická soutěž / SLUNETA</p>
+            <h2 id="race-2025-title">Druhé místo<br><span class="accent">a 16 bodů</span></h2>
+            <p>Soutěž měla pět disciplín: laser, kroužky, bludiště, pohyblivé předměty a slalom. Robot je plnil manuálně i autonomně a rozhodovala hlavně spolehlivost, přesnost a příprava.</p>
+            <a class="text-link" href="https://prf.ujep.cz/cs/29923/chomutovsky-tym-chobot-vyhral-regionalni-robotickou-soutez-a-poleti-do-usa" target="_blank" rel="noreferrer">Výsledky a reportáž UJEP ↗</a>
+          </div>
+          <div class="scoreboard" aria-label="Pořadí regionální soutěže 2025">
+            <div class="score-head mono"><span>Tým</span><span>Body</span></div>
+            <div class="score-line"><span>CHOBOT</span><strong>26</strong></div>
+            <div class="score-line active"><span>CIRCUITBREAKERS</span><strong>16</strong></div>
+            <div class="score-line"><span>PAPERBOX</span><strong>9</strong></div>
+            <div class="score-line"><span>LEDbot</span><strong>4</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="robot" class="robot section-paper">
+      <div class="section-index mono">03 / Robot 2025</div>
+      <div class="robot-layout">
+        <figure class="robot-visual">
+          <div class="scroll-media">
+            <img src="../photos/archive/2025/robot-2025-1600.webp"
+               srcset="../photos/archive/2025/robot-2025-768.webp 768w, ../photos/archive/2025/robot-2025-1600.webp 1600w"
+               sizes="(max-width: 980px) 92vw, (max-width: 1630px) 48vw, 800px"
+               width="1600" height="900" loading="lazy" decoding="async"
+               alt="Robot CircuitBreakers s červeným ochranným rámem, swerve pohonem a elektronikou v dílně.">
+          </div>
+          <figcaption class="robot-caption mono"><span>Drandi / robot 2025</span><span>Mechanika + elektronika</span></figcaption>
+        </figure>
+
+        <div class="robot-copy">
+          <p class="eyebrow mono">Robot / řízení / autonomie</p>
+          <h2>Robot pro sezónu 2025</h2>
+          <p>Loňský robot se jmenoval Drandijela, zkráceně Drandi.</p>
+          <p>Robota řídíme v Javě s WPILib. Má swerve pohon, kameru pro detekci QR kódů a autonomní režimy. Kód zahrnuje také telemetrii, PID/PIDF regulaci a bezpečnostní logiku.</p>
+          <dl class="spec-list">
+            <div><dt class="mono">Pohon</dt><dd>Swerve / YAGSL</dd></div>
+            <div><dt class="mono">Kamera</dt><dd>kamera + QR / coprocessor</dd></div>
+            <div><dt class="mono">Autonomie</dt><dd>bludiště, navigace, reakce na obraz</dd></div>
+            <div><dt class="mono">Knihovny</dt><dd>WPILib, PathPlanner, PhotonLib, CTRE, REV</dd></div>
+          </dl>
+        </div>
+      </div>
+
+
+      <div class="robot-explorer" aria-labelledby="explorer-title">
+        <div class="explorer-heading"><p class="eyebrow mono">Drandi / robot 2025</p><h3 id="explorer-title">Jak robot funguje</h3><p>Vyber část robota a podívej se na její zapojení.</p></div>
+        <div class="explorer-tabs" aria-label="Části robota" hidden>
+          <button type="button" id="tab-drive" data-robot-tab="drive" class="mono">Pohon</button>
+          <button type="button" id="tab-vision" data-robot-tab="vision" class="mono">Kamera</button>
+          <button type="button" id="tab-control" data-robot-tab="control" class="mono">Elektronika</button>
+        </div>
+        <div class="explorer-panels">
+          <section id="panel-drive" class="explorer-panel" data-robot-panel="drive" aria-labelledby="panel-title-drive">
+            <figure><img src="../photos/archive/2025/robot-chassis-2025-1280.webp" alt="Podvozek se čtyřmi pohonnými moduly a kabeláží." width="1280" height="720" loading="lazy" decoding="async"><figcaption class="mono">01 / Pohon</figcaption></figure>
+            <div class="explorer-text"><span class="mono explorer-number">01 / Pohon</span><h4 id="panel-title-drive">Pohon do všech směrů</h4><p>Swerve pohon umožňuje natáčet jednotlivé moduly. Robot tak může měnit směr jízdy nezávisle na natočení podvozku. Náš projekt používá knihovnu YAGSL.</p></div>
+          </section>
+          <section id="panel-vision" class="explorer-panel" data-robot-panel="vision" aria-labelledby="panel-title-vision">
+            <figure><img src="../photos/archive/2025/robot-camera-2025-614.webp" alt="Kamera v tištěném držáku s propojovacím kabelem." width="1280" height="720" loading="lazy" decoding="async"><figcaption class="mono">02 / Kamera</figcaption></figure>
+            <div class="explorer-text"><span class="mono explorer-number">02 / Kamera</span><h4 id="panel-title-vision">Kamera a QR kódy</h4><p>Kamera a koprocesor zpracovávají obraz a detekují QR kódy. Tyto informace používáme při autonomních úlohách a navigaci.</p></div>
+          </section>
+          <section id="panel-control" class="explorer-panel" data-robot-panel="control" aria-labelledby="panel-title-control">
+            <figure><img src="../photos/archive/2025/robot-electronics-2025-638.webp" alt="Rozvod napájení a zapojení elektroniky robota." width="1280" height="720" loading="lazy" decoding="async"><figcaption class="mono">03 / Elektronika</figcaption></figure>
+            <div class="explorer-text"><span class="mono explorer-number">03 / Elektronika</span><h4 id="panel-title-control">Napájení a řízení</h4><p>Elektronika propojuje napájení, pohon a senzory. Kód v Javě s WPILib řeší ruční i autonomní režim, telemetrii a bezpečnostní logiku.</p></div>
+          </section>
+        </div>
+      </div>
+
+      <div class="robot-details" aria-labelledby="robot-details-title">
+        <h3 id="robot-details-title" class="mono">Detaily robota / 2025</h3>
+        <div class="detail-grid">
+          <figure class="detail-card">
+            <div class="scroll-media">
+              <img src="../photos/archive/2025/robot-overview-2025.jpg" width="740" height="528"
+                 loading="lazy" decoding="async"
+                 alt="Celkový pohled na robota CircuitBreakers s červeným rámem a výsuvným mechanismem.">
+            </div>
+            <figcaption><span class="mono">01 / Celý robot</span><strong>Drandijela</strong></figcaption>
+          </figure>
+          <figure class="detail-card">
+            <div class="scroll-media">
+              <img src="../photos/archive/2025/robot-chassis-2025-1280.webp"
+                 srcset="../photos/archive/2025/robot-chassis-2025-768.webp 768w, ../photos/archive/2025/robot-chassis-2025-1280.webp 1280w"
+                 sizes="(max-width: 620px) calc(100vw - 2rem), (max-width: 1630px) 30vw, 490px"
+                 width="1280" height="720" loading="lazy" decoding="async"
+                 alt="Otevřený podvozek robota se čtyřmi pohonnými moduly a kabeláží.">
+            </div>
+            <figcaption><span class="mono">02 / Pohyb</span><strong>Podvozek a pohon</strong></figcaption>
+          </figure>
+          <figure class="detail-card">
+            <div class="scroll-media">
+              <img src="../photos/archive/2025/robot-electronics-2025-638.webp" width="638" height="484"
+                 loading="lazy" decoding="async" alt="Detail rozvodu napájení a zapojení elektroniky uvnitř robota.">
+            </div>
+            <figcaption><span class="mono">03 / Elektronika</span><strong>Napájení a řízení</strong></figcaption>
+          </figure>
+          <figure class="detail-card">
+            <div class="scroll-media">
+              <img src="../photos/archive/2025/robot-camera-2025-614.webp" width="614" height="586"
+                 loading="lazy" decoding="async" alt="Kamera robota v tištěném držáku s plochým propojovacím kabelem.">
+            </div>
+            <figcaption><span class="mono">04 / Vision</span><strong>Kamera a obraz</strong></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="kod" class="code section-ink">
+      <div class="section-index mono">04 / Kód 2025</div>
+      <div class="code-grid">
+        <div class="code-copy">
+          <h2>Kód v Javě</h2>
+          <p>Ve veřejném repozitáři najdeš kalibraci kamery, autonomní průjezd bludištěm, řízení pohybu i bezpečnostní logiku. Je v něm také vidět, co jsme upravovali před soutěží.</p>
+          <a class="repo-link" href="https://github.com/CircuitBreakersTKM/RobUL-2025-Local" target="_blank" rel="noreferrer">
+            <span class="mono">github.com/CircuitBreakersTKM</span>
+            <strong>RobUL-2025-Local ↗</strong>
+          </a>
+        </div>
+        <pre class="terminal" aria-label="Ukázka technického přehledu"><code><span class="dim">// veřejný snapshot našeho stacku</span>
+robot {
+  drivetrain: <span class="red">"swerve"</span>,
+  control: [<span class="gray">"teleop"</span>, <span class="gray">"auto"</span>],
+  vision: <span class="red">"camera + QR"</span>,
+  tuning: <span class="red">"PID / PIDF"</span>,
+  telemetry: <span class="red">true</span>,
+  season: <span class="red">"2025"</span>,
+  competition_ready: <span class="red">true</span>
+}</code></pre>
+      </div>
+    </section>
+
+    <section id="dilna-2025" class="photos section-dark" aria-labelledby="photos-title">
+      <div class="section-index mono">05 / Dílna 2025</div>
+      <div class="photos-head">
+        <h2 id="photos-title">Práce v dílně</h2>
+        <p>Montáž podvozku a zapojování elektroniky v naší dílně během sezóny 2025.</p>
+      </div>
+      <div class="photo-grid">
+        <figure class="photo-card photo-wide">
+          <div class="scroll-media">
+            <img src="../photos/archive/2025/workshop-build-2025-1600.webp"
+               srcset="../photos/archive/2025/workshop-build-2025-768.webp 768w, ../photos/archive/2025/workshop-build-2025-1600.webp 1600w"
+               sizes="(max-width: 620px) calc(100vw - 2rem), (max-width: 1630px) 61vw, 990px"
+               alt="Členové CircuitBreakers společně pracují na zapojení robota v dílně."
+               width="1600" height="900" loading="lazy" decoding="async">
+          </div>
+          <figcaption class="photo-caption"><strong>Zapojování elektroniky</strong><small>Dílna / 2025</small></figcaption>
+        </figure>
+        <figure class="photo-card photo-workshop">
+          <div class="scroll-media">
+            <img src="../photos/archive/2025/workshop-assembly-2025-900.webp"
+               srcset="../photos/archive/2025/workshop-assembly-2025-480.webp 480w, ../photos/archive/2025/workshop-assembly-2025-900.webp 900w"
+               sizes="(max-width: 620px) calc(100vw - 2rem), (max-width: 1630px) 31vw, 510px"
+               alt="Dva členové týmu společně montují součásti robota v dílně."
+               width="900" height="1600" loading="lazy" decoding="async">
+          </div>
+          <figcaption class="photo-caption"><strong>Montáž robota</strong><small>Dílna / Litoměřice</small></figcaption>
+        </figure>
+      </div>
+      <div class="archive-back">
+        <a class="text-link" href="../#zavod">Zpět na aktuální sezónu ↗</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-brand">
+      <img class="footer-logo" src="../photos/logos/circuit_breakers_full_color.svg" alt="" width="3072" height="3072" loading="lazy" decoding="async">
+      <div>
+        <strong>CircuitBreakers</strong>
+        <span>Litoměřice / Czechia</span>
+      </div>
+    </div>
+    <div class="mono footer-meta">
+      <span>© <span id="year">2026</span> CircuitBreakersTKM</span>
+      <span>Robotický tým z Litoměřic.</span>
+    </div>
+    <div class="footer-sources">
+      <a href="../">Portfolio</a>
+      <a href="../team/">Náš tým</a>
+      <a href="../sponsors/">Sponzoři</a>
+      <a href="./" aria-current="page">Archiv</a>
+      <a href="../#kontakt">Kontakt</a>
+    </div>
+  </footer>
+  <script src="../vendor/motion-14.11.1.js" defer></script>
+  <script src="../script.js?v=20261120-swerve3" defer></script>
+  <script src="../robot.js?v=20261120-swerve3" defer></script>
+</body>
+</html>

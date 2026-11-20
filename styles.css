@@ -37,7 +37,8 @@ a:focus-visible, button:focus-visible {
 }
 .skip-link:focus { transform: translateY(0); }
 img { max-width: 100%; display: block; }
-::selection { background: var(--red); color: #fff; }
+/* Translucent on purpose: an opaque box on tight display type covers the lines next to it. */
+::selection { background: rgba(224,90,84,.5); color: #fff; }
 
 .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 .noise {
@@ -52,7 +53,7 @@ img { max-width: 100%; display: block; }
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
   gap: 1rem; padding: .85rem var(--pad);
-  background: rgba(10,10,10,.86); backdrop-filter: blur(12px);
+  background: rgba(10,10,10,.86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255,255,255,.1);
 }
 .brand { display: inline-flex; align-items: center; gap: .8rem; text-decoration: none; width: max-content; }
@@ -102,7 +103,7 @@ img { max-width: 100%; display: block; }
 
 .intro { padding: 7rem var(--pad) 5rem; }
 .intro-grid { max-width: var(--max); margin: 2.6rem auto 5rem; display: grid; grid-template-columns: 1.25fr .75fr; gap: clamp(2rem,7vw,8rem); align-items: start; }
-.intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 {
+.intro h2, .race h2, .awards h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 {
   margin: 0;
   font-family: "Barlow Condensed", Impact, sans-serif;
   text-transform: uppercase;
@@ -277,7 +278,7 @@ footer span, footer a { color:#909090; font-size:.72rem; text-decoration:none; }
   footer { grid-template-columns:1fr; }
   .footer-meta { text-align:left; align-items:flex-start; }
   .footer-sources { justify-content:flex-start; }
-  .intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 {
+  .intro h2, .race h2, .awards h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 {
     overflow-wrap:anywhere;
   }
 }
@@ -321,7 +322,7 @@ footer span, footer a { color:#909090; font-size:.72rem; text-decoration:none; }
   .photo-wide img, .photo-wide .scroll-media { aspect-ratio: 16 / 9; }
   .photo-workshop .scroll-media { aspect-ratio:3 / 4; }
   .photo-workshop img { aspect-ratio: 3 / 4; object-position: 50% 35%; }
-  .intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 {
+  .intro h2, .race h2, .awards h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 {
     font-size:clamp(2rem, 9vw, 3.5rem); line-height:1.04;
   }
   .denver-title-line { display:block; }
@@ -482,7 +483,7 @@ main, section, header, footer { max-width: 100%; }
 /* Interactive robot details and the schematic share the existing editorial grid. */
 .robot-explorer, .swerve-demo { max-width:var(--max); margin:5rem auto 0; }
 .explorer-heading { max-width:42rem; }
-.explorer-heading h3, .swerve-copy h3 { margin:0 0 1.25rem; font:800 clamp(2.6rem,4.5vw,5rem)/1 "Barlow Condensed",sans-serif; text-transform:uppercase; letter-spacing:-.02em; }
+.explorer-heading h3, .swerve-copy h3, .swerve-copy h2 { margin:0 0 1.25rem; font:800 clamp(2.6rem,4.5vw,5rem)/1 "Barlow Condensed",sans-serif; text-transform:uppercase; letter-spacing:-.02em; }
 .explorer-heading > p:last-child { color:#616161; line-height:1.6; }
 .explorer-tabs { display:flex; gap:0; margin:2rem 0 0; border:1px solid var(--line); border-bottom:0; width:fit-content; max-width:100%; }
 .explorer-tabs[hidden], .swerve-controls[hidden] { display:none; }
@@ -505,12 +506,6 @@ main, section, header, footer { max-width: 100%; }
 .swerve-demo { display:grid; grid-template-columns:1fr 1.1fr; background:var(--ink); color:var(--paper); border:1px solid var(--line); }
 .swerve-copy { padding:clamp(1.5rem,3.5vw,3.5rem); }
 .swerve-copy > p:not(.eyebrow) { color:#bdbdb7; line-height:1.65; }
-.swerve-controls { display:flex; flex-wrap:wrap; gap:.5rem; margin:2rem 0; }
-.swerve-controls button { border:1px solid var(--line-dark); padding:.85rem 1rem; }
-.swerve-controls button[aria-pressed="true"] { background:var(--red); border-color:var(--red); color:#fff; }
-.swerve-controls button:hover { border-color:var(--red-on-dark); }
-.swerve-replay { flex-basis:100%; text-align:left; display:flex; justify-content:space-between; }
-.swerve-description { min-height:5rem; font-size:.95rem; }
 .swerve-note { font-size:.62rem; border-top:1px solid var(--line-dark); padding-top:1.25rem; }
 .swerve-stage { min-width:0; margin:0; align-self:stretch; display:flex; flex-direction:column; border-left:1px solid var(--line-dark); color:#f3f3f1; }
 .swerve-stage svg { display:block; width:100%; height:auto; margin:auto 0; }
@@ -527,7 +522,6 @@ main, section, header, footer { max-width: 100%; }
   .swerve-demo { grid-template-columns:1fr; }
   .swerve-stage { border-left:0; border-top:1px solid var(--line-dark); }
   .swerve-stage svg { max-height:440px; }
-  .swerve-description { min-height:3.5rem; }
   .has-js .site-header nav { visibility:visible; transition:none; }
   .has-js .site-header nav[inert] { pointer-events:none; }
   html:not(.has-js) .site-header { position:relative; }
@@ -577,7 +571,7 @@ main > section > .section-index, .race-sticky > .section-index { max-width:var(-
 .intro-grid, .race-stage, .robot-layout, .code-grid, .photos-head, .robul-grid, .join-grid { margin-top:40px; }
 .intro-grid, .robul-grid { margin-bottom:48px; }
 .photos-head { margin-bottom:32px; }
-.intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2,
+.intro h2, .race h2, .awards h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2,
 .roster-heading h2, .support-heading h2 {
   font-size:clamp(36px,4.4vw,72px); line-height:1.06; font-weight:700; letter-spacing:-.015em;
   text-transform:none; overflow-wrap:normal; hyphens:none;
@@ -621,7 +615,7 @@ h1,h2,h3,h4 { font-optical-sizing:auto; }
 .terminal { min-height:0; padding:32px; box-shadow:none; align-items:flex-start; overflow:auto; }
 .terminal code { font-size:clamp(.75rem,1.1vw,.9375rem); line-height:1.8; }
 .robot-explorer, .swerve-demo, .robot-details { margin-top:64px; }
-.explorer-heading h3, .swerve-copy h3 { font-size:clamp(32px,3.6vw,56px); line-height:1.08; font-weight:700; text-transform:none; }
+.explorer-heading h3, .swerve-copy h3, .swerve-copy h2 { font-size:clamp(32px,3.6vw,56px); line-height:1.08; font-weight:700; text-transform:none; }
 .explorer-tabs { margin-top:32px; }
 .explorer-tabs button { padding:12px 24px; min-height:48px; }
 .explorer-panel { grid-template-columns:repeat(2,minmax(0,1fr)); }
@@ -631,10 +625,6 @@ h1,h2,h3,h4 { font-optical-sizing:auto; }
 .explorer-panel figcaption { padding:16px 24px; font-size:.75rem; }
 .explorer-text p { max-width:none; line-height:1.7; }
 .swerve-demo { grid-template-columns:repeat(2,minmax(0,1fr)); }
-.swerve-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:24px 0; }
-.swerve-controls button { padding:12px 8px; min-height:48px; }
-.swerve-replay { display:block; text-align:center; }
-.swerve-description { min-height:6rem; margin:0 0 24px; }
 .swerve-note { font-size:.75rem; line-height:1.6; margin:0; padding-top:24px; }
 .swerve-stage figcaption { padding:24px; font-size:.75rem; }
 .swerve-stage svg { margin:auto 0; }
@@ -686,7 +676,7 @@ footer span, footer a { font-size:.75rem; line-height:1.5; }
   .swerve-demo { grid-template-columns:1fr; }
   .hero-meta { left:var(--pad); transform:none; }
   .hero-actions { width:100%; }
-  .intro h2, .race h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 { font-size:clamp(36px,7vw,56px); }
+  .intro h2, .race h2, .awards h2, .robot h2, .code h2, .photos h2, .robul h2, .denver h2, .join h2 { font-size:clamp(36px,7vw,56px); }
   .team-title { font-size:clamp(56px,10vw,88px); }
 }
 @media (max-width:620px) {
@@ -707,8 +697,6 @@ footer span, footer a { font-size:.75rem; line-height:1.5; }
   .member-grid { gap:16px; }
   .member-card { padding:24px; }
   .team-rail > div { min-height:0; }
-  .swerve-description { min-height:7rem; }
-  .swerve-controls { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .team-hero { padding-top:112px; }
   .spec-list > div { grid-template-columns:88px minmax(0,1fr); }
 }
@@ -727,20 +715,8 @@ main > section > .section-index, .race-sticky > .section-index { width:100%; }
 .score-line { position:relative; isolation:isolate; }
 .score-line::before { content:""; position:absolute; inset:0; z-index:-1; background:rgba(255,255,255,.065); transform:scaleX(calc(var(--score-share,1) * var(--reveal-progress,1))); transform-origin:left; }
 .score-line.active::before { background:rgba(184,52,48,.23); }
-.swerve-stage .gamepad { margin:0; padding:24px; display:grid; grid-template-columns:repeat(3,minmax(44px,1fr)) minmax(72px,1.2fr); grid-template-rows:repeat(2,64px); gap:8px; border-bottom:1px solid var(--line-dark); }
-.swerve-stage .gamepad[hidden] { display:none; }
-.gamepad button { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:4px; }
-.gamepad button span { font-size:24px; line-height:1; }
-.gamepad button small { font:inherit; font-size:11px; white-space:nowrap; }
-.pad-up { grid-area:1/2; }.pad-left { grid-area:2/1; }.pad-down { grid-area:2/2; }.pad-right { grid-area:2/3; }.pad-spin { grid-area:1/4; }.pad-reset { grid-area:2/4; }
-.gamepad button:active { background:var(--red); border-color:var(--red); }
-.swerve-pose { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; padding:24px 0; margin:0; border-top:1px solid var(--line-dark); font-variant-numeric:tabular-nums; }
-.swerve-pose dt { color:var(--muted-dark); font-size:.75rem; }.swerve-pose dd { margin:8px 0 0; font-size:1.25rem; color:var(--paper); }
-.swerve-copy .swerve-queue { font-size:.75rem; margin:0 0 24px; }
 .swerve-wheel .wheel-tread { stroke:#555; stroke-width:2; stroke-dasharray:4 6; }
-@media(max-width:620px) { .swerve-stage .gamepad { padding:16px; gap:8px; grid-template-columns:repeat(3,minmax(0,1fr)) minmax(72px,1.2fr); } }
 @media(prefers-reduced-motion:reduce) { .fact::after { transform:scaleX(1); }.score-line::before { transform:scaleX(var(--score-share,1)); } }
-.gamepad button.is-command-active { background:var(--red); border-color:var(--red); color:#fff; }
 .hero-word-inner { display:block; }
 .score-head, .score-line { padding-inline:24px; }
 @media(max-width:620px) { .score-head, .score-line { padding-inline:16px; } }
@@ -819,3 +795,123 @@ main > section > .section-index, .race-sticky > .section-index { width:100%; }
 .team-page .member-card { display:block; }
 .team-page .member-role { min-height:0; }
 @media(max-width:620px) { .team-page .team-hero, .team-page .team-roster { --pad:1rem; } }
+
+/* Season 2026: awards, competition gallery, upcoming and past events, archive. */
+.section-paper ::selection { background:rgba(184,52,48,.24); color:var(--ink); }
+.swerve-demo ::selection, .section-paper .terminal ::selection { background:rgba(224,90,84,.5); color:#fff; }
+.section-red ::selection, .team-rail .ours ::selection, .hero-action-primary::selection, .hero-action-primary ::selection,
+.explorer-tabs button[aria-selected="true"]::selection, .rotate-button.is-held ::selection { background:rgba(10,10,10,.6); color:#fff; }
+.motion-ribbon { user-select:none; -webkit-user-select:none; }
+
+.link-row { display:flex; flex-wrap:wrap; gap:0 32px; }
+.awards { padding:var(--section-space) var(--pad); }
+.awards-grid { max-width:var(--max); margin:40px auto 0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--grid-gap); align-items:start; }
+.awards-grid > * { min-width:0; }
+.awards-lede { margin:24px 0 0; font-size:1.0625rem; line-height:1.7; text-wrap:pretty; }
+.awards-photo { margin:32px 0 0; border:1px solid var(--line); background:var(--paper-2); overflow:hidden; }
+.awards-photo .scroll-media { aspect-ratio:16 / 10; }
+.awards-photo img { object-fit:cover; object-position:50% 40%; filter:saturate(.88) contrast(1.03); }
+.award-list { list-style:none; margin:0; padding:0; border-top:1px solid var(--ink); }
+.award { display:grid; grid-template-columns:48px minmax(0,1fr); gap:16px; padding:32px 0; border-bottom:1px solid var(--line); }
+.award-index { padding-top:8px; color:var(--red); font-size:.75rem; }
+.award h3 { margin:0; font:700 clamp(28px,3vw,44px)/1.1 "Barlow Condensed",sans-serif; letter-spacing:-.01em; text-wrap:balance; }
+.award-scope { margin:12px 0 0; color:var(--muted-light); font-size:.75rem; line-height:1.5; }
+.award-scope + p { margin:16px 0 0; line-height:1.7; text-wrap:pretty; }
+
+.photo-grid-flip { grid-template-columns:1fr 2fr; margin-top:1rem; }
+.photo-field img { object-position:50% 60%; }
+.photo-robot img { object-position:50% 45%; }
+.photo-carry img { object-position:50% 55%; }
+.photo-interview img { object-position:50% 30%; }
+.archive-back { max-width:var(--max); margin:32px auto 0; }
+
+.denver-next { border-bottom:1px solid var(--line-dark); }
+.status-mark { display:inline-block; width:8px; height:8px; margin-right:12px; background:var(--red-on-dark); }
+.denver-past .status-mark { background:transparent; border:1px solid var(--muted-dark); }
+.denver-past .eyebrow { color:var(--muted-dark); }
+.denver-past .denver-number { opacity:.3; }
+
+.season-list { align-self:center; border-top:1px solid var(--line-dark); }
+.season-head, .season-row { display:grid; grid-template-columns:112px minmax(0,1.25fr) minmax(0,1fr); gap:24px; align-items:baseline; padding:20px 0; border-bottom:1px solid var(--line-dark); }
+.season-head { padding:12px 0; color:var(--muted-dark); font-size:.75rem; }
+.season-head > :last-child, .season-result { text-align:right; }
+.season-row { color:inherit; text-decoration:none; }
+.season-year { font:700 clamp(36px,3.6vw,56px)/.9 "Barlow Condensed",sans-serif; font-variant-numeric:tabular-nums; transition:color .2s; }
+.season-row strong { display:block; font:600 clamp(20px,1.9vw,28px)/1.15 "Barlow Condensed",sans-serif; overflow-wrap:anywhere; }
+.season-row small { display:block; margin-top:8px; color:var(--muted-dark); font-size:.75rem; line-height:1.5; }
+.season-row:hover .season-year, .season-row:focus-visible .season-year { color:var(--red-on-dark); }
+@media (max-width:980px) {
+  .awards-grid { grid-template-columns:1fr; }
+}
+@media (max-width:620px) {
+  .awards-grid { margin-top:32px; }
+  .award { grid-template-columns:32px minmax(0,1fr); padding:24px 0; }
+  .photo-grid-flip { grid-template-columns:1fr; margin-top:1.5rem; }
+  .link-row { flex-direction:column; align-items:flex-start; }
+  .season-head { display:none; }
+  .season-row { grid-template-columns:80px minmax(0,1fr); gap:8px 16px; }
+  .season-result { grid-column:2; text-align:left; }
+}
+
+/* Swerve demo on the homepage: joystick, hold-to-turn buttons and per-wheel readouts. */
+.swerve-section { padding:var(--section-space) var(--pad); }
+.swerve-section .swerve-demo { margin-top:40px; }
+/* The diagram never pushes its own controls below the fold. */
+.swerve-section .swerve-stage svg { height:clamp(280px,46svh,460px); max-height:none; margin:0; }
+.swerve-wheel line { fill:none; stroke:var(--red-on-dark); stroke-width:3; stroke-linecap:round; }
+.swerve-readout { margin-top:24px; }
+.swerve-readout-head { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 16px; margin:0 0 16px; color:var(--muted-dark); font-size:.75rem; }
+.swerve-readout-head b { display:inline-block; min-width:4ch; text-align:right; color:var(--paper); font-weight:500; font-variant-numeric:tabular-nums; }
+.swerve-modules { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px; margin:0; background:var(--line-dark); border:1px solid var(--line-dark); }
+.swerve-modules > div { position:relative; padding:16px; background:var(--ink); }
+.swerve-modules > div::after { content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--red-on-dark); transform:scaleX(var(--share,0)); transform-origin:left; }
+.swerve-modules dt { color:var(--muted-dark); font-size:.75rem; }
+.swerve-modules dd { display:inline-flex; flex-direction:column; width:7ch; margin:8px 8px 0 0; font-size:1.25rem; line-height:1.2; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.swerve-modules dd small { margin-top:4px; color:var(--muted-dark); font-size:.6875rem; }
+/* Single-column layouts move the wheel numbers into the stage, between the diagram and the controls. */
+.swerve-stage { position:relative; }
+.swerve-stage .swerve-readout { margin:0; border-top:1px solid var(--line-dark); }
+.swerve-stage .swerve-readout-head { position:absolute; top:12px; right:12px; margin:0; padding:2px 8px; background:rgba(10,10,10,.78); pointer-events:none; }
+.swerve-stage .swerve-readout-head > :first-child { display:none; }
+.swerve-stage .swerve-modules { border:0; }
+.swerve-stage .swerve-modules > div { padding:8px 16px 10px; }
+.swerve-stage .swerve-modules dt { font-size:.6875rem; line-height:1.4; }
+.swerve-stage .swerve-modules dd { width:5ch; margin:2px 12px 0 0; font-size:.9375rem; line-height:1.3; }
+.swerve-stage .swerve-modules dd + dd { width:6ch; margin-right:0; }
+.swerve-stage .swerve-modules dd small { position:absolute; width:1px; height:1px; margin:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.swerve-deck { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:24px; padding:24px; border-top:1px solid var(--line-dark); user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; }
+.swerve-deck[hidden], .swerve-reset[hidden] { display:none; }
+.rotate-button { justify-self:end; width:72px; height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; border:1px solid var(--line-dark); background:transparent; color:inherit; cursor:pointer; touch-action:none; transition:background-color .12s ease-out, border-color .12s ease-out, scale .1s ease-out; }
+.rotate-button:last-child { justify-self:start; }
+.rotate-button span { font-size:24px; line-height:1; }
+.rotate-button small { font:inherit; font-size:11px; }
+.rotate-button:hover { border-color:var(--red-on-dark); }
+.rotate-button.is-held { background:var(--red); border-color:var(--red); color:#fff; scale:.97; }
+.joystick { position:relative; width:160px; height:160px; border:1px solid var(--line-dark); border-radius:50%; background:#141414; cursor:grab; touch-action:none; transition:border-color .12s ease-out; }
+.joystick::before, .joystick::after { content:""; position:absolute; background:var(--line-dark); }
+.joystick::before { left:50%; top:16px; bottom:16px; width:1px; }
+.joystick::after { top:50%; left:16px; right:16px; height:1px; }
+.joystick:focus-visible { outline:3px solid var(--focus); outline-offset:6px; }
+.joystick.is-dragging { cursor:grabbing; border-color:var(--red-on-dark); }
+.joystick-knob { position:absolute; z-index:1; left:50%; top:50%; width:64px; height:64px; margin:-32px 0 0 -32px; border-radius:50%; background:#e8e8e5; box-shadow:inset 0 1px 0 #fff, 0 8px 18px rgba(0,0,0,.5); will-change:transform; }
+.joystick.is-dragging .joystick-knob { background:#fff; }
+.swerve-stage figcaption { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 24px; }
+.swerve-reset { min-height:44px; padding:0; border:0; border-bottom:1px solid currentColor; background:transparent; color:var(--paper); font-size:.75rem; cursor:pointer; transition:color .12s ease-out; }
+.swerve-reset:hover { color:var(--red-on-dark); }
+.swerve-reset:active { scale:.98; }
+@media (max-width:620px) {
+  .swerve-section .swerve-demo { margin-top:32px; }
+  /* Edge to edge on phones, and short enough that diagram, numbers and controls share one screen:
+     372px = site header + wheel numbers + control deck + a little air. */
+  .swerve-section .swerve-demo { margin-inline:calc(-1 * var(--pad)); border-inline:0; }
+  .swerve-section .swerve-copy { padding-inline:var(--pad); }
+  .swerve-section .swerve-stage svg { height:clamp(170px,calc(100svh - 372px),320px); }
+  .swerve-section .swerve-stage figcaption { padding:16px var(--pad); }
+  .swerve-deck { gap:16px; padding:12px var(--pad); }
+  .rotate-button { width:60px; height:60px; }
+  .joystick { width:132px; height:132px; }
+  .joystick::before { top:12px; bottom:12px; }
+  .joystick::after { left:12px; right:12px; }
+  .joystick-knob { width:52px; height:52px; margin:-26px 0 0 -26px; }
+  .swerve-stage .swerve-modules > div { padding-inline:var(--pad); }
+}

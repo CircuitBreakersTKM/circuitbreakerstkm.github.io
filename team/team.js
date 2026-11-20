@@ -108,8 +108,8 @@
     if (!index) {
       const empty = element('div', 'roster-empty');
       empty.append(element('h3', '', 'Profily zatím chybí.'));
-      const link = element('a', 'text-link dark-link', 'Prohlédnout robota ↗');
-      link.href = new URL('#robot', siteUrl).href;
+      const link = element('a', 'text-link dark-link', 'Výsledky 2026 ↗');
+      link.href = new URL('#zavod', siteUrl).href;
       empty.append(link);
       fragment.append(empty);
     }

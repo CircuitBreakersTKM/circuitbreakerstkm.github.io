@@ -62,137 +62,325 @@
 
   const demo = document.querySelector('.swerve-demo');
   if (!demo) return;
-  const engine = window.anime;
-  const chassis = document.getElementById('swerve-chassis');
   const svg = document.getElementById('swerve-svg');
-  const wheels = [...demo.querySelectorAll('.swerve-wheel')];
-  const pad = demo.querySelector('.gamepad');
-  const description = demo.querySelector('.swerve-description');
-  const svgDescription = document.getElementById('swerve-svg-desc');
-  const count = document.getElementById('queue-count');
-  const xOutput = document.getElementById('pose-x');
-  const yOutput = document.getElementById('pose-y');
+  const chassis = document.getElementById('swerve-chassis');
+  const grid = svg.querySelector('.swerve-grid-fill');
+  const deck = demo.querySelector('.swerve-deck');
+  const stick = demo.querySelector('.joystick');
+  const knobEl = demo.querySelector('.joystick-knob');
+  const resetButton = demo.querySelector('[data-swerve-reset]');
   const headingOutput = document.getElementById('pose-heading');
-  const commands = {
-    up: { x: 0, y: -60, rotation: 0, label: 'Jízda nahoru podle hřiště' },
-    down: { x: 0, y: 60, rotation: 0, label: 'Jízda dolů podle hřiště' },
-    left: { x: -60, y: 0, rotation: 0, label: 'Jízda doleva podle hřiště' },
-    right: { x: 60, y: 0, rotation: 0, label: 'Jízda doprava podle hřiště' },
-    spin: { x: 0, y: 0, rotation: 90, label: 'Otočení o 90° doprava' }
-  };
-  const pose = { x: 0, y: 0, rotation: 0 };
-  const steering = wheels.map(() => ({ angle: 0, drive: 1 }));
-  const moduleLocations = [[-90, -90], [90, -90], [-90, 90], [90, 90]];
-  const camera = { x: 0, y: 0 };
-  const queue = [];
-  let timeline;
-  let target;
-  let moduleTarget;
-  let running = false;
-  let visible = true;
-  let revision = 0;
-  const shortest = degrees => ((degrees + 180) % 360 + 360) % 360 - 180;
+  const wheels = [...demo.querySelectorAll('.swerve-wheel')].map(el => ({
+    el, tread: el.querySelector('.wheel-tread'), vector: el.querySelector('.wheel-vector'),
+    shaft: el.querySelector('.vector-shaft'), head: el.querySelector('.vector-head')
+  }));
+  const cells = [...demo.querySelectorAll('[data-module]')].map(el => ({
+    el, angle: el.querySelector('[data-angle]'), speed: el.querySelector('[data-speed]'), angleText: '', speedText: ''
+  }));
 
+  // Module positions in the chassis frame (y points down, angles grow clockwise).
+  const MODULES = [[-90, -90], [90, -90], [-90, 90], [90, 90]];
+  const WHEEL_MAX = 220;                                   // fastest a wheel can go, px/s
+  const TURN_MAX = .8 * WHEEL_MAX / Math.hypot(90, 90);    // rad/s at full turn input
+  const DEADZONE = .08;
+  const TAP_TURN = 300;                                    // a short tap still turns visibly, ms
+  const knob = { x: 0, y: 0, vx: 0, vy: 0, damping: 1 };
+  const pose = { x: 0, y: 0, rotation: 0 };
+  const camera = { x: 0, y: 0 };
+  const modules = MODULES.map(() => ({ angle: 0, speed: 0, tread: 0, pending: 0 }));
+  const keys = new Set();
+  const holds = new Map();
+  const keyVectors = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0], w: [0, -1], s: [0, 1], a: [-1, 0], d: [1, 0] };
+  let drag;
+  let turn = 0;
+  let resetting = false;
+  let visible = true;
+  let frameId = 0;
+  let last = 0;
+  let headingText = '';
+  const shortest = degrees => ((degrees + 180) % 360 + 360) % 360 - 180;
+  const travel = () => Math.max(1, (stick.clientWidth - knobEl.offsetWidth) / 2);
+  // Past the rim the knob keeps following, with growing resistance.
+  const rubberband = (overshoot, dimension) => overshoot * dimension * .55 / (dimension + .55 * overshoot);
+
+  function spring(axis, velocity, target, dt) {
+    // Damping ratio + response, integrated in small steps so it stays stable at any frame rate.
+    const omega = 2 * Math.PI / .3;
+    for (let left = dt; left > 0; left -= 1 / 240) {
+      const step = Math.min(left, 1 / 240);
+      knob[velocity] += (-omega * omega * (knob[axis] - target) - 2 * knob.damping * omega * knob[velocity]) * step;
+      knob[axis] += knob[velocity] * step;
+    }
+  }
+  function turnInput() {
+    let sum = 0;
+    holds.forEach(hold => { sum += hold.direction; });
+    return Math.max(-1, Math.min(1, sum));
+  }
+  function frame(now) {
+    frameId = 0;
+    const reduced = preference.matches;
+    const dt = Math.min(.034, Math.max(.001, (now - last) / 1000));
+    last = now;
+    const reach = travel();
+
+    if (drag) {
+      // 1:1 with the pointer. A press beside the knob closes its gap within a few frames instead of jumping.
+      const ease = reduced ? 0 : Math.exp(-(now - drag.start) / 45);
+      let x = drag.x + drag.gapX * ease;
+      let y = drag.y + drag.gapY * ease;
+      const distance = Math.hypot(x, y);
+      if (distance > reach) {
+        const shown = reach + rubberband(distance - reach, reach);
+        x *= shown / distance; y *= shown / distance;
+      }
+      knob.x = x; knob.y = y;
+      drag.history.push({ x, y, time: now });
+      while (drag.history.length > 2 && now - drag.history[0].time > 90) drag.history.shift();
+    } else {
+      let targetX = 0, targetY = 0;
+      keys.forEach(key => { targetX += keyVectors[key][0]; targetY += keyVectors[key][1]; });
+      const length = Math.hypot(targetX, targetY) || 1;
+      targetX *= reach / length; targetY *= reach / length;
+      if (reduced) Object.assign(knob, { x: targetX, y: targetY, vx: 0, vy: 0 });
+      else { spring('x', 'vx', targetX, dt); spring('y', 'vy', targetY, dt); }
+      if (!keys.size && Math.hypot(knob.x, knob.y) < .05 && Math.hypot(knob.vx, knob.vy) < 2) Object.assign(knob, { x: 0, y: 0, vx: 0, vy: 0 });
+    }
+
+    // Joystick -> field velocity, buttons -> turn rate.
+    let stickX = knob.x / reach, stickY = knob.y / reach;
+    const deflection = Math.hypot(stickX, stickY);
+    const amount = deflection > DEADZONE ? (Math.min(1, deflection) - DEADZONE) / (1 - DEADZONE) : 0;
+    stickX = deflection ? stickX / deflection * amount : 0;
+    stickY = deflection ? stickY / deflection * amount : 0;
+    const turnTarget = turnInput();
+    turn = reduced ? turnTarget : turn + (turnTarget - turn) * (1 - Math.exp(-dt / .09));
+    if (!turnTarget && Math.abs(turn) < .002) turn = 0;
+    if (amount || turnTarget) resetting = false;
+
+    if (resetting) {
+      const pull = reduced ? 1 : 1 - Math.exp(-dt / .16);
+      pose.x -= pose.x * pull; pose.y -= pose.y * pull; pose.rotation -= pose.rotation * pull;
+      camera.x -= camera.x * pull; camera.y -= camera.y * pull;
+      modules.forEach(module => { module.speed = 0; module.pending = 0; });
+      if (Math.hypot(pose.x, pose.y) < .2 && Math.abs(pose.rotation) < .2 && Math.hypot(camera.x, camera.y) < .2) {
+        Object.assign(pose, { x: 0, y: 0, rotation: 0 }); Object.assign(camera, { x: 0, y: 0 });
+        resetting = false;
+      }
+    } else {
+      // Inverse kinematics: field velocity -> chassis velocity, plus omega x module position for each wheel.
+      const theta = pose.rotation * Math.PI / 180;
+      const fieldX = stickX * WHEEL_MAX, fieldY = stickY * WHEEL_MAX;
+      const omega = turn * TURN_MAX;
+      const chassisX = Math.cos(theta) * fieldX + Math.sin(theta) * fieldY;
+      const chassisY = -Math.sin(theta) * fieldX + Math.cos(theta) * fieldY;
+      const wanted = MODULES.map(([x, y]) => ({ x: chassisX - omega * y, y: chassisY + omega * x }));
+      // No wheel may exceed its top speed: scale the whole command down together.
+      const fastest = Math.max(...wanted.map(v => Math.hypot(v.x, v.y)));
+      const scale = fastest > WHEEL_MAX ? WHEEL_MAX / fastest : 1;
+      const steer = reduced ? 1 : 1 - Math.exp(-dt / .06);
+      let aligned = 0, driven = 0;
+      modules.forEach((module, index) => {
+        const speed = Math.hypot(wanted[index].x, wanted[index].y) * scale / WHEEL_MAX;
+        if (speed < .012) { module.speed = 0; module.pending = 0; return; }   // idle wheels keep their angle
+        let delta = shortest(Math.atan2(wanted[index].x, -wanted[index].y) * 180 / Math.PI - module.angle);
+        let direction = 1;
+        // Never steer more than 90 degrees: drive the wheel backwards instead.
+        if (Math.abs(delta) > 90) { delta = shortest(delta + 180); direction = -1; }
+        module.angle += delta * steer;
+        module.pending = delta * (1 - steer);
+        const grip = Math.cos(module.pending * Math.PI / 180);   // a wheel still turning into place pushes less
+        module.speed = direction * speed * grip;
+        module.tread += module.speed * WHEEL_MAX * dt;
+        aligned += grip; driven++;
+      });
+      // The robot moves with exactly the command the wheels are showing.
+      const progress = driven ? scale * aligned / driven : 0;
+      pose.x += fieldX * progress * dt;
+      pose.y += fieldY * progress * dt;
+      pose.rotation += omega * progress * dt * 180 / Math.PI;
+      // Follow at the edge of the view, without clamping or resetting world coordinates.
+      if (Math.abs(pose.x - camera.x) > slack.x) camera.x = pose.x - Math.sign(pose.x - camera.x) * slack.x;
+      if (Math.abs(pose.y - camera.y) > slack.y) camera.y = pose.y - Math.sign(pose.y - camera.y) * slack.y;
+    }
+    render();
+    const settling = modules.some(module => Math.abs(module.pending) > .2);
+    if (drag || keys.size || holds.size || resetting || settling || turn || knob.x || knob.y || knob.vx || knob.vy) start();
+  }
   function render() {
-    chassis.setAttribute('transform', `translate(${pose.x} ${pose.y}) rotate(${pose.rotation})`);
-    // Follow at the edge of the view, without clamping or resetting world coordinates.
-    if (Math.abs(pose.x - camera.x) > 85) camera.x = pose.x - Math.sign(pose.x - camera.x) * 85;
-    if (Math.abs(pose.y - camera.y) > 55) camera.y = pose.y - Math.sign(pose.y - camera.y) * 55;
-    svg.setAttribute('viewBox', `${camera.x} ${camera.y} 520 460`);
-    const grid = svg.querySelector('rect[fill="url(#swerve-grid)"]');
-    grid.setAttribute('x', camera.x); grid.setAttribute('y', camera.y);
-    xOutput.textContent = String(Math.round(pose.x));
-    yOutput.textContent = String(Math.round(-pose.y));
-    headingOutput.textContent = `${Math.round(pose.rotation)}°`;
-    wheels.forEach((wheel, index) => {
-      wheel.setAttribute('transform', `rotate(${steering[index].angle})`);
-      wheel.querySelector('.wheel-vector').setAttribute('transform', `rotate(${steering[index].drive < 0 ? 180 : 0})`);
+    knobEl.style.transform = `translate3d(${knob.x.toFixed(2)}px, ${knob.y.toFixed(2)}px, 0)`;
+    chassis.setAttribute('transform', `translate(${pose.x.toFixed(2)} ${pose.y.toFixed(2)}) rotate(${pose.rotation.toFixed(2)})`);
+    svg.setAttribute('viewBox', `${camera.x.toFixed(2)} ${camera.y.toFixed(2)} 520 460`);
+    grid.setAttribute('x', camera.x.toFixed(2)); grid.setAttribute('y', camera.y.toFixed(2));
+    let driving = false;
+    modules.forEach((module, index) => {
+      const wheel = wheels[index];
+      const share = Math.abs(module.speed);
+      const length = 22 + 34 * share;
+      driving = driving || share > .01;
+      wheel.el.setAttribute('transform', `rotate(${module.angle.toFixed(2)})`);
+      wheel.vector.setAttribute('transform', `rotate(${module.speed < 0 ? 180 : 0})`);
+      wheel.vector.style.opacity = Math.min(1, share * 8).toFixed(2);
+      wheel.shaft.setAttribute('y2', (-length).toFixed(1));
+      wheel.head.setAttribute('transform', `translate(0 ${(-length).toFixed(1)})`);
+      wheel.tread.style.strokeDashoffset = module.tread.toFixed(1);
+      // Text is rewritten only when the rounded value changes, and its box never changes width.
+      const cell = cells[index];
+      if (!cell) return;
+      const percent = Math.round(module.speed * 100);
+      const angleText = `${Math.round(shortest(module.angle)) || 0}°`;
+      const speedText = `${percent > 0 ? '+' : percent < 0 ? '−' : ''}${Math.abs(percent)} %`;
+      if (angleText !== cell.angleText) cell.angle.textContent = cell.angleText = angleText;
+      if (speedText !== cell.speedText) cell.speed.textContent = cell.speedText = speedText;
+      cell.el.style.setProperty('--share', share.toFixed(3));
     });
+    const heading = `${Math.round(((pose.rotation % 360) + 360) % 360) % 360}°`;
+    if (heading !== headingText) headingOutput.textContent = headingText = heading;
+    demo.classList.toggle('is-driving', driving);
   }
-  function queueStatus() { count.textContent = String(queue.length); }
-  function setRunning(value) {
-    running = value; demo.classList.toggle('is-driving', value);
-    if (!value) pad.querySelectorAll('.is-command-active').forEach(button => button.classList.remove('is-command-active'));
+  // How far the robot may drift from the middle before the view follows it. The diagram is cropped
+  // to fill its box, so a short phone-sized view gets less room than a tall one.
+  const slack = { x: 85, y: 55 };
+  function measureView() {
+    const scale = Math.max(svg.clientWidth / 520, svg.clientHeight / 460);
+    if (!scale) return;
+    slack.x = Math.max(0, svg.clientWidth / scale / 2 - 175);
+    slack.y = Math.max(0, svg.clientHeight / scale / 2 - 175);
   }
-  function updateVisibility() {
-    if (!timeline) return;
-    if (document.hidden || !visible) timeline.pause();
-    else timeline.play();
+  if (window.ResizeObserver) new ResizeObserver(measureView).observe(svg);
+  measureView();
+  function start() {
+    if (frameId || !visible || document.hidden) return;
+    if (!last || performance.now() - last > 100) last = performance.now() - 16;
+    frameId = requestAnimationFrame(frame);
   }
-  function next() {
-    if (running || !queue.length) return;
-    const name = queue.shift();
-    const command = commands[name];
-    queueStatus();
-    target = { x: pose.x + command.x, y: pose.y + command.y, rotation: pose.rotation + command.rotation };
-    const theta = pose.rotation * Math.PI / 180;
-    const desired = moduleLocations.map(([x, y], index) => {
-      // Inverse kinematics: field velocity -> chassis velocity + omega cross module position.
-      const vx = command.rotation ? -y : Math.cos(theta) * command.x + Math.sin(theta) * command.y;
-      const vy = command.rotation ? x : -Math.sin(theta) * command.x + Math.cos(theta) * command.y;
-      let delta = shortest(Math.atan2(vx, -vy) * 180 / Math.PI - steering[index].angle);
-      let drive = 1;
-      if (Math.abs(delta) > 90) { delta = shortest(delta + 180); drive = -1; }
-      return { angle: steering[index].angle + delta, drive };
-    });
-    moduleTarget = desired;
-    steering.forEach((state, index) => { state.drive = desired[index].drive; });
-    description.textContent = command.label + '. Další povel naváže na tuto polohu.';
-    svgDescription.textContent = command.label;
-    if (!engine || preference.matches) {
-      Object.assign(pose, target);
-      steering.forEach((state, index) => { state.angle = desired[index].angle; });
-      render(); next(); return;
-    }
-    setRunning(true);
-    pad.querySelector(`[data-swerve="${name}"]`).classList.add('is-command-active');
-    const thisRevision = revision;
-    const start = { ...pose };
-    const steerDuration = Math.max(120, Math.max(...desired.map((state, index) => Math.abs(state.angle - steering[index].angle))) / 360 * 1000);
-    timeline = engine.createTimeline({ autoplay: false })
-      .add(steering, { angle: (_, index) => desired[index].angle, duration: steerDuration, ease: 'inOutSine', onUpdate: render }, 0)
-      .add(pose, { ...target, duration: 850, ease: 'inOutSine', onUpdate: () => {
-        const travel = command.rotation ? (pose.rotation - start.rotation) * Math.PI / 180 * Math.hypot(90, 90) : Math.hypot(pose.x - start.x, pose.y - start.y);
-        wheels.forEach((wheel, index) => { wheel.querySelector('.wheel-tread').style.strokeDashoffset = String(travel * steering[index].drive); });
-        render();
-      } }, steerDuration);
-    timeline.then(() => {
-      if (thisRevision !== revision) return;
-      timeline = undefined; setRunning(false); render(); next();
-    });
-    timeline.play(); updateVisibility();
+
+  // Joystick: glued to the pointer from the press, released into a spring that inherits the finger's velocity.
+  function endDrag() {
+    if (!drag) return;
+    const first = drag.history[0], latest = drag.history[drag.history.length - 1];
+    const span = first && latest ? (latest.time - first.time) / 1000 : 0;
+    knob.vx = span > .01 ? Math.max(-1400, Math.min(1400, (latest.x - first.x) / span)) : 0;
+    knob.vy = span > .01 ? Math.max(-1400, Math.min(1400, (latest.y - first.y) / span)) : 0;
+    // Only a release that carried momentum earns a little bounce.
+    knob.damping = Math.hypot(knob.vx, knob.vy) > 260 ? .8 : 1;
+    drag = undefined;
+    stick.classList.remove('is-dragging');
+    start();
   }
-  function reset() {
-    revision++;
-    timeline?.cancel(); timeline = undefined;
-    queue.length = 0; target = undefined;
-    Object.assign(pose, { x: 0, y: 0, rotation: 0 });
-    Object.assign(camera, { x: 0, y: 0 });
-    steering.forEach(state => { state.angle = 0; state.drive = 1; });
-    setRunning(false); queueStatus(); render();
-    description.textContent = 'Robot je zpět uprostřed hřiště. Fronta je prázdná.';
-    svgDescription.textContent = description.textContent;
-  }
-  function enqueue(name) {
-    if (name === 'reset') { reset(); return; }
-    queue.push(name); queueStatus(); next();
-  }
-  pad.hidden = false;
-  pad.querySelectorAll('[data-swerve]').forEach(button => button.addEventListener('click', () => enqueue(button.dataset.swerve)));
-  pad.addEventListener('keydown', event => {
-    const name = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', e: 'spin', E: 'spin', r: 'reset', R: 'reset' }[event.key];
-    if (name) { event.preventDefault(); enqueue(name); }
+  stick.addEventListener('pointerdown', event => {
+    if (event.button > 0 || drag) return;
+    const rect = stick.getBoundingClientRect();   // measured at the press: the stage moves with the page
+    const centerX = rect.left + rect.width / 2, centerY = rect.top + rect.height / 2;
+    const x = event.clientX - centerX, y = event.clientY - centerY;
+    const onKnob = Math.hypot(x - knob.x, y - knob.y) <= knobEl.offsetWidth / 2 + 6;
+    drag = {
+      id: event.pointerId, centerX, centerY, start: performance.now(), history: [],
+      // On the knob: keep the offset where it was grabbed. Beside it: the knob comes to the finger.
+      offsetX: onKnob ? x - knob.x : 0, offsetY: onKnob ? y - knob.y : 0,
+      gapX: onKnob ? 0 : knob.x - x, gapY: onKnob ? 0 : knob.y - y
+    };
+    drag.x = x - drag.offsetX; drag.y = y - drag.offsetY;
+    knob.vx = knob.vy = 0;
+    try { stick.setPointerCapture(event.pointerId); } catch (error) { /* synthetic pointers cannot be captured */ }
+    stick.classList.add('is-dragging');
+    stick.focus({ preventScroll: true });
+    event.preventDefault();
+    start();
   });
-  new IntersectionObserver(entries => { visible = entries[0].isIntersecting; updateVisibility(); }).observe(demo);
-  document.addEventListener('visibilitychange', updateVisibility);
-  preference.addEventListener('change', () => {
-    clearTabAnimations();
-    if (preference.matches && running) {
-      revision++; timeline?.cancel(); timeline = undefined;
-      Object.assign(pose, target);
-      steering.forEach((state, index) => { state.angle = moduleTarget[index].angle; });
-      setRunning(false); render(); next();
-    }
+  stick.addEventListener('pointermove', event => {
+    if (!drag || event.pointerId !== drag.id) return;
+    drag.x = event.clientX - drag.centerX - drag.offsetX;
+    drag.y = event.clientY - drag.centerY - drag.offsetY;
+    start();
   });
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => stick.addEventListener(type, event => {
+    if (drag && event.pointerId === drag.id) endDrag();
+  }));
+  stick.addEventListener('keydown', event => {
+    const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    if (keyVectors[key]) { event.preventDefault(); keys.add(key); knob.damping = 1; start(); }
+    if ((key === 'q' || key === 'e') && !event.repeat) hold(`key-${key}`, key === 'q' ? -1 : 1);
+  });
+  stick.addEventListener('keyup', event => {
+    const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    if (keys.delete(key)) start();
+    if (key === 'q' || key === 'e') release(`key-${key}`);
+  });
+  stick.addEventListener('blur', () => { keys.clear(); release('key-q'); release('key-e'); start(); });
+
+  // Turn buttons: the robot turns from the press itself and for as long as it is held.
+  function hold(source, direction) {
+    const existing = holds.get(source);
+    if (existing) clearTimeout(existing.timer);
+    holds.set(source, { direction, since: performance.now() });
+    start();
+  }
+  function release(source, immediately = false) {
+    const active = holds.get(source);
+    if (!active || active.timer) return;
+    const remaining = immediately ? 0 : TAP_TURN - (performance.now() - active.since);
+    if (remaining > 0) active.timer = setTimeout(() => { holds.delete(source); start(); }, remaining);
+    else { holds.delete(source); start(); }
+  }
+  demo.querySelectorAll('[data-rotate]').forEach(button => {
+    const direction = Number(button.dataset.rotate);
+    const source = `button-${direction}`;
+    let lastKey = 0;
+    const down = () => { button.classList.add('is-held'); hold(source, direction); };
+    const up = () => { button.classList.remove('is-held'); release(source); };
+    button.addEventListener('pointerdown', event => {
+      if (event.button > 0) return;
+      try { button.setPointerCapture(event.pointerId); } catch (error) { /* synthetic pointers cannot be captured */ }
+      down();
+    });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => button.addEventListener(type, up));
+    button.addEventListener('keydown', event => {
+      if (event.key !== ' ' && event.key !== 'Enter') return;
+      event.preventDefault(); lastKey = performance.now();
+      if (!event.repeat) down();
+    });
+    button.addEventListener('keyup', event => {
+      if (event.key === ' ' || event.key === 'Enter') { lastKey = performance.now(); up(); }
+    });
+    button.addEventListener('blur', up);
+    // Activation without a pointer or key press (assistive technology) still gives one visible turn.
+    button.addEventListener('click', event => {
+      if (event.detail || performance.now() - lastKey < 600) return;
+      hold(`${source}-tap`, direction); release(`${source}-tap`);
+    });
+  });
+  function releaseAll() {
+    keys.clear();
+    [...holds.keys()].forEach(source => { clearTimeout(holds.get(source).timer); holds.delete(source); });
+    demo.querySelectorAll('.rotate-button.is-held').forEach(button => button.classList.remove('is-held'));
+    endDrag();
+  }
+  deck.addEventListener('contextmenu', event => event.preventDefault());
+  resetButton.addEventListener('click', () => {
+    pose.rotation = shortest(pose.rotation);
+    resetting = true;
+    start();
+  });
+  // In single-column layouts the wheel numbers sit between the diagram and the controls,
+  // so they stay in view while a thumb is on the joystick.
+  const readout = demo.querySelector('.swerve-readout');
+  const copy = demo.querySelector('.swerve-copy');
+  const singleColumn = matchMedia('(max-width: 980px)');
+  function placeReadout() {
+    if (!readout) return;
+    if (singleColumn.matches) deck.before(readout); else copy.append(readout);
+  }
+  singleColumn.addEventListener('change', placeReadout);
+  placeReadout();
+  deck.hidden = false;
+  resetButton.hidden = false;
+  new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;
+    if (visible) start(); else releaseAll();
+  }).observe(demo);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) releaseAll(); else start(); });
+  addEventListener('blur', releaseAll);
+  preference.addEventListener('change', () => { clearTabAnimations(); start(); });
   render();
 })();

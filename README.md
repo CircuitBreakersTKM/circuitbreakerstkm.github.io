@@ -1,8 +1,9 @@
 # CircuitBreakers
 
-Web středoškolského robotického týmu z Litoměřic. Na `/` je portfolio robotů,
-soutěží a práce v dílně, na `/team/` jsou profily členů a na `/sponsors/`
-seznam sponzorů s možnostmi podpory. Web hostuje GitHub Pages.
+Web středoškolského robotického týmu z Litoměřic. Na `/` je aktuální sezóna
+(výsledky, ceny a fotky ze soutěže), na `/team/` jsou profily členů, na
+`/sponsors/` seznam sponzorů s možnostmi podpory a na `/archive/` minulé
+sezóny. Web hostuje GitHub Pages.
 Kontakt pro sponzorskou spolupráci: `sponzori@circuitbreakers.cloud`.
 
 ## Lokální spuštění
@@ -66,6 +67,24 @@ JSON používá dvojité uvozovky a za posledním prvkem nesmí být čárka.
 Při chybě načítání nebo neplatných údajích se zobrazí tlačítko „Zkusit znovu“.
 Prázdný seznam zobrazí zprávu „Profily zatím chybí.“ Profily vyžadují JavaScript.
 
+## Fotky a archiv sezón
+
+Fotky aktuální sezóny jsou v `photos/site/`, vždy ve dvou šířkách pro `srcset`
+(například `medals-2026-1600.webp` a `medals-2026-768.webp`). Ukládejte je jako
+WebP bez EXIF metadat a nezvětšujte je nad původní rozlišení.
+
+Když sezóna skončí, přesuňte její fotky do `photos/archive/<rok>/` a její sekce
+z `index.html` do `archive/index.html`. Do tabulky sezón nahoře na stránce
+archivu přidejte řádek `season-row`. Při přesunu zkontrolujte cesty i na
+`/team/` a `/sponsors/`, které fotky z těchto složek také používají.
+
+Nové prvky se do animací při scrollování zapojí přes seznam `candidates`
+ve `script.js`; animace se při scrollování zpět samy vracejí. Knihovna Motion
+je ve složce `vendor/`.
+Soubor `robot.js` obsluhuje ukázku swerve pohonu na hlavní stránce (páčka,
+tlačítka pro otáčení, výpočet natočení a rychlosti každého kola) a průzkumník
+robota na stránce archivu u sezóny 2025.
+
 ## GitHub Pages
 
 V Settings → Pages ponechte publikování větve `main` ze složky `/`.
@@ -73,7 +92,7 @@ Změny se na veřejném webu projeví po pushi a dokončení nasazení GitHub Pa
 Hosting může ještě chvíli vracet předchozí verzi z cache.
 
 JSONy jsou dostupné na `/team/team.json` a `/sponsors/sponsors.json`.
-V `sitemap.xml` jsou pouze stránky portfolia, týmu a sponzorů.
+V `sitemap.xml` jsou stránky portfolia, týmu, sponzorů a archivu.
 Při obnovení stránky prohlížeč ověřuje aktuální verzi JSONu.
 
 Chybová stránka je v `404.html`. GitHub Pages ji použije pro neexistující adresy.
