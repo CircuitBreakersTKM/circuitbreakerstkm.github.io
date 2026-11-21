@@ -824,6 +824,14 @@ main > section > .section-index, .race-sticky > .section-index { width:100%; }
 .photo-carry img { object-position:50% 55%; }
 .photo-interview img { object-position:50% 30%; }
 .archive-back { max-width:var(--max); margin:32px auto 0; }
+/* A TV report that cannot be embedded (the broadcaster blocks framing): a poster that opens it at the source. */
+.video-link { position:relative; flex:1 0 auto; display:flex; flex-direction:column; color:inherit; text-decoration:none; }
+.video-badge { position:absolute; left:16px; bottom:16px; display:flex; align-items:center; gap:12px; padding-right:16px; background:rgba(10,10,10,.82); color:#fff; font-size:.75rem; line-height:1; }
+.video-play { width:48px; height:48px; display:grid; place-items:center; background:var(--red); transition:background-color .12s ease-out, scale .1s ease-out; }
+.video-play::before { content:""; margin-left:3px; border-style:solid; border-width:8px 0 8px 14px; border-color:transparent transparent transparent #fff; }
+.video-link:hover .video-play { background:#a62d29; }
+.video-link:active .video-play { scale:.94; }
+.photo-caption .text-link { margin-top:0; }
 
 .denver-next { border-bottom:1px solid var(--line-dark); }
 .status-mark { display:inline-block; width:8px; height:8px; margin-right:12px; background:var(--red-on-dark); }
