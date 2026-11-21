@@ -57,8 +57,16 @@
   function scheduleMeasure() {
     if (!measureFrame) measureFrame = requestAnimationFrame(measure);
   }
+  // A photo's reveal follows the scroll position, but never plays faster than this (seconds for a
+  // full reveal). A slow scroll stays tied to the finger; a fast one lets the reveal finish on its own.
+  const PHOTO_REVEAL_TIME = .55;
+  let lastRender = 0;
   function render() {
     frame = 0;
+    const now = performance.now();
+    const step = Math.min(.034, Math.max(.001, (now - lastRender) / 1000)) / PHOTO_REVEAL_TIME;
+    lastRender = now;
+    let catchingUp = false;
     const reduced = preference.matches || !motion;
     const distance = Math.max(120, Math.min(260, innerHeight * .25));
     const max = document.documentElement.scrollHeight - innerHeight;
@@ -75,7 +83,17 @@
       const { el, top, photo, row, stagger, visible, wideRow } = entry;
       const continuous = wideRow && wideRow.facts && !compact.matches;
       const focused = keyboardFocus !== null && el.contains(keyboardFocus);
-      const p = reduced || continuous || focused || !visible ? 1 : clamp((scrollY + innerHeight * .94 - top - stagger) / distance);
+      const revealed = reduced || continuous || focused || !visible;
+      let p = revealed ? 1 : clamp((scrollY + innerHeight * .94 - top - stagger) / distance);
+      if (photo) {
+        // The cap applies before the row stagger, so photos in a row still cascade when the reveal runs on time.
+        const lead = stagger / distance;
+        const wanted = revealed ? 1 + lead : Math.min(1 + lead, Math.max(0, (scrollY + innerHeight * .94 - top) / distance));
+        const gap = wanted - (entry.reveal ?? wanted);
+        entry.reveal = reduced || Math.abs(gap) <= step ? wanted : entry.reveal + Math.sign(gap) * step;
+        if (entry.reveal !== wanted) catchingUp = true;
+        p = clamp(entry.reveal - lead);
+      }
       // Position, rather than a one-shot timer, owns progress in both directions.
       const eased = p * p * (3 - 2 * p);
       // Photos settle with an ease-out: quick to appear, slow to come to rest.
@@ -96,7 +114,7 @@
         el.style.translate = row ? `${(1 - eased) * 16}px 0` : `0 ${(1 - eased) * 24}px`;
       }
     });
-
+    if (catchingUp) scheduleRender();
   }
   function scheduleRender() { if (!frame) frame = requestAnimationFrame(render); }
   const scoreRows = [...document.querySelectorAll('.score-line')];
