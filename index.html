@@ -45,7 +45,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20261121-caption4">
+  <link rel="stylesheet" href="./styles.css?v=20261121-swerve-dark">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -316,23 +316,25 @@
       </div>
     </section>
 
-    <section id="swerve" class="swerve-section section-paper" aria-labelledby="swerve-title">
+    <section id="swerve" class="swerve-section section-ink" aria-labelledby="swerve-title">
       <div class="section-index mono">06 / Swerve pohon</div>
       <div class="swerve-demo">
         <div class="swerve-copy">
-          <p class="eyebrow mono">Vyzkoušej si řízení</p>
-          <h2 id="swerve-title">Každé kolo<br>zatáčí zvlášť</h2>
-          <p id="swerve-help">Páčkou určíš směr jízdy po hřišti, i když je robot otočený. Tlačítky ho otáčíš, dokud je držíš. Ukázka pro každé kolo průběžně počítá, kam se má natočit a jak rychle se má točit.</p>
-          <p class="swerve-note mono">Schéma principu swerve pohonu. Nejde o simulaci skutečného výkonu našeho robota.</p>
-          <div class="swerve-readout">
-            <p class="swerve-readout-head mono"><span>Výpočet pro každé kolo</span><span>Natočení robota <b id="pose-heading">0°</b></span></p>
-            <dl class="swerve-modules mono">
-            <div data-module="0"><dt>Levé přední</dt><dd><span data-angle>0°</span><small>natočení</small></dd><dd><span data-speed>0 %</span><small>pohon</small></dd></div>
-            <div data-module="1"><dt>Pravé přední</dt><dd><span data-angle>0°</span><small>natočení</small></dd><dd><span data-speed>0 %</span><small>pohon</small></dd></div>
-            <div data-module="2"><dt>Levé zadní</dt><dd><span data-angle>0°</span><small>natočení</small></dd><dd><span data-speed>0 %</span><small>pohon</small></dd></div>
-            <div data-module="3"><dt>Pravé zadní</dt><dd><span data-angle>0°</span><small>natočení</small></dd><dd><span data-speed>0 %</span><small>pohon</small></dd></div>
-            </dl>
+          <div class="swerve-main">
+            <p class="eyebrow mono">Vyzkoušej si řízení</p>
+            <h2 id="swerve-title">Každé kolo<br>zatáčí zvlášť</h2>
+            <p id="swerve-help">Páčkou určíš směr jízdy po hřišti, i když je robot otočený. Tlačítky ho otáčíš, dokud je držíš. Ukázka pro každé kolo průběžně počítá, kam se má natočit a jak rychle se má točit.</p>
+            <div class="swerve-readout">
+              <p class="swerve-readout-head mono"><span>Výpočet pro každé kolo</span><span class="readout-heading">Natočení robota <b data-heading>0°</b></span><span class="readout-legend">úhel vůči přídi robota</span></p>
+              <dl class="swerve-modules mono">
+              <div data-module="0"><dt>Levé přední</dt><dd><span data-angle>0°</span><small>natočení</small></dd><dd><span data-speed>0 %</span><small>pohon</small></dd><dd class="module-dial" aria-hidden="true"><svg viewBox="-36 -36 72 72"><circle r="33"/><path class="dial-front" d="M0-33V-26"/><g data-dial><rect x="-7" y="-15" width="14" height="30" rx="3"/><g data-dial-vector><line x1="0" y1="0" x2="0" y2="-8"/><path d="M-4 5L0 0L4 5" transform="translate(0 -8)"/></g></g></svg></dd></div>
+              <div data-module="1"><dt>Pravé přední</dt><dd><span data-angle>0°</span><small>natočení</small></dd><dd><span data-speed>0 %</span><small>pohon</small></dd><dd class="module-dial" aria-hidden="true"><svg viewBox="-36 -36 72 72"><circle r="33"/><path class="dial-front" d="M0-33V-26"/><g data-dial><rect x="-7" y="-15" width="14" height="30" rx="3"/><g data-dial-vector><line x1="0" y1="0" x2="0" y2="-8"/><path d="M-4 5L0 0L4 5" transform="translate(0 -8)"/></g></g></svg></dd></div>
+              <div data-module="2"><dt>Levé zadní</dt><dd><span data-angle>0°</span><small>natočení</small></dd><dd><span data-speed>0 %</span><small>pohon</small></dd><dd class="module-dial" aria-hidden="true"><svg viewBox="-36 -36 72 72"><circle r="33"/><path class="dial-front" d="M0-33V-26"/><g data-dial><rect x="-7" y="-15" width="14" height="30" rx="3"/><g data-dial-vector><line x1="0" y1="0" x2="0" y2="-8"/><path d="M-4 5L0 0L4 5" transform="translate(0 -8)"/></g></g></svg></dd></div>
+              <div data-module="3"><dt>Pravé zadní</dt><dd><span data-angle>0°</span><small>natočení</small></dd><dd><span data-speed>0 %</span><small>pohon</small></dd><dd class="module-dial" aria-hidden="true"><svg viewBox="-36 -36 72 72"><circle r="33"/><path class="dial-front" d="M0-33V-26"/><g data-dial><rect x="-7" y="-15" width="14" height="30" rx="3"/><g data-dial-vector><line x1="0" y1="0" x2="0" y2="-8"/><path d="M-4 5L0 0L4 5" transform="translate(0 -8)"/></g></g></svg></dd></div>
+              </dl>
+            </div>
           </div>
+          <p class="swerve-note mono">Schéma principu swerve pohonu. Nejde o simulaci skutečného výkonu našeho robota.</p>
         </div>
         <figure class="swerve-stage">
           <svg id="swerve-svg" viewBox="0 0 520 460" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="swerve-svg-title swerve-svg-desc">
@@ -351,9 +353,11 @@
           </g></g>
         </svg>
           <div class="swerve-deck" hidden>
+            <dl class="deck-readout deck-readout-drive mono"><div><dt>Směr jízdy</dt><dd data-stick-angle>–</dd></div><div><dt>Rychlost</dt><dd data-stick-speed>0 %</dd></div></dl>
             <button type="button" class="rotate-button mono" data-rotate="-1" aria-label="Otáčet robota doleva, dokud držíš"><span aria-hidden="true">↺</span><small>Doleva</small></button>
             <div class="joystick" tabindex="0" role="application" aria-roledescription="páčka" aria-label="Páčka pro jízdu. Táhni ji, nebo použij šipky; klávesy Q a E robota otáčejí." aria-describedby="swerve-help"><span class="joystick-knob" aria-hidden="true"></span></div>
             <button type="button" class="rotate-button mono" data-rotate="1" aria-label="Otáčet robota doprava, dokud držíš"><span aria-hidden="true">↻</span><small>Doprava</small></button>
+            <dl class="deck-readout deck-readout-turn mono"><div><dt>Otáčení</dt><dd data-turn>0 %</dd></div><div><dt>Natočení</dt><dd data-heading>0°</dd></div></dl>
           </div>
           <figcaption class="mono"><span>Pohled shora / šipka u kola ukazuje směr a rychlost</span><button type="button" class="swerve-reset mono" data-swerve-reset hidden>Vrátit na střed</button></figcaption>
         </figure>
@@ -441,7 +445,7 @@
   </footer>
 
   <script src="./vendor/motion-14.11.1.js" defer></script>
-  <script src="./script.js?v=20261121-caption4" defer></script>
-  <script src="./robot.js?v=20261121-caption4" defer></script>
+  <script src="./script.js?v=20261121-swerve-dark" defer></script>
+  <script src="./robot.js?v=20261121-swerve-dark" defer></script>
 </body>
 </html>

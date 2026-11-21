@@ -69,13 +69,18 @@
   const stick = demo.querySelector('.joystick');
   const knobEl = demo.querySelector('.joystick-knob');
   const resetButton = demo.querySelector('[data-swerve-reset]');
-  const headingOutput = document.getElementById('pose-heading');
+  const headingOutputs = [...demo.querySelectorAll('[data-heading]')];
+  const stickAngleOutput = demo.querySelector('[data-stick-angle]');
+  const stickSpeedOutput = demo.querySelector('[data-stick-speed]');
+  const turnOutput = demo.querySelector('[data-turn]');
   const wheels = [...demo.querySelectorAll('.swerve-wheel')].map(el => ({
     el, tread: el.querySelector('.wheel-tread'), vector: el.querySelector('.wheel-vector'),
     shaft: el.querySelector('.vector-shaft'), head: el.querySelector('.vector-head')
   }));
   const cells = [...demo.querySelectorAll('[data-module]')].map(el => ({
-    el, angle: el.querySelector('[data-angle]'), speed: el.querySelector('[data-speed]'), angleText: '', speedText: ''
+    el, angle: el.querySelector('[data-angle]'), speed: el.querySelector('[data-speed]'), angleText: '', speedText: '',
+    dial: el.querySelector('[data-dial]'), dialVector: el.querySelector('[data-dial-vector]'),
+    dialShaft: el.querySelector('[data-dial-vector] line'), dialHead: el.querySelector('[data-dial-vector] path')
   }));
 
   // Module positions in the chassis frame (y points down, angles grow clockwise).
@@ -98,6 +103,7 @@
   let frameId = 0;
   let last = 0;
   let headingText = '';
+  const input = { angle: 0, amount: 0, turn: 0, text: '' };
   const shortest = degrees => ((degrees + 180) % 360 + 360) % 360 - 180;
   const travel = () => Math.max(1, (stick.clientWidth - knobEl.offsetWidth) / 2);
   // Past the rim the knob keeps following, with growing resistance.
@@ -157,6 +163,8 @@
     turn = reduced ? turnTarget : turn + (turnTarget - turn) * (1 - Math.exp(-dt / .09));
     if (!turnTarget && Math.abs(turn) < .002) turn = 0;
     if (amount || turnTarget) resetting = false;
+    input.amount = amount; input.turn = turn;
+    if (amount) input.angle = Math.atan2(stickX, -stickY) * 180 / Math.PI;
 
     if (resetting) {
       const pull = reduced ? 1 : 1 - Math.exp(-dt / .16);
@@ -233,9 +241,24 @@
       if (angleText !== cell.angleText) cell.angle.textContent = cell.angleText = angleText;
       if (speedText !== cell.speedText) cell.speed.textContent = cell.speedText = speedText;
       cell.el.style.setProperty('--share', share.toFixed(3));
+      // The dial shows the same wheel relative to the robot's front, whatever way the robot faces.
+      if (!cell.dial) return;
+      const reach = 8 + 20 * share;
+      cell.dial.setAttribute('transform', `rotate(${module.angle.toFixed(1)})`);
+      cell.dialVector.setAttribute('transform', `rotate(${module.speed < 0 ? 180 : 0})`);
+      cell.dialVector.style.opacity = Math.min(1, share * 8).toFixed(2);
+      cell.dialShaft.setAttribute('y2', (-reach).toFixed(1));
+      cell.dialHead.setAttribute('transform', `translate(0 ${(-reach).toFixed(1)})`);
     });
+    // What the controls are asking for, shown next to them.
+    const turnPercent = Math.round(input.turn * 100);
+    const inputText = `${input.amount ? Math.round(((input.angle % 360) + 360) % 360) % 360 + '°' : '–'}|${Math.round(input.amount * 100)} %|${turnPercent > 0 ? '+' : turnPercent < 0 ? '−' : ''}${Math.abs(turnPercent)} %`;
+    if (inputText !== input.text && stickAngleOutput) {
+      input.text = inputText;
+      [stickAngleOutput.textContent, stickSpeedOutput.textContent, turnOutput.textContent] = inputText.split('|');
+    }
     const heading = `${Math.round(((pose.rotation % 360) + 360) % 360) % 360}°`;
-    if (heading !== headingText) headingOutput.textContent = headingText = heading;
+    if (heading !== headingText) { headingText = heading; headingOutputs.forEach(output => { output.textContent = heading; }); }
     demo.classList.toggle('is-driving', driving);
   }
   // How far the robot may drift from the middle before the view follows it. The diagram is cropped
@@ -365,7 +388,7 @@
   // In single-column layouts the wheel numbers sit between the diagram and the controls,
   // so they stay in view while a thumb is on the joystick.
   const readout = demo.querySelector('.swerve-readout');
-  const copy = demo.querySelector('.swerve-copy');
+  const copy = demo.querySelector('.swerve-main');
   const singleColumn = matchMedia('(max-width: 980px)');
   function placeReadout() {
     if (!readout) return;

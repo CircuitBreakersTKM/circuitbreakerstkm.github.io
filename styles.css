@@ -893,7 +893,11 @@ main > section > .section-index, .race-sticky > .section-index { width:100%; }
 }
 
 /* Swerve demo on the homepage: joystick, hold-to-turn buttons and per-wheel readouts. */
-.swerve-section { padding:var(--section-space) var(--pad); }
+/* A dark section, so the demo is not a black box floating in a white page, and a wider measure
+   than the rest of the site so it uses a large screen. The section label follows the same measure. */
+.swerve-section { --max:1680px; padding:var(--section-space) var(--pad); }
+.swerve-section .swerve-demo { border-color:var(--line-dark); }
+.swerve-main > p:not(.eyebrow) { max-width:40rem; color:#bdbdb7; line-height:1.65; }
 .swerve-section .swerve-demo { margin-top:40px; }
 /* The diagram never pushes its own controls below the fold. */
 .swerve-section .swerve-stage svg { height:clamp(280px,46svh,460px); max-height:none; margin:0; }
@@ -911,17 +915,21 @@ main > section > .section-index, .race-sticky > .section-index { width:100%; }
 .swerve-stage { position:relative; }
 .swerve-stage .swerve-readout { margin:0; border-top:1px solid var(--line-dark); }
 .swerve-stage .swerve-readout-head { position:absolute; top:12px; right:12px; margin:0; padding:2px 8px; background:rgba(10,10,10,.78); pointer-events:none; }
-.swerve-stage .swerve-readout-head > :first-child { display:none; }
+.swerve-stage .swerve-readout-head > :not(.readout-heading) { display:none; }
 .swerve-stage .swerve-modules { border:0; }
 .swerve-stage .swerve-modules > div { padding:8px 16px 10px; }
 .swerve-stage .swerve-modules dt { font-size:.6875rem; line-height:1.4; }
 .swerve-stage .swerve-modules dd { width:5ch; margin:2px 12px 0 0; font-size:.9375rem; line-height:1.3; }
 .swerve-stage .swerve-modules dd + dd { width:6ch; margin-right:0; }
 .swerve-stage .swerve-modules dd small { position:absolute; width:1px; height:1px; margin:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
-.swerve-deck { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:24px; padding:24px; border-top:1px solid var(--line-dark); user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; }
+.swerve-deck { display:grid; grid-template-columns:minmax(0,1fr) auto auto auto minmax(0,1fr); align-items:center; gap:24px; padding:24px; border-top:1px solid var(--line-dark); user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; }
 .swerve-deck[hidden], .swerve-reset[hidden] { display:none; }
 .rotate-button { justify-self:end; width:72px; height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; border:1px solid var(--line-dark); background:transparent; color:inherit; cursor:pointer; touch-action:none; transition:background-color .12s ease-out, border-color .12s ease-out, scale .1s ease-out; }
-.rotate-button:last-child { justify-self:start; }
+.rotate-button[data-rotate="-1"] { grid-column:2; }
+.joystick { grid-column:3; }
+.rotate-button[data-rotate="1"] { grid-column:4; }
+/* Dials and input readouts are desktop extras; narrower layouts keep the lean version. */
+.swerve-modules .module-dial, .deck-readout, .readout-legend { display:none; }
 .rotate-button span { font-size:24px; line-height:1; }
 .rotate-button small { font:inherit; font-size:11px; }
 .rotate-button:hover { border-color:var(--red-on-dark); }
@@ -953,4 +961,50 @@ main > section > .section-index, .race-sticky > .section-index { width:100%; }
   .joystick::after { left:12px; right:12px; }
   .joystick-knob { width:52px; height:52px; margin:-26px 0 0 -26px; }
   .swerve-stage .swerve-modules > div { padding-inline:var(--pad); }
+}
+
+/* Desktop: the demo fills its box. The wheel table stretches to the bottom of the column
+   and the note shares a row with the caption, so the two halves end on the same lines. */
+@media (min-width:981px) {
+  .swerve-section .swerve-copy { align-self:stretch; display:flex; flex-direction:column; padding-bottom:0; }
+  .swerve-main { flex:1; display:flex; flex-direction:column; }
+  .swerve-main .swerve-readout { flex:1; display:flex; flex-direction:column; margin:32px 0; }
+  .swerve-main .swerve-modules { flex:1; grid-auto-rows:1fr; }
+  .swerve-main .swerve-modules > div { display:flex; flex-wrap:wrap; align-content:center; padding:16px 20px; }
+  .swerve-main .swerve-modules dt { flex:0 0 100%; }
+  .swerve-section .swerve-note { margin:0 -32px; padding:24px 32px; display:flex; align-items:center; border-top:1px solid var(--line-dark); }
+  @supports (grid-template-rows:subgrid) {
+    .swerve-section .swerve-demo { grid-template-rows:auto auto auto; }
+    .swerve-section .swerve-copy, .swerve-section .swerve-stage { display:grid; grid-template-rows:subgrid; grid-row:span 3; }
+    .swerve-section .swerve-copy { grid-template-columns:minmax(0,1fr); }
+    .swerve-section .swerve-main { grid-row:1 / span 2; }
+    .swerve-section .swerve-note { grid-row:3; }
+  }
+}
+/* Wide desktop: a dial per wheel, and what the controls are asking for beside them. */
+@media (min-width:1360px) {
+  .swerve-main .swerve-modules > div { display:grid; grid-template-columns:auto auto minmax(0,1fr); grid-template-rows:auto auto; gap:8px 0; }
+  .swerve-main .swerve-modules dt { grid-column:1 / span 2; grid-row:1; }
+  .swerve-main .swerve-modules dd { grid-row:2; margin-top:0; }
+  .swerve-main .swerve-modules dd:nth-of-type(1) { grid-column:1; }
+  .swerve-main .swerve-modules dd:nth-of-type(2) { grid-column:2; }
+  .swerve-main .swerve-modules .module-dial { display:block; grid-column:3; grid-row:1 / span 2; justify-self:end; align-self:center; width:64px; height:64px; margin:0; }
+  .module-dial svg { display:block; width:100%; height:100%; overflow:visible; }
+  .module-dial circle { fill:none; stroke:var(--line-dark); }
+  .module-dial .dial-front { fill:none; stroke:var(--red-on-dark); stroke-width:2; }
+  .module-dial rect { fill:#e8e8e5; stroke:#0a0a0a; stroke-width:2; }
+  .module-dial line, .module-dial [data-dial-vector] path { fill:none; stroke:var(--red-on-dark); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+  .swerve-main .readout-heading { display:none; }
+  .swerve-main .readout-legend { display:inline; }
+  .deck-readout { display:grid; gap:16px; margin:0; min-width:0; }
+  .deck-readout-drive { grid-column:1; justify-self:start; }
+  .deck-readout-turn { grid-column:5; justify-self:end; text-align:right; }
+  .deck-readout dt { color:var(--muted-dark); font-size:.75rem; line-height:1.5; }
+  .deck-readout dd { min-width:5ch; margin:2px 0 0; color:var(--paper); font-size:1.25rem; line-height:1.2; font-variant-numeric:tabular-nums; white-space:nowrap; }
+}
+/* Very wide screens: the wider demo gets a taller diagram and larger dials to match. */
+@media (min-width:1600px) {
+  .swerve-section .swerve-stage svg { height:clamp(280px,48svh,540px); }
+  .swerve-main .swerve-modules .module-dial { width:80px; height:80px; }
+  .swerve-main .swerve-modules > div { padding:20px 28px; }
 }
