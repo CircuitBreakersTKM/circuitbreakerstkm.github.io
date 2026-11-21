@@ -836,6 +836,33 @@ main > section > .section-index, .race-sticky > .section-index { width:100%; }
 .video-link:hover .video-play { background:#a62d29; }
 .video-link:active .video-play { scale:.94; }
 .photo-caption .text-link { margin-top:0; }
+/* Cards in a gallery row share one image row and one banner row, so their banners always line up. */
+@media (min-width:621px) {
+  @supports (grid-template-rows:subgrid) {
+    .photo-grid { grid-template-rows:auto auto; row-gap:0; }
+    .photo-grid > .photo-card { display:grid; grid-template-rows:subgrid; grid-row:span 2; }
+  }
+}
+/* The video card's banner keeps the same two-line height as the photo beside it. */
+/* The banner, not the card, is the size container: a contained card could no longer share rows with its neighbour. */
+.video-caption { container-type:inline-size; }
+.video-caption-inner { width:100%; display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
+.video-meta-link { display:none; position:relative; color:var(--red-on-dark); font:500 .75rem/1.5 "IBM Plex Mono",monospace; letter-spacing:.015em; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.3em; transition:color .12s ease-out; }
+.video-meta-link::after { content:""; position:absolute; inset:-13px 0; }
+.video-meta-link:hover { color:#fff; }
+@media (min-width:621px) {
+  /* No room for a link beside the text: the report line itself becomes the link. */
+  @container (max-width:743.98px) {
+    .video-caption .video-meta, .video-caption .video-cta { display:none; }
+    .video-caption .video-meta-link { display:inline-block; }
+  }
+  /* Enough room: the link sits on the right, level with the report line. */
+  @container (min-width:744px) {
+    .video-caption-inner { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px 32px; align-items:start; }
+    .video-caption-inner > strong, .video-caption-inner > .video-meta { grid-column:1; }
+    .video-caption-inner > .video-cta { grid-column:2; grid-row:1 / span 2; align-self:end; min-height:0; margin:0; padding-bottom:2px; }
+  }
+}
 
 .denver-next { border-bottom:1px solid var(--line-dark); }
 .status-mark { display:inline-block; width:8px; height:8px; margin-right:12px; background:var(--red-on-dark); }

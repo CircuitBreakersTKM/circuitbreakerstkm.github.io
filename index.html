@@ -45,7 +45,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20261121-reveal2">
+  <link rel="stylesheet" href="./styles.css?v=20261121-caption4">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -303,7 +303,15 @@
             </div>
             <span class="video-badge mono"><i class="video-play"></i>Česká televize / 3 min</span>
           </a>
-          <figcaption class="photo-caption"><strong>Soutěž studentských robotů v Ústí nad Labem</strong><small>Reportáž České televize / Události v regionech / 20. 11. 2026</small><a class="text-link" href="https://www.ceskatelevize.cz/porady/15334105033-udalosti-v-regionech-sever-a-vychod/226411000171120/cast/1221022/" target="_blank" rel="noreferrer">Přehrát na webu České televize ↗</a></figcaption>
+          <figcaption class="photo-caption video-caption">
+            <div class="video-caption-inner">
+              <strong>Soutěž studentských robotů v Ústí nad Labem</strong>
+              <small class="video-meta">Reportáž České televize / Události v regionech / 20. 11. 2026</small>
+              <!-- Shown instead of the two lines around it when the card is too narrow for a link beside the text. -->
+              <a class="video-meta-link" href="https://www.ceskatelevize.cz/porady/15334105033-udalosti-v-regionech-sever-a-vychod/226411000171120/cast/1221022/" target="_blank" rel="noreferrer">Reportáž České televize / 20. 11. 2026 ↗</a>
+              <a class="text-link video-cta" href="https://www.ceskatelevize.cz/porady/15334105033-udalosti-v-regionech-sever-a-vychod/226411000171120/cast/1221022/" target="_blank" rel="noreferrer">Přehrát na webu České televize ↗</a>
+            </div>
+          </figcaption>
         </figure>
       </div>
     </section>
@@ -433,7 +441,7 @@
   </footer>
 
   <script src="./vendor/motion-14.11.1.js" defer></script>
-  <script src="./script.js?v=20261121-reveal2" defer></script>
-  <script src="./robot.js?v=20261121-reveal2" defer></script>
+  <script src="./script.js?v=20261121-caption4" defer></script>
+  <script src="./robot.js?v=20261121-caption4" defer></script>
 </body>
 </html>
