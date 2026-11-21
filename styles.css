@@ -947,10 +947,10 @@ main > section > .section-index, .race-sticky > .section-index { width:100%; }
 .swerve-reset:hover { color:var(--red-on-dark); }
 .swerve-reset:active { scale:.98; }
 @media (max-width:620px) {
-  .swerve-section .swerve-demo { margin-top:32px; }
+  .swerve-section .swerve-demo { margin-top:8px; }
   /* Edge to edge on phones, and short enough that diagram, numbers and controls share one screen:
      372px = site header + wheel numbers + control deck + a little air. */
-  .swerve-section .swerve-demo { margin-inline:calc(-1 * var(--pad)); border-inline:0; border-bottom:0; }
+  .swerve-section .swerve-demo { margin-inline:calc(-1 * var(--pad)); border:0; }
   /* Edge to edge, the demo and its section share one black: no grey band above the demo or below it. */
   .swerve-section { background:var(--ink); padding-bottom:0; border-top:1px solid var(--line-dark); }
   .swerve-section .swerve-copy { padding-inline:var(--pad); }
