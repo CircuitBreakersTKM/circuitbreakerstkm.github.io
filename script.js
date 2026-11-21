@@ -25,7 +25,7 @@
       const group = el.closest('.detail-grid, .photo-grid, .facts-row, .team-rail, .member-grid, .support-grid, .scoreboard, .spec-list, .award-list, .season-list');
       const index = group ? [...group.children].indexOf(el) : 0;
       const columns = group && !row ? getComputedStyle(group).gridTemplateColumns.split(' ').length : 1;
-      const stagger = group ? Math.max(0, row ? index : index % columns) * 14 : 0;
+      const stagger = group ? Math.max(0, row ? index : index % columns) * (photo ? 44 : 14) : 0;
       entries.set(el, { el, photo, row, stagger, top: 0, height: 0 });
     });
     measure();
@@ -33,7 +33,7 @@
   function measure() {
     measureFrame = 0;
     // Cache layout coordinates with transforms cleared; scroll rendering never reads layout.
-    entries.forEach(({ el }) => { el.style.translate = 'none'; });
+    entries.forEach(({ el }) => { el.style.translate = 'none'; el.style.scale = 'none'; });
     entries.forEach(entry => {
       const rect = entry.el.getBoundingClientRect();
       entry.lastProgress = -1;
@@ -66,24 +66,35 @@
     wideRows.forEach(row => {
       const p = reduced || compact.matches ? 1 : clamp((scrollY + innerHeight * .94 - row.top) / Math.max(distance, Math.min(420, innerHeight * .42)));
       row.progress = p * p * (3 - 2 * p);
-      row.el.style.clipPath = !row.facts && !compact.matches && !reduced ? `inset(0 ${(1 - row.progress) * 100}% 0 0)` : 'none';
     });
+    // Keyboard focus keeps its element fully revealed. Focus left behind by a click or tap does not,
+    // otherwise a card would stop rewinding once its link had been opened.
+    const active = document.activeElement;
+    const keyboardFocus = active && active !== document.body && active.matches(':focus-visible') ? active : null;
     entries.forEach(entry => {
       const { el, top, photo, row, stagger, visible, wideRow } = entry;
-      const continuous = wideRow && !compact.matches;
-      const focused = el.contains(document.activeElement);
+      const continuous = wideRow && wideRow.facts && !compact.matches;
+      const focused = keyboardFocus !== null && el.contains(keyboardFocus);
       const p = reduced || continuous || focused || !visible ? 1 : clamp((scrollY + innerHeight * .94 - top - stagger) / distance);
       // Position, rather than a one-shot timer, owns progress in both directions.
       const eased = p * p * (3 - 2 * p);
-      const revealProgress = continuous && wideRow.facts ? clamp((wideRow.progress * wideRow.width - entry.rowLeft) / Math.max(1, entry.rowWidth)) : eased;
+      // Photos settle with an ease-out: quick to appear, slow to come to rest.
+      const settled = 1 - (1 - p) ** 3;
+      const revealProgress = continuous ? clamp((wideRow.progress * wideRow.width - entry.rowLeft) / Math.max(1, entry.rowWidth)) : photo ? settled : eased;
       if (entry.lastProgress === revealProgress) return;
       entry.lastProgress = revealProgress;
       el.classList.add('scroll-reveal');
       el.classList.toggle('reveal-photo', photo);
       el.style.setProperty('--reveal-progress', String(revealProgress));
-      el.style.opacity = photo ? '1' : String(.12 + .88 * eased);
-      el.style.translate = row ? `${(1 - eased) * 16}px 0` : `0 ${(1 - eased) * (photo ? 12 : 24)}px`;
-      el.style.clipPath = photo && !reduced && !continuous ? `inset(0 ${(1 - eased) * 100}% 0 0)` : 'none';
+      if (photo) {
+        // The frame fades in, rises and grows the last few percent; CSS eases the picture back from a slight zoom.
+        el.style.opacity = String(settled);
+        el.style.translate = `0 ${(1 - settled) * 36}px`;
+        el.style.scale = String(.965 + .035 * settled);
+      } else {
+        el.style.opacity = String(.12 + .88 * eased);
+        el.style.translate = row ? `${(1 - eased) * 16}px 0` : `0 ${(1 - eased) * 24}px`;
+      }
     });
 
   }

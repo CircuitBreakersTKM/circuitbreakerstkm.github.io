@@ -663,6 +663,9 @@ footer span, footer a { font-size:.75rem; line-height:1.5; }
 .footer-sources { align-items:center; flex-wrap:wrap; }
 .footer-sources a { min-height:44px; display:inline-flex; align-items:center; }
 .scroll-reveal { --reveal-progress:1; }
+/* Photo reveal: the frame rises from its bottom edge while the picture eases back from a slight zoom. */
+.reveal-photo { transform-origin:50% 100%; }
+.reveal-photo .scroll-media > img { scale:calc(1 + (1 - var(--reveal-progress,1)) * .08); }
 .section-index::after { transform:scaleX(var(--reveal-progress,1)); }
 .motion-ribbon { padding:20px 0; background:var(--red); overflow:hidden; }
 .motion-ribbon-track { display:flex; width:max-content; will-change:transform; }
@@ -702,7 +705,8 @@ footer span, footer a { font-size:.75rem; line-height:1.5; }
 }
 @media (prefers-reduced-motion:reduce) {
   html.motion-boot .hero-word, html.motion-boot .team-title { opacity:1; }
-  .scroll-reveal { opacity:1!important; translate:none!important; clip-path:none!important; }
+  .scroll-reveal { opacity:1!important; translate:none!important; scale:none!important; clip-path:none!important; }
+  .reveal-photo .scroll-media > img { scale:none; }
   .motion-ribbon-track { transform:none!important; }
 }
 @media (prefers-reduced-transparency:reduce), (prefers-contrast:more) {
