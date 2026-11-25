@@ -24,7 +24,7 @@
   <meta name="theme-color" content="#0a0a0a">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://circuitbreakers.cloud/">
-  <meta name="description" content="CircuitBreakers — robotický tým z Litoměřic. Navrhujeme, stavíme a programujeme soutěžní roboty v rámci projektu RobUL.">
+  <meta name="description" content="CircuitBreakers je robotický tým z Litoměřic. Navrhujeme, stavíme a programujeme soutěžní roboty v rámci projektu RobUL.">
   <meta property="og:title" content="CircuitBreakers | Robotický tým z Litoměřic">
   <meta property="og:site_name" content="CircuitBreakers">
   <meta property="og:locale" content="cs_CZ">
@@ -45,7 +45,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20261121-reveal-cap2">
+  <link rel="stylesheet" href="./styles.css?v=20261125-runs11">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -194,10 +194,11 @@
           <div class="race-copy">
             <p class="eyebrow mono">Regionální robotická soutěž Ústeckého kraje / SLUNETA</p>
             <h2 id="race-title">První místo<br><span class="accent">a 12 bodů</span></h2>
-            <p>Druhý ročník měl čtyři úkoly: Záchranná mise, Míčky, Kostky a Couvací slalom. Každý se jel v ručním i autonomním režimu. Letošní robot se jmenuje Rosettijela, zkráceně Rosi.</p>
+            <p>Druhý ročník měl čtyři úkoly: Záchranná mise, Míčky, Kostky a Couvací slalom. Každý se jel v ručním i autonomním režimu.</p>
             <div class="link-row">
               <a class="text-link" href="https://www.irozhlas.cz/veda-technologie/technologie/stredoskolaci-z-litomeric-jedou-soutezit-v-robotice-do-nizozemska-viteze-ceka_2611200644_lbl" target="_blank" rel="noreferrer">Reportáž Českého rozhlasu ↗</a>
               <a class="text-link" href="https://www.ceskatelevize.cz/porady/15334105033-udalosti-v-regionech-sever-a-vychod/226411000171120/cast/1221022/" target="_blank" rel="noreferrer">Reportáž České televize ↗</a>
+              <a class="text-link" href="#jizdy">Trasy našich jízd ↓</a>
               <a class="text-link" href="./archive/">Starší výsledky v archivu ↗</a>
             </div>
           </div>
@@ -245,7 +246,7 @@
             <div>
               <h3>Cena PR a marketingové poroty</h3>
               <p class="award-scope mono">Hodnotilo se: web, sociální sítě a týmový duch</p>
-              <p>Druhá porota sledovala, jak se tým prezentuje navenek: web, sociální sítě a to, jak spolu jako tým působíme. Robotika pro nás není jen stroj, ale i lidi kolem něj. A ano, hodnotil se i tenhle web.</p>
+              <p>Druhá porota sledovala, jak se tým prezentuje navenek: web, sociální sítě a to, jak spolu jako tým působíme. Robotika pro nás není jen volnočasový kroužek, ale i lidi kolem něj. A ano, hodnotil se i tenhle web.</p>
             </div>
           </li>
         </ol>
@@ -316,8 +317,118 @@
       </div>
     </section>
 
+    <section id="jizdy" class="runs section-paper" aria-labelledby="runs-title">
+      <div class="section-index mono">06 / Jízdy</div>
+      <div class="runs-head">
+        <div>
+          <p class="eyebrow mono">Čtyři úkoly / autonomní i ruční jízdy</p>
+          <h2 id="runs-title">Kudy Rosi<br>jela</h2>
+        </div>
+        <div class="runs-copy">
+          <p>U každého ze čtyř úkolů je do plánku hřiště zakreslená trasa, kterou Rosi projela. Všechny čtyři úkoly tu jsou z autonomní jízdy, u Míčků a Kostek jde přepnout i na ruční jízdu. V ruční jízdě jsme za Míčky získali 42 bodů a za Kostky 33 bodů, v obou hrách to bylo nejvyšší skóre soutěže. Barva čáry ukazuje rychlost od 0 do 2,4 m/s. U autonomních jízd čtverce značí polohu robota každé 2 sekundy a jejich silná hrana je předek robota. Zeleně je vyznačený sběr míčků nebo uchopení kostky, červeně výstřel nebo odložení kostky.</p>
+          <p class="note mono">Klepnutím se plánek zvětší. Dalším klepnutím přepneš mezi celým plánkem a detailem.</p>
+        </div>
+      </div>
+      <div class="run-grid">
+        <div class="run-switch">
+          <div class="explorer-tabs run-tabs" aria-label="Jízdy Hry 1" hidden>
+            <button type="button" id="tab-rescue-race" data-robot-tab="rescue-race" class="mono">Soutěž / 26,2 s</button>
+            <button type="button" id="tab-rescue-best" data-robot-tab="rescue-best" class="mono">Trénink / 20,7 s</button>
+          </div>
+          <div class="run-panels">
+            <figure id="panel-rescue-race" class="run-card" data-robot-panel="rescue-race">
+              <a class="run-link" href="./photos/site/run-rescue-2026-1671.webp" target="_blank" rel="noreferrer" aria-label="Hra 1 / Záchranná mise, 26,2 s: zvětšit plánek">
+                <img style="aspect-ratio:1671/1950" src="./photos/site/run-rescue-2026-1671.webp"
+                   srcset="./photos/site/run-rescue-2026-800.webp 800w, ./photos/site/run-rescue-2026-1671.webp 1671w"
+                   sizes="(max-width: 980px) calc(100vw - 2rem), (max-width: 1630px) 92vw, 1500px"
+                   alt="Plánek bludiště se zakreslenou trasou autonomní jízdy robota k míči a zpět. Míč sebral v čase 13,4 s, do cíle dojel za 26,2 s."
+                   width="1671" height="2000" loading="lazy" decoding="async">
+              </a>
+              <figcaption class="run-caption"><span class="run-name"><strong>Hra 1 / Záchranná mise</strong><small class="mono">Autonomní jízda / 19. 11. 2026</small></span><span class="run-time">26,2 s</span></figcaption>
+            </figure>
+            <figure id="panel-rescue-best" class="run-card" data-robot-panel="rescue-best">
+              <a class="run-link" href="./photos/site/run-rescue-best-2026-1671.webp" target="_blank" rel="noreferrer" aria-label="Hra 1 / Náš nejrychlejší průjezd, 20,7 s: zvětšit plánek">
+                <img style="aspect-ratio:1671/1950" src="./photos/site/run-rescue-best-2026-1671.webp"
+                   srcset="./photos/site/run-rescue-best-2026-800.webp 800w, ./photos/site/run-rescue-best-2026-1671.webp 1671w"
+                   sizes="(max-width: 980px) calc(100vw - 2rem), (max-width: 1630px) 92vw, 1500px"
+                   alt="Plánek bludiště se zakreslenou trasou autonomní jízdy robota k míči a zpět z tréninku. Míč sebral v čase 10,7 s, do cíle dojel za 20,7 s."
+                   width="1671" height="2000" loading="lazy" decoding="async">
+              </a>
+              <figcaption class="run-caption"><span class="run-name"><strong>Hra 1 / Náš nejrychlejší průjezd</strong><small class="mono">Autonomní jízda / trénink 18. 11. 2026</small></span><span class="run-time">20,7 s</span></figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="run-switch">
+          <div class="explorer-tabs run-tabs" aria-label="Jízdy Hry 2" hidden>
+            <button type="button" id="tab-balls-auto" data-robot-tab="balls-auto" class="mono">Autonomně / 20,1 s</button>
+            <button type="button" id="tab-balls-manual" data-robot-tab="balls-manual" class="mono">Ručně / 42 bodů</button>
+          </div>
+          <div class="run-panels">
+            <figure id="panel-balls-auto" class="run-card" data-robot-panel="balls-auto">
+              <a class="run-link" href="./photos/site/run-balls-2026-2000.webp" target="_blank" rel="noreferrer" aria-label="Hra 2 / Míčky, 20,1 s: zvětšit plánek">
+                <img style="aspect-ratio:2000/1108" src="./photos/site/run-balls-2026-2000.webp"
+                   srcset="./photos/site/run-balls-2026-800.webp 800w, ./photos/site/run-balls-2026-2000.webp 2000w"
+                   sizes="(max-width: 980px) calc(100vw - 2rem), (max-width: 1630px) 92vw, 1500px"
+                   alt="Plánek hřiště se zakreslenou trasou autonomní jízdy robota ze startu k depu s míčky, ke koši a zpět. Sběrač běžel mezi 6,5 a 7,9 s, robot vystřelil v čase 15,6 s a vrátil se za 20,1 s."
+                   width="2000" height="1163" loading="lazy" decoding="async">
+              </a>
+              <figcaption class="run-caption"><span class="run-name"><strong>Hra 2 / Míčky</strong><small class="mono">Autonomní jízda / 19. 11. 2026</small></span><span class="run-time">20,1 s</span></figcaption>
+            </figure>
+            <figure id="panel-balls-manual" class="run-card" data-robot-panel="balls-manual">
+              <a class="run-link" href="./photos/site/run-balls-manual-2026-2000.webp" target="_blank" rel="noreferrer" aria-label="Hra 2 / Míčky, ruční jízda, 42 bodů: zvětšit plánek">
+                <img style="aspect-ratio:2000/1108" src="./photos/site/run-balls-manual-2026-2000.webp"
+                   srcset="./photos/site/run-balls-manual-2026-800.webp 800w, ./photos/site/run-balls-manual-2026-2000.webp 2000w"
+                   sizes="(max-width: 980px) calc(100vw - 2rem), (max-width: 1630px) 92vw, 1500px"
+                   alt="Plánek hřiště s trasami ruční jízdy mezi depem s míčky a koši. Zeleně jsou úseky se sběračem v chodu, červeně 15 výstřelů na vysoký koš za 2 minuty 49 sekund. Jízda získala 42 bodů."
+                   width="2000" height="1163" loading="lazy" decoding="async">
+              </a>
+              <figcaption class="run-caption"><span class="run-name"><strong>Hra 2 / Míčky, ruční jízda</strong><small class="mono">15 výstřelů na vysoký koš za 2:49 min / nejvyšší skóre soutěže v ruční jízdě / 19. 11. 2026</small></span><span class="run-time">42 bodů</span></figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="run-switch">
+          <div class="explorer-tabs run-tabs" aria-label="Jízdy Hry 3" hidden>
+            <button type="button" id="tab-cubes-auto" data-robot-tab="cubes-auto" class="mono">Autonomně / 25,6 s</button>
+            <button type="button" id="tab-cubes-manual" data-robot-tab="cubes-manual" class="mono">Ručně / 33 bodů</button>
+          </div>
+          <div class="run-panels">
+            <figure id="panel-cubes-auto" class="run-card" data-robot-panel="cubes-auto">
+              <a class="run-link" href="./photos/site/run-cubes-2026-2000.webp" target="_blank" rel="noreferrer" aria-label="Hra 3 / Kostky, 25,6 s: zvětšit plánek">
+                <img style="aspect-ratio:2000/1108" src="./photos/site/run-cubes-2026-2000.webp"
+                   srcset="./photos/site/run-cubes-2026-800.webp 800w, ./photos/site/run-cubes-2026-2000.webp 2000w"
+                   sizes="(max-width: 980px) calc(100vw - 2rem), (max-width: 1630px) 92vw, 1500px"
+                   alt="Plánek hřiště se zakreslenou trasou autonomní jízdy robota ze startu ke zdroji kostek, k vysokému podstavci a zpět. Kostku uchopil v čase 9,8 s, odložil v 17,3 s a vrátil se za 25,6 s."
+                   width="2000" height="1163" loading="lazy" decoding="async">
+              </a>
+              <figcaption class="run-caption"><span class="run-name"><strong>Hra 3 / Kostky</strong><small class="mono">Autonomní jízda / 19. 11. 2026</small></span><span class="run-time">25,6 s</span></figcaption>
+            </figure>
+            <figure id="panel-cubes-manual" class="run-card" data-robot-panel="cubes-manual">
+              <a class="run-link" href="./photos/site/run-cubes-manual-2026-2000.webp" target="_blank" rel="noreferrer" aria-label="Hra 3 / Kostky, ruční jízda, 33 bodů: zvětšit plánek">
+                <img style="aspect-ratio:2000/1108" src="./photos/site/run-cubes-manual-2026-2000.webp"
+                   srcset="./photos/site/run-cubes-manual-2026-800.webp 800w, ./photos/site/run-cubes-manual-2026-2000.webp 2000w"
+                   sizes="(max-width: 980px) calc(100vw - 2rem), (max-width: 1630px) 92vw, 1500px"
+                   alt="Plánek hřiště s trasami ruční jízdy mezi zdrojem kostek a podstavci. Zeleně je 15 uchopení kostky, červeně 7 odložení u vysokého a 8 u nízkého podstavce za 2 minuty 58 sekund. Na konci zůstalo 6 kostek na vysokém podstavci, 6 na nízkém a 3 v zemním cíli. Jízda získala 33 bodů."
+                   width="2000" height="1163" loading="lazy" decoding="async">
+              </a>
+              <figcaption class="run-caption"><span class="run-name"><strong>Hra 3 / Kostky, ruční jízda</strong><small class="mono">6 kostek na vysokém, 6 na nízkém podstavci, 3 v zemním cíli / 2:58 min / nejvyšší skóre soutěže v ruční jízdě / 19. 11. 2026</small><small class="run-note">Na plánku je 7 odložení u vysokého a 8 u nízkého podstavce. Jedna kostka z vysokého podstavce spadla a zůstala ležet. U nízkého jedna spadla dvakrát a pokaždé jsme ji zvedli a položili znovu.</small></span><span class="run-time">33 bodů</span></figcaption>
+            </figure>
+          </div>
+        </div>
+        <figure class="run-card run-wide">
+          <a class="run-link" href="./photos/site/run-slalom-2026-2000.webp" target="_blank" rel="noreferrer" aria-label="Hra 4 / Couvací slalom, 25,3 s: zvětšit plánek">
+            <img style="aspect-ratio:2000/1097" src="./photos/site/run-slalom-2026-2000.webp"
+               srcset="./photos/site/run-slalom-2026-800.webp 800w, ./photos/site/run-slalom-2026-2000.webp 2000w"
+               sizes="(max-width: 980px) calc(100vw - 2rem), (max-width: 1630px) 92vw, 1500px"
+               alt="Plánek hřiště se zakreslenou trasou autonomní jízdy robota, která se vine mezi deseti kužely od startu k cílové čáře. Na cílové čáře byl za 25,3 s."
+               width="2000" height="1153" loading="lazy" decoding="async">
+          </a>
+          <figcaption class="run-caption"><span class="run-name"><strong>Hra 4 / Couvací slalom</strong><small class="mono">Autonomní jízda / 19. 11. 2026</small></span><span class="run-time">25,3 s</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
     <section id="swerve" class="swerve-section section-ink" aria-labelledby="swerve-title">
-      <div class="section-index mono">06 / Swerve pohon</div>
+      <div class="section-index mono">07 / Swerve pohon</div>
       <div class="swerve-demo">
         <div class="swerve-copy">
           <div class="swerve-main">
@@ -365,7 +476,7 @@
     </section>
 
     <section id="robul" class="robul section-paper">
-      <div class="section-index mono">07 / RobUL</div>
+      <div class="section-index mono">08 / RobUL</div>
       <div class="robul-grid">
         <div>
           <p class="eyebrow mono">Čtyři města / jeden výběrový tým</p>
@@ -406,7 +517,7 @@
     </section>
 
     <section id="kontakt" class="join section-red">
-      <div class="section-index mono">08 / Co dál</div>
+      <div class="section-index mono">09 / Kontakt</div>
       <div class="join-grid">
         <h2>Napiš nám<br>na Instagram</h2>
         <div>
@@ -445,7 +556,7 @@
   </footer>
 
   <script src="./vendor/motion-14.11.1.js" defer></script>
-  <script src="./script.js?v=20261121-reveal-cap2" defer></script>
-  <script src="./robot.js?v=20261121-reveal-cap2" defer></script>
+  <script src="./script.js?v=20261125-runs11" defer></script>
+  <script src="./robot.js?v=20261125-runs11" defer></script>
 </body>
 </html>

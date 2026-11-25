@@ -13,11 +13,11 @@
   const clamp = n => Math.min(1, Math.max(0, n));
   const progress = document.querySelector('.scroll-progress span');
   const ribbon = document.querySelector('.motion-ribbon-track');
-  const candidates = 'main h2, .explorer-heading h3, .swerve-copy h3, .section-index, .team-photo, .robot-visual, .detail-card, .photo-card, .fact, .score-line, .spec-list > div, .terminal, .team-rail > div, .member-card, .sponsor-card, .support-grid article, .intro-copy, .robot-copy > p, .code-copy > p, .robul-copy, .denver-copy > p, .join-grid > div, .swerve-stage, .repo-link, .robot-details > h3, .awards-lede, .awards-photo, .award, .season-row';
+  const candidates = 'main h2, .explorer-heading h3, .swerve-copy h3, .section-index, .team-photo, .robot-visual, .detail-card, .photo-card, .fact, .score-line, .spec-list > div, .terminal, .team-rail > div, .member-card, .sponsor-card, .support-grid article, .intro-copy, .robot-copy > p, .code-copy > p, .robul-copy, .denver-copy > p, .join-grid > div, .swerve-stage, .repo-link, .robot-details > h3, .awards-lede, .awards-photo, .award, .season-row, .run-card, .run-switch, .runs-copy';
 
   function register(root = document) {
     root.querySelectorAll(candidates).forEach(el => {
-      if (entries.has(el) || el.closest('.explorer-panel')) return;
+      if (entries.has(el) || el.closest('.explorer-panel, .run-panels')) return;
       // A container owns its children so nested text never drifts out of alignment.
       if (el.parentElement.closest('.support-grid article, .sponsor-card, .member-card, .join-grid > div, .intro-copy, .robul-copy')) return;
       const photo = el.matches('.team-photo, .robot-visual, .detail-card, .photo-card, .awards-photo');

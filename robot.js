@@ -1,41 +1,42 @@
 (() => {
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
-  const explorer = document.querySelector('.robot-explorer');
-  const tabs = [...document.querySelectorAll('[data-robot-tab]')];
-  const panels = [...document.querySelectorAll('[data-robot-panel]')];
-  let tabAnimations = [];
-  let selection = 0;
-  function clearTabAnimations() {
-    selection++;
-    tabAnimations.forEach(animation => animation.stop());
-    tabAnimations = [];
-    panels.forEach(panel => { panel.classList.remove('is-leaving'); panel.style.removeProperty('opacity'); });
-  }
-  function selectTab(tab, transition = true) {
-    const previousOpacity = panels.map(panel => getComputedStyle(panel).visibility === 'hidden' ? 0 : Number(getComputedStyle(panel).opacity));
-    clearTabAnimations();
-    const revision = selection;
-    const next = document.getElementById(`panel-${tab.dataset.robotTab}`);
-    tabs.forEach(button => {
-      const selected = button === tab;
-      button.setAttribute('aria-selected', String(selected));
-      button.tabIndex = selected ? 0 : -1;
-    });
-    panels.forEach((panel, index) => {
-      panel.hidden = panel !== next;
-      if (!transition || !window.Motion || preference.matches) return;
-      if (panel !== next && previousOpacity[index] > 0) panel.classList.add('is-leaving');
-      panel.style.opacity = String(previousOpacity[index]);
-      const animation = Motion.animate(panel, { opacity: panel === next ? 1 : 0 }, { duration: .2 });
-      tabAnimations.push(animation);
-      animation.then(() => {
-        if (revision !== selection) return;
-        panel.classList.remove('is-leaving');
-        panel.style.removeProperty('opacity');
+  // Tabbed panels: the robot explorer in the archive and the Hra 1 run switcher on the homepage.
+  document.querySelectorAll('.robot-explorer, .run-switch').forEach(explorer => {
+    const tabs = [...explorer.querySelectorAll('[data-robot-tab]')];
+    const panels = [...explorer.querySelectorAll('[data-robot-panel]')];
+    if (!tabs.length) return;
+    let tabAnimations = [];
+    let selection = 0;
+    function clearTabAnimations() {
+      selection++;
+      tabAnimations.forEach(animation => animation.stop());
+      tabAnimations = [];
+      panels.forEach(panel => { panel.classList.remove('is-leaving'); panel.style.removeProperty('opacity'); });
+    }
+    function selectTab(tab, transition = true) {
+      const previousOpacity = panels.map(panel => getComputedStyle(panel).visibility === 'hidden' ? 0 : Number(getComputedStyle(panel).opacity));
+      clearTabAnimations();
+      const revision = selection;
+      const next = document.getElementById(`panel-${tab.dataset.robotTab}`);
+      tabs.forEach(button => {
+        const selected = button === tab;
+        button.setAttribute('aria-selected', String(selected));
+        button.tabIndex = selected ? 0 : -1;
       });
-    });
-  }
-  if (explorer && tabs.length) {
+      panels.forEach((panel, index) => {
+        panel.hidden = panel !== next;
+        if (!transition || !window.Motion || preference.matches) return;
+        if (panel !== next && previousOpacity[index] > 0) panel.classList.add('is-leaving');
+        panel.style.opacity = String(previousOpacity[index]);
+        const animation = Motion.animate(panel, { opacity: panel === next ? 1 : 0 }, { duration: .2 });
+        tabAnimations.push(animation);
+        animation.then(() => {
+          if (revision !== selection) return;
+          panel.classList.remove('is-leaving');
+          panel.style.removeProperty('opacity');
+        });
+      });
+    }
     explorer.classList.add('is-interactive');
     const tablist = explorer.querySelector('.explorer-tabs');
     tablist.hidden = false;
@@ -58,6 +59,50 @@
       });
     });
     selectTab(tabs[0], false);
+  });
+
+  // Run maps enlarge in place. Without JS (or with a modifier key) the link still opens the image file.
+  const mapLinks = [...document.querySelectorAll('.run-link')];
+  if (mapLinks.length && typeof HTMLDialogElement === 'function') {
+    const box = document.createElement('dialog');
+    box.className = 'lightbox';
+    box.setAttribute('aria-label', 'Zvětšený plánek');
+    box.innerHTML = '<button type="button" class="lightbox-close mono" aria-label="Zavřít zvětšený plánek">Zavřít <span aria-hidden="true">✕</span></button><div class="lightbox-scroll"><img alt="" decoding="async"></div>';
+    document.body.append(box);
+    const picture = box.querySelector('img');
+    const scroller = box.querySelector('.lightbox-scroll');
+    let shown = null;
+    mapLinks.forEach(link => link.addEventListener('click', event => {
+      if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      const small = link.querySelector('img');
+      // The copy already on the page shows at once; the full-size file replaces it when it has loaded.
+      shown = link;
+      picture.src = small.currentSrc || small.src;
+      const full = new Image();
+      full.src = link.href;
+      full.decode().then(() => { if (shown === link) picture.src = link.href; }).catch(() => {});
+      picture.alt = small.alt;
+      picture.width = small.width;
+      picture.height = small.height;
+      // The detail size is known up front, so the view can be centred before the large file has loaded.
+      picture.style.setProperty('--natural-width', `${small.getAttribute('width')}px`);
+      box.classList.remove('is-zoomed');
+      box.showModal();
+    }));
+    box.addEventListener('click', event => {
+      if (event.target !== picture) { box.close(); return; }
+      // A second click shows the map at its real size, centred on the point that was clicked.
+      const rect = picture.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+      const zoomed = box.classList.toggle('is-zoomed');
+      if (zoomed) {
+        scroller.scrollLeft = x * scroller.scrollWidth - scroller.clientWidth / 2;
+        scroller.scrollTop = y * scroller.scrollHeight - scroller.clientHeight / 2;
+      }
+    });
+    box.addEventListener('close', () => box.classList.remove('is-zoomed'));
   }
 
   const demo = document.querySelector('.swerve-demo');
