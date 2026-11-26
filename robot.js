@@ -1,4 +1,5 @@
 (() => {
+  const thisScript = document.currentScript;
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   // Tabbed panels: the robot explorer in the archive and the Hra 1 run switcher on the homepage.
   document.querySelectorAll('.robot-explorer, .run-switch').forEach(explorer => {
@@ -103,6 +104,200 @@
       }
     });
     box.addEventListener('close', () => box.classList.remove('is-zoomed'));
+  }
+
+  // Run animations: each map can be swapped for a replay of the run from the robot's log. The drawing comes
+  // from the player in animations/ (kept as generated); its own controls are hidden and the bar under the
+  // map drives it instead. The player and a run's data (100-250 kB) load on the first click only.
+  // On a phone the replay opens over the whole screen instead of inside the card.
+  const animated = [...document.querySelectorAll('.run-card[data-run-anim]')];
+  if (animated.length && thisScript) {
+    const folder = new URL('animations/', thisScript.src);
+    const version = new URL(thisScript.src).search;
+    const phone = matchMedia('(max-width: 620px), (pointer: coarse) and (max-height: 620px)');
+    const loading = new Map();
+    const load = file => {
+      if (!loading.has(file)) loading.set(file, new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = new URL(file, folder).href + version;
+        script.onload = resolve;
+        script.onerror = () => { loading.delete(file); script.remove(); reject(new Error(file)); };
+        document.head.append(script);
+      }));
+      return loading.get(file);
+    };
+    const BAR = '<button type="button" class="run-play mono"><i class="run-play-icon" aria-hidden="true"></i><span class="run-play-label">Přehrát animaci</span></button>'
+      + '<input class="run-seek" type="range" min="0" max="1000" value="0" aria-label="Čas animace">'
+      + '<span class="run-clock mono"></span>'
+      + '<button type="button" class="run-rate mono" aria-label="Rychlost přehrávání">1×</button>'
+      + '<button type="button" class="run-close mono"><span class="run-close-label">Plánek</span> <span aria-hidden="true">✕</span></button>';
+    const SKIN = ':host { font:inherit; color:inherit; background:transparent } .wrap { max-width:none; padding:0 } #title { display:none }'
+      + ' canvas { border-radius:0 } .note { margin:12px 0 0; color:#616161; font-size:.8125rem; line-height:1.5 } .note:empty { display:none }'
+      + ' :host([data-theater]) .note { margin:0; padding:10px 12px; background:#fff }'
+      + ' @media (orientation:landscape) and (max-height:620px) { :host([data-theater]) .note { display:none } }';
+    // Per card: its bar's parts (ui) and, once loaded, the player's (player).
+    const cards = new Map();
+    let theater = null;   // the full-screen frame, built on first use
+    let staged = null;    // the card whose replay is in it
+
+    function setLive(card, on) {
+      const { ui } = cards.get(card);
+      ui.bar.classList.toggle('is-live', on);
+      if (on) sync(card); else { ui.bar.classList.remove('is-paused'); ui.play.removeAttribute('aria-label'); }
+    }
+    // anchor: the swap was asked for from the bar, so the bar stays where it is on screen. The Hra 1 picture
+    // is twice as tall as its replay; without this the card would shrink away from under the pointer.
+    function showInline(card, on, anchor = false) {
+      const { ui } = cards.get(card);
+      const before = ui.slot.getBoundingClientRect().top;
+      card.classList.toggle('is-animating', on);
+      // While one card of a pair plays, the other no longer holds the cell open at its picture's height.
+      if (card.parentElement.matches('.run-panels')) card.parentElement.classList.toggle('has-anim', on);
+      setLive(card, on);
+      if (anchor) {
+        // Again on the next frames: the replay's canvas takes its height a moment after it is shown.
+        const hold = () => scrollBy({ top: ui.slot.getBoundingClientRect().top - before, behavior: 'instant' });
+        hold();
+        requestAnimationFrame(() => { hold(); requestAnimationFrame(hold); });
+      }
+    }
+    // The site's bar mirrors the player every frame while it is live.
+    function sync(card) {
+      const { ui, player } = cards.get(card);
+      if (!player || !ui.bar.classList.contains('is-live')) return;
+      if (player.play) {
+        const paused = player.play.textContent.trim() === '▶';
+        ui.bar.classList.toggle('is-paused', paused);
+        ui.play.setAttribute('aria-label', paused ? 'Přehrát animaci' : 'Pozastavit animaci');
+        if (!player.dragging) ui.seek.value = player.seek.value;
+        ui.seek.style.setProperty('--p', `${ui.seek.value / 10}%`);
+        const clock = player.time.textContent;
+        if (ui.clock.textContent !== clock) ui.clock.textContent = clock;
+        ui.rate.textContent = player.rate.textContent;
+      }
+      requestAnimationFrame(() => sync(card));
+    }
+    function buildTheater() {
+      const box = document.createElement('dialog');
+      box.className = 'run-theater';
+      box.setAttribute('aria-label', 'Animace jízdy');
+      box.innerHTML = '<div class="run-theater-frame"><div class="run-theater-stage"></div><p class="run-theater-hint mono">Na šířku je obraz větší</p><div class="run-theater-bar"></div></div>';
+      document.body.append(box);
+      const frame = box.firstElementChild;
+      box.addEventListener('close', leaveTheater);
+      // Leaving real full screen (back gesture, system button) closes the replay too.
+      document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && box.open && box.dataset.full) box.close(); });
+      return { box, frame, stage: frame.children[0], bar: frame.children[2] };
+    }
+    function enterTheater(card) {
+      const { ui, player } = cards.get(card);
+      theater ??= buildTheater();
+      staged = card;
+      const canvas = player.host.shadowRoot.querySelector('canvas');
+      theater.frame.style.setProperty('--ratio', String(canvas.width / canvas.height || 1.9));
+      player.host.setAttribute('data-theater', '');
+      theater.stage.append(ui.stage);
+      theater.bar.append(ui.bar);
+      ui.closeLabel.textContent = 'Zavřít';
+      delete theater.box.dataset.full;
+      theater.box.showModal();
+      setLive(card, true);
+      // Where the browser allows it (Android), take the real full screen and turn it to landscape.
+      // A dialog itself cannot go full screen, so its frame does.
+      if (theater.frame.requestFullscreen) {
+        theater.frame.requestFullscreen({ navigationUI: 'hide' }).then(() => {
+          theater.box.dataset.full = '1';
+          return screen.orientation?.lock?.('landscape');
+        }).catch(() => {});
+      }
+    }
+    function leaveTheater() {
+      const card = staged;
+      if (!card) return;
+      staged = null;
+      const { ui, player } = cards.get(card);
+      player.host.showcase.pause();
+      setLive(card, false);
+      player.host.removeAttribute('data-theater');
+      ui.link.after(ui.stage);
+      ui.slot.append(ui.bar);
+      ui.closeLabel.textContent = 'Plánek';
+      try { screen.orientation?.unlock?.(); } catch (error) { /* not locked */ }
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      if (theater.box.open) theater.box.close();
+      ui.play.focus({ preventScroll: true });
+    }
+    function stop(card, anchor = false) {
+      if (staged === card) { leaveTheater(); return; }
+      cards.get(card).player?.host.showcase.pause();
+      showInline(card, false, anchor);
+    }
+    async function start(card) {
+      const entry = cards.get(card);
+      const { ui } = entry;
+      if (!ui.stage) {
+        ui.stage = document.createElement('div');
+        ui.stage.className = 'run-anim';
+        const host = document.createElement('div');
+        host.dataset.showcase = card.dataset.runAnim;
+        ui.stage.append(host);
+        ui.link.after(ui.stage);
+      }
+      const host = ui.stage.firstElementChild;
+      if (!entry.player) {
+        ui.play.disabled = true;
+        ui.label.textContent = 'Načítám…';
+        try {
+          await load('showcase-player.js');
+          await load(`${card.dataset.runAnim}.js`);
+          window.Showcase.scan();
+          if (!host.showcase) throw new Error('player did not mount');
+        } catch (error) {
+          ui.play.disabled = false;
+          ui.label.textContent = 'Animaci se nepodařilo načíst';
+          return;
+        }
+        ui.play.disabled = false;
+        ui.label.textContent = 'Přehrát animaci';
+        const inner = host.shadowRoot;
+        const [seek, time, play, rate] = ['seek', 'time', 'play', 'rate'].map(id => inner.getElementById(id));
+        const style = document.createElement('style');
+        // If a regenerated player ever drops these parts, its own controls stay and the bar only closes it.
+        const own = seek && time && play && rate;
+        style.textContent = SKIN + (own ? ' .bar { display:none }' : '');
+        inner.append(style);
+        ui.bar.classList.toggle('is-plain', !own);
+        entry.player = own ? { host, seek, time, play, rate, dragging: false } : { host };
+      }
+      if (phone.matches) enterTheater(card); else showInline(card, true, true);
+      host.showcase.seek(0);
+      host.showcase.play();
+    }
+    animated.forEach(card => {
+      const slot = document.createElement('div');
+      slot.className = 'run-bar-slot';
+      slot.innerHTML = `<div class="run-bar">${BAR}</div>`;
+      card.querySelector('.run-caption').before(slot);
+      const bar = slot.firstElementChild;
+      const find = name => bar.querySelector(`.run-${name}`);
+      const ui = { slot, bar, link: card.querySelector('.run-link'), stage: null, play: find('play'), label: find('play-label'), seek: find('seek'), clock: find('clock'), rate: find('rate'), close: find('close'), closeLabel: find('close-label') };
+      cards.set(card, { ui, player: null });
+      ui.play.addEventListener('click', () => {
+        const { player } = cards.get(card);
+        if (!bar.classList.contains('is-live')) { start(card); return; }
+        if (bar.classList.contains('is-paused')) player.host.showcase.play(); else player.host.showcase.pause();
+      });
+      ui.seek.addEventListener('input', () => {
+        const { host } = cards.get(card).player;
+        host.showcase.seek(host.showcase.duration * ui.seek.value / 1000);
+      });
+      ui.seek.addEventListener('pointerdown', () => { cards.get(card).player.dragging = true; });
+      ['pointerup', 'pointercancel', 'change'].forEach(type => ui.seek.addEventListener(type, () => { cards.get(card).player.dragging = false; }));
+      ui.rate.addEventListener('click', () => cards.get(card).player.rate.click());
+      ui.close.addEventListener('click', () => { stop(card, true); ui.play.focus({ preventScroll: true }); });
+      // A card swapped out by its tabs goes back to the picture, so nothing plays unseen.
+      new MutationObserver(() => { if (card.hidden && card.classList.contains('is-animating')) stop(card); }).observe(card, { attributes: true, attributeFilter: ['hidden'] });
+    });
   }
 
   const demo = document.querySelector('.swerve-demo');

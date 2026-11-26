@@ -898,6 +898,60 @@ main > section > .section-index, .race-sticky > .section-index { width:100%; }
   .run-grid { margin-top:32px; }
 }
 
+/* Run animation. The bar under each map starts a replay of the run; while it plays, the same bar carries
+   the transport (pause, time slider, clock, speed) and the way back to the picture. */
+.run-bar-slot { min-height:49px; border-top:1px solid var(--line); background:#fff; }
+.run-bar { display:flex; align-items:center; min-height:48px; background:#fff; color:var(--ink); }
+.run-play { display:flex; align-items:center; gap:16px; min-height:48px; padding:0 20px 0 0; border:0; background:none; color:inherit; font-size:.75rem; line-height:1; letter-spacing:.015em; text-transform:uppercase; cursor:pointer; touch-action:manipulation; }
+.run-play-icon { flex:0 0 auto; width:48px; height:48px; display:grid; place-items:center; background:var(--red); transition:background-color .12s ease-out, scale .1s ease-out; }
+.run-play-icon::before { content:""; margin-left:3px; border-style:solid; border-width:8px 0 8px 14px; border-color:transparent transparent transparent #fff; }
+.run-play-label { transition:color .12s ease-out; }
+.run-play:hover .run-play-icon { background:#a62d29; }
+.run-play:hover .run-play-label { color:var(--red); }
+.run-play:active .run-play-icon { scale:.94; }
+.run-play:disabled { cursor:progress; }
+.run-play:disabled .run-play-icon { opacity:.6; }
+.run-seek, .run-clock, .run-rate, .run-close { display:none; }
+.run-bar.is-live .run-play { padding-right:0; }
+.run-bar.is-live .run-play-label { display:none; }
+/* Playing: the triangle becomes two bars. */
+.run-bar.is-live:not(.is-paused) .run-play-icon::before { width:4px; height:14px; margin:0; border-width:0 4px; border-color:#fff; }
+.run-bar.is-live .run-seek { display:block; flex:1 1 auto; min-width:0; margin:0 16px; }
+.run-bar.is-live .run-clock { display:block; padding-right:16px; color:var(--muted-light); font-size:.75rem; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.run-bar.is-live .run-rate, .run-bar.is-live .run-close { display:block; align-self:stretch; min-width:48px; min-height:48px; padding:0 16px; border:0; border-left:1px solid var(--line); background:none; color:inherit; font-size:.75rem; text-transform:uppercase; white-space:nowrap; cursor:pointer; touch-action:manipulation; transition:background-color .12s ease-out; }
+.run-bar.is-live .run-rate:hover, .run-bar.is-live .run-close:hover { background:var(--paper-2); }
+.run-bar.is-live.is-plain .run-play, .run-bar.is-live.is-plain .run-seek, .run-bar.is-live.is-plain .run-clock, .run-bar.is-live.is-plain .run-rate { display:none; }
+.run-seek { -webkit-appearance:none; appearance:none; height:48px; padding:0; background:transparent; cursor:pointer; --p:0%; }
+.run-seek::-webkit-slider-runnable-track { height:2px; background:linear-gradient(to right, var(--red) var(--p), rgba(10,10,10,.22) var(--p)); }
+.run-seek::-moz-range-track { height:2px; background:rgba(10,10,10,.22); }
+.run-seek::-moz-range-progress { height:2px; background:var(--red); }
+.run-seek::-webkit-slider-thumb { -webkit-appearance:none; width:10px; height:20px; margin-top:-9px; border:0; border-radius:0; background:var(--red); }
+.run-seek::-moz-range-thumb { width:10px; height:20px; border:0; border-radius:0; background:var(--red); }
+.run-seek:focus-visible { outline:3px solid var(--focus); outline-offset:-3px; }
+.run-anim { display:none; padding:clamp(8px,1.2vw,16px); }
+.run-card.is-animating > .run-anim { display:block; animation:run-anim-in .2s ease-out; }
+.run-card.is-animating > .run-link { display:none; }
+.run-panels.has-anim > .run-card[hidden] { height:0; overflow:hidden; border:0; }
+@keyframes run-anim-in { from { opacity:0; } }
+@media (prefers-reduced-motion: reduce) { .run-card.is-animating > .run-anim { animation:none; } }
+@media (max-width:620px) {
+  /* The slider gets a row of its own; pause, clock, speed and close share the one below. */
+  .run-bar.is-live { flex-wrap:wrap; }
+  .run-bar.is-live .run-seek { order:-1; flex:0 0 calc(100% - 32px); height:40px; }
+  .run-bar.is-live .run-clock { flex:1 1 auto; padding-left:16px; }
+  .run-bar.is-live .run-rate, .run-bar.is-live .run-close { padding:0 12px; }
+}
+/* On a phone the replay takes the whole screen: the map as large as it fits, the bar along the bottom. */
+.run-theater { position:fixed; inset:0; width:100vw; height:100dvh; max-width:none; max-height:none; margin:0; padding:0; border:0; background:var(--ink); color:#fff; overflow:hidden; }
+.run-theater::backdrop { background:var(--ink); }
+html:has(.run-theater[open]) { overflow:hidden; }
+.run-theater-frame { width:100%; height:100%; display:flex; flex-direction:column; background:var(--ink); padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+.run-theater-stage { flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center; }
+/* As wide as the screen, or as wide as the height left above the bar allows. */
+.run-theater-stage .run-anim { display:block; padding:0; width:min(100%, calc((100dvh - 48px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * var(--ratio, 1.9))); background:#fff; }
+.run-theater-hint { display:none; margin:0; padding:0 16px 16px; color:#a9a9a9; font-size:.75rem; text-align:center; text-transform:uppercase; }
+@media (orientation:portrait) { .run-theater-hint { display:block; } }
+
 /* A run map enlarged over the page. One click fits it to the screen, a click on the map shows it at real size. */
 .lightbox { position:fixed; inset:0; width:100vw; height:100dvh; max-width:none; max-height:none; margin:0; padding:0; border:0; background:rgba(10,10,10,.94); color:#fff; overflow:hidden; }
 .lightbox::backdrop { background:rgba(10,10,10,.6); }

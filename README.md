@@ -67,6 +67,15 @@ JSON používá dvojité uvozovky a za posledním prvkem nesmí být čárka.
 Při chybě načítání nebo neplatných údajích se zobrazí tlačítko „Zkusit znovu“.
 Prázdný seznam zobrazí zprávu „Profily zatím chybí.“ Profily vyžadují JavaScript.
 
+## Animace jízd
+
+Plánky jízd na hlavní stránce mají pod sebou tlačítko „Přehrát animaci“. Přehrávač
+(`animations/showcase-player.js`) a data jednotlivých jízd (`animations/game*.js`) se
+generují v repozitáři robota a sem se jen kopírují beze změn ze složky
+`docs/showcase/animations/embed/`. Načítají se až po kliknutí. Která animace patří ke
+kterému plánku, určuje atribut `data-run-anim` u karty v `index.html`. Ovládací lištu a
+celoobrazovkové přehrávání na telefonu řeší `robot.js`.
+
 ## Fotky a archiv sezón
 
 Fotky aktuální sezóny jsou v `photos/site/`, vždy ve dvou šířkách pro `srcset`
