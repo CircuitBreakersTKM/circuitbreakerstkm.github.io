@@ -130,7 +130,10 @@ function objectAt(o, t) {
   while (lo < hi) { const mid = (lo + hi + 1) >> 1; k[mid][0] <= t ? lo = mid : hi = mid - 1; }
   const a = k[lo], b = k[Math.min(lo + 1, k.length - 1)];
   const u = b[0] > a[0] ? Math.min(1, (t - a[0]) / (b[0] - a[0])) : 0;
-  if (a[4] === 1) return { x: a[1], y: a[2], a: a[3], s: 1, u };
+  if (a[4] === 1) {  // held: its place in the robot's frame may shift (pushed onto a pedestal)
+    const v = b[4] === 1 ? u : 0;
+    return { x: a[1] + (b[1] - a[1]) * v, y: a[2] + (b[2] - a[2]) * v, a: a[3] + (b[3] - a[3]) * v, s: 1, u };
+  }
   let bx = b[1], by = b[2];
   if (b[4] === 1 && a[4] !== 1) [bx, by] = local(pose(b[0]), b[1], b[2]);  // moving into the robot
   let da = b[3] - a[3]; da = Math.atan2(Math.sin(da), Math.cos(da));
@@ -174,7 +177,8 @@ function hud(t, p) {
   const size = Math.max(12, len(0.12));
   g.font = `600 ${size}px system-ui, sans-serif`; g.textBaseline = "top"; g.textAlign = "left";
   const lines = [`${cz(Math.min(t, DUR))} s`, `${cz(p.v)} m/s`];
-  for (const c of S.counters) lines.push(`${c.label}: ${c.times.filter(q => q <= t).length}`);
+  for (const c of S.counters)
+    lines.push(`${c.label}: ${c.times.filter(q => q <= t).length - (c.minus || []).filter(q => q <= t).length}`);
   const w = Math.max(...lines.map(s => g.measureText(s).width)) + size * 0.8, h = lines.length * size * 1.3 + size * 0.5;
   const [x, y] = [cv.width - w - size * 0.5, size * 0.5];
   g.fillStyle = "rgba(255,255,255,.88)"; g.strokeStyle = "#9aa0aa"; g.lineWidth = 1;
